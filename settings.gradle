@@ -14,3 +14,5 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Audace"
 include ':app'
+include ':app'
+include ':app'
