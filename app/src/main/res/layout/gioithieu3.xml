@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/GioiThieuBG"
+    android:background="@drawable/intro"
     android:backgroundTintMode="src_in">
 
     <Button
@@ -16,7 +16,8 @@
         app:cornerRadius="20dp"
         app:iconTint="#F5D000"
         tools:layout_editor_absoluteX="130dp"
-        tools:layout_editor_absoluteY="632dp" />
+        tools:layout_editor_absoluteY="632dp"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/textView3"
@@ -26,7 +27,8 @@
         android:textSize="20sp"
         android:textStyle="bold"
         tools:layout_editor_absoluteX="68dp"
-        tools:layout_editor_absoluteY="352dp" />
+        tools:layout_editor_absoluteY="352dp"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/textView4"
@@ -37,22 +39,25 @@
         android:text="Dịch vụ vận chuyển đơn hàng  đến tận nhà"
         android:textSize="20sp"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="401dp" />
+        tools:layout_editor_absoluteY="401dp"
+        tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/imageView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/Ellipse14"
+        app:srcCompat="@drawable/ellipse"
         tools:layout_editor_absoluteX="76dp"
-        tools:layout_editor_absoluteY="150dp" />
+        tools:layout_editor_absoluteY="150dp"
+        tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/imageView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/Fastdelivery"
+        app:srcCompat="@drawable/delivery"
         tools:layout_editor_absoluteX="92dp"
-        tools:layout_editor_absoluteY="102dp" />
+        tools:layout_editor_absoluteY="102dp"
+        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
