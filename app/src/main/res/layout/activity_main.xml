@@ -10,30 +10,41 @@
         android:id="@+id/imageView"
         android:layout_width="216dp"
         android:layout_height="198dp"
+        android:layout_marginLeft="96dp"
+        android:layout_marginTop="130dp"
+        android:gravity="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/img"
-        tools:layout_editor_absoluteX="97dp"
-        tools:layout_editor_absoluteY="128dp" />
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="72dp"
         android:layout_marginTop="30dp"
+        android:gravity="center"
         android:text="Đơn đặt hàng của bạn đã thành công"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="75dp" />
+        app:layout_constraintVertical_bias="0.041"
+        tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="128dp"
+        android:layout_marginTop="100dp"
         android:backgroundTint="#F5D000"
+        android:gravity="center"
         android:text="Quay lại"
         app:cornerRadius="20dp"
         app:iconTint="#F5D000"
-        tools:layout_editor_absoluteX="130dp"
-        tools:layout_editor_absoluteY="409dp" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        tools:ignore="MissingConstraints" />
 </androidx.constraintlayout.widget.ConstraintLayout>
