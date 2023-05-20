@@ -15,29 +15,29 @@
             tools:layout_editor_absoluteY="81dp" />
 
         <RelativeLayout
-            android:layout_centerInParent="true"
-            android:layout_centerVertical="true"
             android:layout_alignRight="@id/imageView6"
             android:layout_alignBottom="@id/imageView6"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
             <ImageButton
-                android:id="@+id/btnUse"
+                android:id="@+id/btnLogin"
+                android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-
-                android:background="@drawable/save_voucherbg"
-                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+                android:background="@android:color/transparent"
+                android:contentDescription="Đăng nhập"
+                app:srcCompat="@drawable/save_voucherbg"
+                android:textAlignment="center" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignCenter="@id/btnUse"
                 android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:fontFamily="@font/open_sans"
                 android:textColor="#FFEB3B"
-                android:textSize="12sp"
-                tools:text="LƯU" />
+                android:text="LƯU"
+                android:textSize="16sp" />
 
         </RelativeLayout>
 
