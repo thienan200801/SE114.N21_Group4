@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/voucheritem"
+            android:layout_centerVertical="true"
+            tools:layout_editor_absoluteX="40dp"
+            tools:layout_editor_absoluteY="81dp" />
+
+        <RelativeLayout
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:layout_alignRight="@id/imageView6"
+            android:layout_alignBottom="@id/imageView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageButton
+                android:id="@+id/btnUse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+
+                android:background="@drawable/save_voucherbg"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignCenter="@id/btnUse"
+                android:layout_centerInParent="true"
+                android:textColor="#FFEB3B"
+                android:textSize="12sp"
+                tools:text="LƯU" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginEnd="40dp"
+
+            android:layout_centerVertical="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_marginStart="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/open_sans_condensed_light_italic"
+                    android:gravity="center"
+                    android:text="Sale off 30%"
+                    android:textColor="#F5BF01"
+                    android:textSize="24sp" />
+
+                <LinearLayout
+                    android:layout_marginStart="60dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:text = "Mặt hàng"
+                        android:layout_margin="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:text = "Điều kiện:"
+                        android:layout_margin="5dp"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:text = "Thời gian:"
+                        android:layout_margin="5dp"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:text = "Lưu ý"
+                        android:layout_margin="5dp"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:text = "xxxxxxxxxxxxxxx"
+                        android:layout_margin="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:text = "xxxxxxxxxxxxxxx"
+                        android:layout_margin="5dp"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:text = "xxxxxxxxxxxxxxx"
+                        android:layout_margin="5dp"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:text = "xxxxxxxxxxxxxxx"
+                        android:layout_margin="5dp"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+        </RelativeLayout>
+
+
+
