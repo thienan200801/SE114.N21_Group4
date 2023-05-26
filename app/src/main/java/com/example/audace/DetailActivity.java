@@ -3,6 +3,8 @@ package com.example.audace;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,16 +14,23 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.audace.adapter.SizeAdapter;
 import com.example.audace.api.ApiItemDetails;
 import com.example.audace.model.DetailOfItem;
+import com.example.audace.model.SizeObject;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -32,9 +41,13 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class DetailActivity extends AppCompatActivity {
-    private TextView nameofproduct, rating, description;
+    private TextView nameofproduct, rating, description, colorItem, sizeItem;
     private Handler handler;
     Button orderBtn;
+
+    private RecyclerView rvSize;
+    ArrayList<SizeObject> sizeObjectList;
+    SizeAdapter sizeAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i("message", "start on create");
@@ -46,16 +59,26 @@ public class DetailActivity extends AppCompatActivity {
         nameofproduct = (TextView) findViewById(R.id.nameofproduct);
         rating = (TextView) findViewById(R.id.rating);
         description = findViewById(R.id.description);
+        colorItem = (TextView) findViewById(R.id.color_item_detail);
+        sizeItem = (TextView)findViewById(R.id.size_item_detail);
         orderBtn = findViewById(R.id.bt3);
         Log.i("message", nameofproduct.toString());
 
+        sizeObjectList = new ArrayList<>();
+        sizeObjectList.add(new SizeObject("test"));
+
+        rvSize = (RecyclerView) findViewById(R.id.colorRecycler);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        rvSize.setLayoutManager(layoutManager);
+        rvSize.setHasFixedSize(false);
+        sizeAdapter = new SizeAdapter(sizeObjectList);
+        rvSize.setAdapter(sizeAdapter);
     }
     private void renderData() {
         Log.i("message","start crawl information");
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("text/plain");
-        RequestBody body = RequestBody.create(mediaType, "");
         Request request = new Request.Builder()
                 .url("https://audace-ecomerce.herokuapp.com/products/product/6459ed39b33d8814d8301f2a")
                 .method("GET", null)
@@ -71,20 +94,28 @@ public class DetailActivity extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 try {
                     Log.i("message","Call API successful");
-                    //Log.i("message",response.body().string());
                     JSONObject jsonObject = new JSONObject(response.body().string());
                     DetailOfItem d = new DetailOfItem();
                     d.setName(jsonObject.getString("name"));
                     d.setRating(Float.parseFloat(jsonObject.getString("rating")));
                     d.setDescription(jsonObject.getString("description"));
                     d.setFavourite(jsonObject.getBoolean("isFavourite"));
+                    JSONArray sizeJsonArray = jsonObject.getJSONArray("sizes");
+                    for(int i = 0; i<sizeJsonArray.length(); i++){
+                        String res = sizeJsonArray.getJSONObject(i).getString("widthInCentimeter")
+                                + "cm x "
+                                + sizeJsonArray.getJSONObject(i).getString("heightInCentimeter")
+                                + "cm";
+                        SizeObject sizeItemObject = new SizeObject(res);
+                        sizeObjectList.add(sizeItemObject);
+                    }
                     if(d != null) {
                         handler.post(() -> {
                                 nameofproduct.setText(d.getName());
                                 rating.setText(Float.toString(d.getRating()));
                                 description.setText(d.getDescription());
+                                sizeAdapter.notifyDataSetChanged();
                         });
-
                     }
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
