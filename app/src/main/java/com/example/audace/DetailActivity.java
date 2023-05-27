@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.AttributeSet;
@@ -18,8 +19,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.audace.adapter.ColorAdapter;
 import com.example.audace.adapter.SizeAdapter;
 import com.example.audace.api.ApiItemDetails;
+import com.example.audace.model.ColorObject;
 import com.example.audace.model.DetailOfItem;
 import com.example.audace.model.SizeObject;
 
@@ -45,9 +48,11 @@ public class DetailActivity extends AppCompatActivity {
     private Handler handler;
     Button orderBtn;
 
-    private RecyclerView rvSize;
+    private RecyclerView rvSize, rvColor;
     ArrayList<SizeObject> sizeObjectList;
+    ArrayList<ColorObject> colorObjectList;
     SizeAdapter sizeAdapter;
+    ColorAdapter colorAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i("message", "start on create");
@@ -67,12 +72,32 @@ public class DetailActivity extends AppCompatActivity {
         sizeObjectList = new ArrayList<>();
         sizeObjectList.add(new SizeObject("test"));
 
-        rvSize = (RecyclerView) findViewById(R.id.colorRecycler);
+        rvSize = (RecyclerView) findViewById(R.id.sizeRecycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvSize.setLayoutManager(layoutManager);
         rvSize.setHasFixedSize(false);
         sizeAdapter = new SizeAdapter(sizeObjectList);
         rvSize.setAdapter(sizeAdapter);
+
+        colorObjectList = new ArrayList<>();
+        colorObjectList.add(new ColorObject("#E0AB0980"));
+
+        rvColor = (RecyclerView) findViewById(R.id.colorRecycler);
+        LinearLayoutManager layoutManagerColor = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        rvColor.setLayoutManager(layoutManagerColor);
+        rvColor.setHasFixedSize(false);
+        colorAdapter = new ColorAdapter(colorObjectList);
+        rvColor.setAdapter(colorAdapter);
+
+        orderBtn=findViewById(R.id.bt3);
+        orderBtn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Intent t=new Intent(DetailActivity.this,Checkout.class);
+                startActivity(t);
+            }
+        });
     }
     private void renderData() {
         Log.i("message","start crawl information");
@@ -101,6 +126,9 @@ public class DetailActivity extends AppCompatActivity {
                     d.setDescription(jsonObject.getString("description"));
                     d.setFavourite(jsonObject.getBoolean("isFavourite"));
                     JSONArray sizeJsonArray = jsonObject.getJSONArray("sizes");
+                    JSONArray colorJsonArray = jsonObject.getJSONArray("colors");
+
+                    sizeObjectList.clear();
                     for(int i = 0; i<sizeJsonArray.length(); i++){
                         String res = sizeJsonArray.getJSONObject(i).getString("widthInCentimeter")
                                 + "cm x "
@@ -109,12 +137,21 @@ public class DetailActivity extends AppCompatActivity {
                         SizeObject sizeItemObject = new SizeObject(res);
                         sizeObjectList.add(sizeItemObject);
                     }
+
+                    colorObjectList.clear();
+                    for(int i = 0; i<colorJsonArray.length(); i++){
+                        String res = colorJsonArray.getJSONObject(i).getString("hex");
+                        ColorObject colorItemObject = new ColorObject(res);
+                        colorObjectList.add(colorItemObject);
+                    }
+                    Log.i("message",colorObjectList.toString());
                     if(d != null) {
                         handler.post(() -> {
                                 nameofproduct.setText(d.getName());
                                 rating.setText(Float.toString(d.getRating()));
                                 description.setText(d.getDescription());
                                 sizeAdapter.notifyDataSetChanged();
+                                colorAdapter.notifyDataSetChanged();
                         });
                     }
                 } catch (JSONException e) {
