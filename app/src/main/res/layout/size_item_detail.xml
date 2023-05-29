@@ -1,0 +1,14 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rectangle_5"
+    android:layout_width="56dp"
+    android:layout_height="12dp"
+    android:background="@drawable/border_button_size_detail" >
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="TextView"
+        android:textSize="8sp" />
+</FrameLayout>
