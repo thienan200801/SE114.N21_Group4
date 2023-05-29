@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/home">
+    <fragment
+        android:id="@+id/home"
+        android:name="com.example.audace.home"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_home_to_fragment_subcatagory"
+            app:destination="@id/fragment_subcatagory" >
+            <argument
+                android:name="id"
+                android:defaultValue="646af8cc03004211ed6ee936" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_subcatagory"
+        android:name="com.example.audace.fragment_subcatagory"
+        android:label="fragment_subcatagory"
+        tools:layout="@layout/fragment_subcatagory" >
+        <argument
+            android:name="id"
+            app:argType="string" />
+    </fragment>
+</navigation>

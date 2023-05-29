@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="145dp"
+    android:layout_height="227dp"
+    android:background="@drawable/item_card"
+    android:elevation="10dp">
+
+    <LinearLayout
+        android:id="@+id/itemCardLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/item_card"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/itemCardImageFrameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/itemCardImageView"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:background="@android:color/transparent"
+                android:backgroundTint="@android:color/transparent"
+                app:srcCompat="@drawable/bag_example1"
+                tools:ignore="ContentDescription"
+                tools:srcCompat="@drawable/empty_tall_divider" />
+
+            <ToggleButton
+                android:id="@+id/itemCardImageButton"
+                android:layout_width="19dp"
+                android:layout_height="19dp"
+                android:layout_gravity="bottom|right|center_vertical"
+                android:layout_marginRight="12dp"
+                android:background="@android:color/transparent"
+                android:backgroundTint="@android:color/transparent"
+                android:backgroundTintMode="add"
+                android:button="@drawable/baseline_favorite_border_24"
+                android:checked="false"
+                android:textOff=""
+                android:textOn=""
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/itemCardNameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|top"
+                android:fontFamily="@font/open_sans"
+                android:text="Bag"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/itemCardPriceTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:fontFamily="@font/open_sans_bold"
+                android:gravity="center"
+                android:text="Bag"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>

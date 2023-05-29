@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".home">
+    <ScrollView
+        android:id="@+id/home_scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/catagoryListView"
+                android:layout_width="match_parent"
+                android:layout_height="102dp"
+                android:overScrollMode="never"
+                android:paddingLeft="7dp"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:clickable="false"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="100dp"
+                    android:layout_height="28dp"
+                    android:layout_marginTop="18dp"
+                    android:background="#FFF47C "
+                    android:clickable="true"
+                    android:fontFamily="@font/open_sans_condensed_bold"
+                    android:gravity="center"
+                    android:text="Bộ sưu tập"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <LinearLayout
+                    android:id="@+id/bst_more_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="bottom|right"
+                    android:clickable="true"
+                    android:orientation="horizontal"
+                    tools:ignore="TouchTargetSizeCheck">
+
+                    <TextView
+                        android:layout_width="69dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|right"
+                        android:clickable="false"
+                        android:foregroundTint="#000000"
+                        android:gravity="left"
+                        android:text="Xem thêm"
+                        android:textColor="#000000" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/baseline_arrow_right_alt_24" />
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/BannerRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="137dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:overScrollMode="never">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:clickable="false"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="100dp"
+                    android:layout_height="28dp"
+                    android:layout_marginStart="-8dp"
+                    android:layout_marginTop="27dp"
+                    android:background="#FFF47C "
+                    android:fontFamily="@font/open_sans_condensed_bold"
+                    android:gravity="center"
+                    android:text="Bán chạy"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="bottom|right"
+                    android:clickable="true"
+                    android:orientation="horizontal"
+                    tools:ignore="TouchTargetSizeCheck">
+
+                    <TextView
+                        android:layout_width="69dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|right"
+                        android:clickable="false"
+                        android:foregroundTint="#000000"
+                        android:gravity="left"
+                        android:text="Xem thêm"
+                        android:textColor="#000000" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/baseline_arrow_right_alt_24" />
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/banChayItemList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="8dp"
+                android:overScrollMode="never" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:clickable="false"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="28dp"
+                    android:layout_marginStart="-8dp"
+                    android:layout_marginTop="27dp"
+                    android:background="#FFF47C "
+                    android:fontFamily="@font/open_sans_condensed_bold"
+                    android:gravity="center"
+                    android:text="Sale-off"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="bottom|right"
+                    android:clickable="true"
+                    android:orientation="horizontal"
+                    tools:ignore="TouchTargetSizeCheck">
+
+                    <TextView
+                        android:layout_width="69dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|right"
+                        android:clickable="false"
+                        android:foregroundTint="#000000"
+                        android:gravity="left"
+                        android:text="Xem thêm"
+                        android:textColor="#000000" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/baseline_arrow_right_alt_24" />
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/saleOffItemList"
+                android:layout_width="match_parent"
+                android:layout_height="227dp"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="8dp"
+                android:overScrollMode="never" />
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>
