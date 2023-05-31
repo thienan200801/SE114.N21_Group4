@@ -127,11 +127,9 @@ public class CatagoryListAdapter extends RecyclerView.Adapter<CatagoryListAdapte
                 }
             });
             viewHolder.getImageView().getLayoutParams().height = viewHolder.getImageView().getLayoutParams().width;
-            viewHolder.getImageView().setOnClickListener(new View.OnClickListener(){
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
-                    com.example.audace.homeDirections.ActionHomeToFragmentSubcatagory action = homeDirections.actionHomeToFragmentSubcatagory();
-                    action.setId(catagories.get(viewHolder.getAdapterPosition()).imgID);
                     Navigation.findNavController(view).navigate(R.id.action_home_to_fragment_subcatagory);
                 }
             });
@@ -142,14 +140,14 @@ public class CatagoryListAdapter extends RecyclerView.Adapter<CatagoryListAdapte
             if(viewHolder.getTextView().getWidth()  < pixels)
                 viewHolder.getTextView().setWidth(pixels);
             if(selectedCatagory == position)
-                viewHolder.getTextView().setBackgroundColor(Color.parseColor("#FFFAD0"));
+                viewHolder.getTextView().setBackgroundColor(Color.parseColor("#F5D000"));
             else
-                viewHolder.getTextView().setBackgroundColor(Color.WHITE);
-            viewHolder.getTextView().setOnClickListener(new View.OnClickListener() {
+                viewHolder.getTextView().setBackgroundColor(Color.parseColor("#ffffff"));
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     notifyItemChanged(selectedCatagory);
-                    selectedCatagory = viewHolder.getLayoutPosition();
+                    selectedCatagory = viewHolder.getPosition();
                     DataStorage.getInstance().setCatagoryId(catagories.get(selectedCatagory).imgID);
                     notifyItemChanged(selectedCatagory);
                     if(runnable != null)

@@ -117,6 +117,16 @@ public class home extends Fragment {
         // Inflate the layout for this fragment
         fragment = this;
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        fragment.getActivity().findViewById(R.id.drawerToggleButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DrawerLayout drawerLayout = (DrawerLayout) fragment.getActivity().findViewById(R.id.drawerNavigationView).getParent();
+                if(drawerLayout.isOpen())
+                    drawerLayout.close();
+                else
+                    drawerLayout.open();
+            }
+        });
         catagories = new ArrayList<Catagory>();
         CrawlCatagory();
         catagoryListAdapter = new CatagoryListAdapter(catagories);
