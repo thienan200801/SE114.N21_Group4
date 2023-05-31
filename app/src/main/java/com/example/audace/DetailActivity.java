@@ -3,6 +3,7 @@ package com.example.audace;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,6 +23,7 @@ import android.widget.Toast;
 import com.example.audace.adapter.ColorAdapter;
 import com.example.audace.adapter.SizeAdapter;
 import com.example.audace.api.ApiItemDetails;
+import com.example.audace.fragment_subcatagoryArgs;
 import com.example.audace.model.ColorObject;
 import com.example.audace.model.DetailOfItem;
 import com.example.audace.model.SizeObject;
@@ -44,6 +46,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class DetailActivity extends AppCompatActivity {
+    private String productID;
     private TextView nameofproduct, rating, description, colorItem, sizeItem;
     private Handler handler;
     Button orderBtn;
@@ -57,6 +60,7 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.i("message", "start on create");
         handler = new Handler();
+        productID = DataStorage.getInstance().getProductId();
         super.onCreate(savedInstanceState);
         renderData();
         setContentView(R.layout.activity_detail);
@@ -104,8 +108,9 @@ public class DetailActivity extends AppCompatActivity {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("text/plain");
+        String string = String.format("https://audace-ecomerce.herokuapp.com/products/product/%s",productID);
         Request request = new Request.Builder()
-                .url("https://audace-ecomerce.herokuapp.com/products/product/6459ed39b33d8814d8301f2a")
+                .url(string)
                 .method("GET", null)
                 .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
                 .build();
