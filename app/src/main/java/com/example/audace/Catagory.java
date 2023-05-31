@@ -17,4 +17,12 @@ public class Catagory {
         ImgUrl = Url;
         subCatagories = new ArrayList<>();
     }
+
+    public ArrayList<Catagory> getSubCatagories() {
+        return subCatagories;
+    }
+
+    public void setSubCatagories(ArrayList<Catagory> subCatagories) {
+        this.subCatagories = subCatagories;
+    }
 }

@@ -15,17 +15,10 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    ArrayList<Catagory> catagories;
-    ArrayList<Banner> banners;
-
-    ArrayList<Product> products;
-    CatagoryListAdapter catagoryListAdapter;
-    BannerListAdapter bannerListAdapter;
-
-    ProductListAdapter productListAdapter;
+    final DataStorage storage = DataStorage.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_checkout);
+        setContentView(R.layout.activity_homepage);
     }
 }

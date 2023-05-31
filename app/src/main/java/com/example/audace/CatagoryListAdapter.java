@@ -3,8 +3,10 @@ package com.example.audace;
 import android.app.Notification;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.Image;
 import android.media.ImageReader;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.navigation.NavController;
 import androidx.navigation.NavHost;
 import androidx.navigation.NavHostController;
@@ -35,11 +38,29 @@ import okhttp3.Response;
 public class CatagoryListAdapter extends RecyclerView.Adapter<CatagoryListAdapter.ViewHolder> {
     ArrayList<Catagory> catagories;
     private int selectedCatagory;
+
+    private Runnable runnable;
+
     public CatagoryListAdapter(ArrayList<Catagory> input) {
 
         catagories = input;
-        selectedCatagory = 0;
+        selectedCatagory = RecyclerView.SCROLLBAR_POSITION_DEFAULT;
+        String catagoryID = DataStorage.getInstance().getCatagoryId();
+        for(int i = 0; i < catagories.size(); i ++)
+        {
+            if(catagories.get(i).imgID == catagoryID)
+            {
+                selectedCatagory = i;
+                break;
+            }
+        }
+        runnable = null;
     }
+
+    public void setRunnable(Runnable callback) {
+        this.runnable = callback;
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
         private final ImageView imgView;
@@ -77,7 +98,6 @@ public class CatagoryListAdapter extends RecyclerView.Adapter<CatagoryListAdapte
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position){
 
-        Log.i("message", "start crawl image");
         viewHolder.getTextView().setText(catagories.get(position).CatagoryName);
         viewHolder.getTextView().setTextSize(12);
         if(!Objects.equals(catagories.get(position).ImgUrl, ""))
@@ -117,7 +137,25 @@ public class CatagoryListAdapter extends RecyclerView.Adapter<CatagoryListAdapte
             });
         }
         else {
-            viewHolder.getTextView().setHeight(21);
+            final float scale = viewHolder.getTextView().getContext().getResources().getDisplayMetrics().density;
+            int pixels = (int) (94 * scale + 0.5f);
+            if(viewHolder.getTextView().getWidth()  < pixels)
+                viewHolder.getTextView().setWidth(pixels);
+            if(selectedCatagory == position)
+                viewHolder.getTextView().setBackgroundColor(Color.parseColor("#FFFAD0"));
+            else
+                viewHolder.getTextView().setBackgroundColor(Color.WHITE);
+            viewHolder.getTextView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    notifyItemChanged(selectedCatagory);
+                    selectedCatagory = viewHolder.getLayoutPosition();
+                    DataStorage.getInstance().setCatagoryId(catagories.get(selectedCatagory).imgID);
+                    notifyItemChanged(selectedCatagory);
+                    if(runnable != null)
+                        new Handler().post(runnable);
+                }
+            });
         }
     }
 
@@ -139,4 +177,11 @@ public class CatagoryListAdapter extends RecyclerView.Adapter<CatagoryListAdapte
         if(value < catagories.size() && value > 0)
             selectedCatagory = value;
     }
+    public void Update(ArrayList<Catagory>catagoryArrayList)
+    {
+        catagories.clear();
+        catagories.addAll(catagoryArrayList);
+        notifyDataSetChanged();
+    }
+
 }

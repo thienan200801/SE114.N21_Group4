@@ -35,7 +35,7 @@
 
             <ToggleButton
                 android:id="@+id/itemCardImageButton"
-                android:layout_width="19dp"
+                android:layout_width="25dp"
                 android:layout_height="19dp"
                 android:layout_gravity="bottom|right|center_vertical"
                 android:layout_marginRight="12dp"

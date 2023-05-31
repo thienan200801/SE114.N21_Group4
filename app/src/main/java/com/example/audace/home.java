@@ -1,10 +1,14 @@
 package com.example.audace;
 
 import android.app.Activity;
+import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.NavHost;
@@ -16,9 +20,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +39,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -132,7 +143,7 @@ public class home extends Fragment {
         products = new ArrayList<Product>();
         CrawlBanChayProduct();
         productListAdapter = new ProductListAdapter(products);
-
+        productListAdapter.setDestinationId(R.id.action_home_to_fragment_subcatagory);
         LinearLayoutManager productListManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
         RecyclerView banChayRecycleView = (RecyclerView) view.findViewById(R.id.banChayItemList);
 
@@ -146,6 +157,7 @@ public class home extends Fragment {
         saleProducts = new ArrayList<Product>();
         CrawlSaleOffProduct();
         saleProductListAdapter = new ProductListAdapter(saleProducts);
+        saleProductListAdapter.setDestinationId(R.id.action_home_to_fragment_subcatagory);
         RecyclerView saleOffRecycleView = (RecyclerView) view.findViewById(R.id.saleOffItemList);
         LinearLayoutManager saleOffLinearLayout = new LinearLayoutManager(saleOffRecycleView.getContext(), LinearLayoutManager.HORIZONTAL, false);
         saleOffRecycleView.setAdapter(saleProductListAdapter);
@@ -157,7 +169,25 @@ public class home extends Fragment {
         bstButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                NavController navController = Navigation.findNavController(view);
+                NavController navController = NavHostFragment.findNavController(fragment);
+                navController.navigate(R.id.action_home_to_fragment_subcatagory);
+            }
+        });
+
+        View banChayButton = view.findViewById(R.id.banchaymore_button);
+        banChayButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                NavController navController = NavHostFragment.findNavController(fragment);
+                navController.navigate(R.id.action_home_to_fragment_subcatagory);
+            }
+        });
+
+        View saleOffButton = view.findViewById(R.id.saleoffmore_button);
+        saleOffButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                NavController navController = NavHostFragment.findNavController(fragment);
                 navController.navigate(R.id.action_home_to_fragment_subcatagory);
             }
         });
@@ -166,6 +196,8 @@ public class home extends Fragment {
     public void CrawlCatagory(){
         Handler handler = new Handler(getContext().getMainLooper());
         OkHttpClient client = new OkHttpClient().newBuilder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
                 .build();
         MediaType mediaType = MediaType.parse("text/plain");
         RequestBody body = RequestBody.create(mediaType, "");
@@ -205,14 +237,25 @@ public class home extends Fragment {
                             Catagory item = null;
                             try {
                                 item = new Catagory(jsonObject.get("_id").toString(), jsonObject.get("name").toString(), jsonObject.get("imageURL").toString());
-                            } catch (JSONException e) {
+                                JSONArray childCatagory = jsonObject.getJSONArray("childCategories");
+                                for(int j = 0 ; j < childCatagory.length(); j++)
+                                {
+                                    JSONObject child = childCatagory.getJSONObject(j);
+                                    item.getSubCatagories().add(new Catagory(child.get("_id").toString(), child.get("name").toString(), "") );
+                                }
+
+                                catagories.add(item);
+                            } catch (Exception e) {
+                                Log.i("exception", e.toString());
                             }
-                            catagories.add(item);
                         }
+                        Log.i("message", catagories.toString());
                         catagoryListAdapter = new CatagoryListAdapter(catagories);
                         RecyclerView recyclerView = (RecyclerView) fragment.getView().findViewById(R.id.catagoryListView);
                         recyclerView.setAdapter(catagoryListAdapter);
                         catagoryListAdapter.notifyItemRangeInserted(0, products.size());
+                        DataStorage.getInstance().setCatagoryArrayList(new ArrayList<>(catagories));
+                        populateDrawerMenu(NavHostFragment.findNavController(fragment));
                     }
                 });
             }
@@ -221,6 +264,8 @@ public class home extends Fragment {
     public void CrawlBanner(){
         Handler handler = new Handler(getContext().getMainLooper());
         OkHttpClient client = new OkHttpClient().newBuilder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
                 .build();
         MediaType mediaType = MediaType.parse("text/plain");
         RequestBody body = RequestBody.create(mediaType, "");
@@ -277,6 +322,8 @@ public class home extends Fragment {
     public void CrawlBanChayProduct(){
         Handler handler = new Handler(getContext().getMainLooper());
         OkHttpClient client = new OkHttpClient().newBuilder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
                 .build();
         MediaType mediaType = MediaType.parse("text/plain");
         RequestBody body = RequestBody.create(mediaType, "");
@@ -315,13 +362,14 @@ public class home extends Fragment {
                             }
                             Product item = null;
                             try {
-                                item = new Product(jsonObject.getString("_id"),jsonObject.getString("name"), "00000", jsonObject.getBoolean("isFavourite"),jsonObject.getString("imageURL") );
+                                item = new Product(jsonObject.getString("_id"),jsonObject.getString("name"), jsonObject.getString("currentPrice"), jsonObject.getBoolean("isFavourite"),jsonObject.getString("imageURL") );
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
                             }
                             products.add(item);
                         }
                         productListAdapter = new ProductListAdapter(products);
+                        productListAdapter.setDestinationId(R.id.action_home_to_detailActivity);
                         RecyclerView banChayRecycleView = (RecyclerView) fragment.getView().findViewById(R.id.banChayItemList);
                         banChayRecycleView.setAdapter(productListAdapter);
                         productListAdapter.notifyItemRangeInserted(0, products.size());
@@ -333,6 +381,8 @@ public class home extends Fragment {
     public void CrawlSaleOffProduct(){
         Handler handler = new Handler();
         OkHttpClient client = new OkHttpClient().newBuilder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
                 .build();
         MediaType mediaType = MediaType.parse("text/plain");
         RequestBody body = RequestBody.create(mediaType, "");
@@ -355,7 +405,7 @@ public class home extends Fragment {
                     for(int i = 0; i < jsonArray.length(); i ++)
                     {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        Product item = new Product(jsonObject.getString("_id"),jsonObject.getString("name"), "00000", jsonObject.getBoolean("isFavourite"),jsonObject.getString("imageURL") );
+                        Product item = new Product(jsonObject.getString("_id"),jsonObject.getString("name"),jsonObject.getString("currentPrice"), jsonObject.getBoolean("isFavourite"),jsonObject.getString("imageURL") );
                         saleProducts.add(item);
                     }
                     handler.post(new Runnable() {
@@ -370,6 +420,42 @@ public class home extends Fragment {
                 }
             }
         });
+    }
+    public void populateDrawerMenu(NavController navController)
+    {
+        NavigationView navigationView = (NavigationView) fragment.getActivity().findViewById(R.id.drawerNavigationView);
+        Menu menu = navigationView.getMenu();
+        ArrayList<Catagory> catagoryArrayList = DataStorage.getInstance().getCatagoryArrayList();
+        menu.clear();
+        for(int i = 0; i <catagoryArrayList.size(); i ++)
+        {
+            if(catagoryArrayList.get(i).getSubCatagories().size() == 0)
+                menu.add(catagoryArrayList.get(i).CatagoryName);
+            else
+            {
+                SubMenu subMenu = menu.addSubMenu(catagoryArrayList.get(i).CatagoryName);
+                ArrayList<Catagory> child = catagoryArrayList.get(i).getSubCatagories();
+                for(int j = 0; j < child.size(); j ++)
+                {
+                    MenuItem item = subMenu.add(child.get(j).CatagoryName);
+                    int index = j;
+                    item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+                            DataStorage.getInstance().setCatagoryId(child.get(index).imgID);
+                            navController.navigate(R.id.action_home_to_fragment_subcatagory);
+                            ((DrawerLayout)navigationView.getParent()).closeDrawer(GravityCompat.START);
+                            return true;
+                        }
+                    });
+                    Log.i("message", child.get(j).CatagoryName);
+                }
+                subMenu.clearHeader();
+
+            }
+
+        }
+        navigationView.invalidate();
     }
 }
 
