@@ -238,7 +238,7 @@
                             android:layout_gravity="center_horizontal"
                             android:background="@android:color/transparent"
                             android:contentDescription="Đăng nhập"
-                            android:onClick="onButtonClick"
+                            android:onClick="onClick"
                             android:padding="16dp"
                             android:textAlignment="center"
                             app:srcCompat="@drawable/rec9" />
@@ -358,7 +358,7 @@
                             android:layout_gravity="center_horizontal"
                             android:background="@android:color/transparent"
                             android:contentDescription="Đăng nhập"
-                            android:onClick="onButtonClick"
+                            android:onClick="onClick"
                             android:padding="16dp"
                             android:textAlignment="center"
                             app:srcCompat="@drawable/rec9" />
