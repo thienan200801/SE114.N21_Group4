@@ -118,6 +118,7 @@ public class LoginScreen extends AppCompatActivity {
                     client.newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                            Toast.makeText(LoginScreen.this,"Sign Up failed",Toast.LENGTH_SHORT).show();
 
                         }
 
@@ -125,6 +126,20 @@ public class LoginScreen extends AppCompatActivity {
                         public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                             String body=response.body().string();
                             Log.e("data from server", body);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    if (body.equals("")) {
+                                        Toast.makeText(LoginScreen.this, "Sign Up successfully", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                    else {
+                                        Toast.makeText(LoginScreen.this, body, Toast.LENGTH_SHORT).show();
+
+                                    }
+                                }
+                            });
 
 
                         }
@@ -168,12 +183,13 @@ public class LoginScreen extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(LoginScreen.this, serverResponse, Toast.LENGTH_SHORT).show();
-                                if (serverResponse.equals("accessToken")) {
-                                    // Intent to another window
+
+                                if (!serverResponse.contains("statusCode")) {
+                                    Toast.makeText(LoginScreen.this,"Login Success", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(LoginScreen.this, MainActivity.class);
                                     startActivity(intent);
                                 }
+
 
                             }
                         });
