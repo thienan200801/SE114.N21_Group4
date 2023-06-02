@@ -90,32 +90,10 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent">
-
-                            <ImageButton
-                                android:id="@+id/btnDel"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerInParent="true"
-                                android:background="@android:color/transparent"
-                                android:contentDescription="Delete Item"
-                                android:onClick="onCLick"
-                                android:textAlignment="center"
-                                app:srcCompat="@drawable/delete"
-                                tools:ignore="TouchTargetSizeCheck" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerInParent="true"
-                                android:text="Xóa"
-                                android:textSize="9sp" />
-                        </RelativeLayout>
 
 
                         <RelativeLayout
+                            android:layout_marginStart="50dp"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent">
                             <ImageButton
@@ -136,43 +114,25 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
-                                android:text="Thêm vào giỏ"
+                                android:text="Mua lại"
                                 android:textSize="9sp" />
                         </RelativeLayout>
 
-                        <ImageButton
+                        <TextView
                             android:id="@+id/btnNumPlus"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:background="@android:color/transparent"
-                            android:contentDescription="Plus number"
-                            android:onClick="onCLick"
+                            android:layout_height="match_parent"
+                            android:text="Số lượng"
                             android:textAlignment="center"
-                            app:srcCompat="@drawable/plus"
+                            android:textSize="9sp"
                             tools:ignore="TouchTargetSizeCheck" />
                         <TextView
                             android:id="@+id/numTextView"
                             android:layout_width="20dp"
                             android:layout_height="match_parent"/>
-                        <ImageButton
-                            android:id="@+id/btnNumMinus"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:background="@android:color/transparent"
-                            android:contentDescription="Plus number"
-                            android:onClick="onClick"
-                            android:textAlignment="center"
-                            app:srcCompat="@drawable/minus"
-                            tools:ignore="TouchTargetSizeCheck" />
-
                     </LinearLayout>
-
-
                 </LinearLayout>
             </LinearLayout>
-
         </RelativeLayout>
 
     </RelativeLayout>
