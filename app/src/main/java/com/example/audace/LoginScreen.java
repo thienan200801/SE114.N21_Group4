@@ -163,15 +163,20 @@ public class LoginScreen extends AppCompatActivity {
                     Response response = null;
                     try{
                         response = call.execute();
-                        String serverResponse = response.body().string();
+                        JSONObject serverResponse = new JSONObject(response.body().string());
 
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(LoginScreen.this, serverResponse, Toast.LENGTH_SHORT).show();
-                                if (serverResponse.equals("accessToken")) {
+                                //Toast.makeText(LoginScreen.this, serverResponse, Toast.LENGTH_SHORT).show();
+                                if (serverResponse.toString().contains("accessToken")) {
                                     // Intent to another window
-                                    Intent intent = new Intent(LoginScreen.this, MainActivity.class);
+                                    Intent intent = new Intent(LoginScreen.this, HomepageActivity.class);
+                                    try {
+                                        DataStorage.getInstance().setAccessToken(serverResponse.getString("accessToken"));
+                                    } catch (JSONException e) {
+                                        throw new RuntimeException(e);
+                                    }
                                     startActivity(intent);
                                 }
 
@@ -179,6 +184,8 @@ public class LoginScreen extends AppCompatActivity {
                         });
                     }catch (IOException e){
                         e.printStackTrace();
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
                     }
                 }
             }).start();

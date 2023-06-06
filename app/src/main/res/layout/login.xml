@@ -3,12 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="0dp"
+    android:padding="0dp">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:background="#FFFAD0"
+        android:orientation="vertical"
 
         tools:context=".MainActivity">
 
@@ -16,9 +19,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
-            android:paddingTop="0dp"
+            android:layout_marginBottom="0dp"
             android:gravity="top"
-            android:layout_marginBottom="0dp">
+            android:paddingTop="0dp">
 
             <ImageView
                 android:id="@+id/imageView2"
@@ -54,13 +57,16 @@
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
+
                 <ImageButton
                     android:id="@+id/btnLogin"
                     android:layout_width="wrap_content"
@@ -69,8 +75,8 @@
                     android:contentDescription="Đăng nhập"
                     android:onClick="onButtonClick"
                     android:padding="16dp"
-                    app:srcCompat="@drawable/rectangle6"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    app:srcCompat="@drawable/rectangle6" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -82,9 +88,11 @@
                     android:textSize="18sp" />
 
             </RelativeLayout>
+
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
+
                 <ImageButton
                     android:id="@+id/btnSignUp"
                     android:layout_width="wrap_content"
@@ -93,9 +101,8 @@
                     android:contentDescription="Đăng ký"
                     android:onClick="onButtonClick"
                     android:padding="16dp"
-                    app:srcCompat="@drawable/rectangle6"
                     android:textAlignment="center"
-                    />
+                    app:srcCompat="@drawable/rectangle6" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -107,9 +114,6 @@
                     android:textSize="18sp" />
 
             </RelativeLayout>
-
-
-
 
 
         </LinearLayout>
@@ -446,9 +450,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
-            android:paddingTop="0dp"
+            android:layout_marginBottom="0dp"
             android:gravity="bottom"
-            android:layout_marginBottom="0dp">
+            android:paddingTop="0dp">
 
             <ImageView
                 android:id="@+id/imageView4"
@@ -463,12 +467,11 @@
                 android:id="@+id/imageView5"
                 android:layout_width="match_parent"
                 android:layout_height="105dp"
-                android:layout_marginBottom="0dp"
                 android:layout_marginTop="30dp"
+                android:layout_marginBottom="0dp"
                 android:paddingTop="0dp"
                 app:srcCompat="@drawable/rectangle8" />
         </RelativeLayout>
-
 
 
     </LinearLayout>

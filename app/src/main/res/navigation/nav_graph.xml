@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/home">
+    <fragment
+        android:id="@+id/home"
+        android:name="com.example.audace.home"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_home_to_fragment_subcatagory"
+            app:destination="@id/fragment_subcatagory" >
+            <argument
+                android:name="id"
+                android:defaultValue="646af8cc03004211ed6ee936" />
+        </action>
+        <action
+            android:id="@+id/action_home_to_detailActivity"
+            app:destination="@id/detailActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_subcatagory"
+        android:name="com.example.audace.fragment_subcatagory"
+        android:label="fragment_subcatagory"
+        tools:layout="@layout/fragment_subcatagory" >
+        <argument
+            android:name="id"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_fragment_subcatagory_to_detailActivity"
+            app:destination="@id/detailActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/detailActivity"
+        android:name="com.example.audace.DetailActivity"
+        android:label="activity_detail"
+        tools:layout="@layout/activity_detail" >
+        <argument
+            android:name="productId"
+            app:argType="string"
+            android:defaultValue="6459ed39b33d8814d8301f2a" />
+    </activity>
+    <action
+        android:id="@+id/action_global_detailActivity"
+        app:destination="@id/detailActivity"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popUpTo="@id/home"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+</navigation>
