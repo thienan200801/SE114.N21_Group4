@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
@@ -35,8 +37,8 @@
                 android:layout_centerInParent="true"
                 android:layout_gravity="center"
                 android:fontFamily="@font/open_sans"
-                android:textColor="#FFEB3B"
                 android:text="LƯU"
+                android:textColor="#FFEB3B"
                 android:textSize="16sp" />
 
         </RelativeLayout>
@@ -60,36 +62,45 @@
                     android:gravity="center"
                     android:text="Sale off 30%"
                     android:textColor="#F5BF01"
-                    android:textSize="24sp" />
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_marginStart="60dp"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-                    <TextView
-                        android:text = "Mặt hàng"
-                        android:layout_margin="5dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                    <TextView
-                        android:text = "Điều kiện:"
-                        android:layout_margin="5dp"
 
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
                     <TextView
-                        android:text = "Thời gian:"
-                        android:layout_margin="5dp"
-
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="Mặt hàng"
+                        android:textColor="#000000" />
+
                     <TextView
-                        android:text = "Lưu ý"
-                        android:layout_margin="5dp"
-
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+
+                        android:layout_margin="5dp"
+                        android:text="Điều kiện:"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_margin="5dp"
+                        android:text="Thời gian:"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_margin="5dp"
+                        android:text="Lưu ý"
+                        android:textColor="#000000" />
 
                 </LinearLayout>
                 <LinearLayout
@@ -97,26 +108,23 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
                     <TextView
-                        android:text = "xxxxxxxxxxxxxxx"
+                        android:id="@+id/txtmathang"
                         android:layout_margin="5dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <TextView
-                        android:text = "xxxxxxxxxxxxxxx"
+                        android:id="@+id/txtdieukien"
                         android:layout_margin="5dp"
-
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <TextView
-                        android:text = "xxxxxxxxxxxxxxx"
+                        android:id="@+id/txtthoigian"
                         android:layout_margin="5dp"
-
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <TextView
-                        android:text = "xxxxxxxxxxxxxxx"
+                        android:id="@+id/txtluuy"
                         android:layout_margin="5dp"
-
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
@@ -127,6 +135,6 @@
 
 
         </RelativeLayout>
-
+</androidx.cardview.widget.CardView>
 
 
