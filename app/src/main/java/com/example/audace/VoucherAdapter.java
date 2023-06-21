@@ -37,6 +37,7 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.ViewHold
         holder.dieukienTextView.setText(item.getDieukien());
         holder.thoigianTextView.setText(item.getThoigian());
         holder.luuyTextView.setText(item.getLuuy());
+        holder.saleoffTextView.setText(item.getSaleoff());
         holder.saveVoucher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,6 +56,7 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.ViewHold
         TextView dieukienTextView ;
         TextView thoigianTextView ;
         TextView luuyTextView ;
+        TextView saleoffTextView;
         ImageButton saveVoucher;
 
         ViewHolder( View view){
@@ -63,6 +65,7 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.ViewHold
             dieukienTextView =view.findViewById(R.id.txtdieukien);
             thoigianTextView =view.findViewById(R.id.txtthoigian);
             luuyTextView = view.findViewById(R.id.txtluuy);
+            saleoffTextView = view.findViewById(R.id.saleoff_txt);
             saveVoucher = view.findViewById(R.id.btnSaveVoucher);
 
 

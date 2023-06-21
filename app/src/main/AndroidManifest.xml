@@ -22,6 +22,18 @@
         </activity>
         <activity android:name=".LoginScreen"/>
         <activity android:name=".VoucherScreen"/>
+        <activity android:name=".CartScreen"/>
+        <activity android:name=".ProfileScreen"/>
+        <activity android:name=".InfoScreen"/>
+        <activity android:name=".FavoriteScreen"/>
+        <activity android:name=".HistoryScreen"/>
+        <activity android:name=".OrderScreen"/>
+
+
+
+
+
+
 
 
         <meta-data

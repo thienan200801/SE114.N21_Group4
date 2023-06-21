@@ -46,10 +46,10 @@
                     android:paddingEnd="10dp">
 
                     <TextView
+                        android:id="@+id/cart_name_txtView"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:layout_margin="5dp"
-                        android:text="Túi Gucci fjaslkjf;asdkf;ầ;sfdjakfjas;fja;sfja;skfja;"
                         android:textColor="#000000"
                         android:textSize="12sp" />
                     <LinearLayout

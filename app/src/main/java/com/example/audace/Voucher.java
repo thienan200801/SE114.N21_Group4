@@ -2,6 +2,8 @@ package com.example.audace;
 
 public class Voucher {
     String id;
+
+    String saleoff;
     String mathang;
     String dieukien;
     String thoigian;
@@ -46,6 +48,12 @@ public class Voucher {
     public void setLuuy(String luuy) {
         this.luuy = luuy;
     }
+    public String getSaleoff() {
+        return saleoff;
+    }
 
+    public void setSaleoff(String saleoff) {
+        this.saleoff = saleoff;
+    }
 
 }

@@ -30,11 +30,20 @@ public class VoucherScreen extends AppCompatActivity {
     }
     private void setupData(){
         Voucher vch = new Voucher();
-        vch.setDieukien("");
-        vch.setLuuy("");
-        vch.setMathang("");
-        vch.setThoigian("");
+        vch.setDieukien("Đơn hàng đạt 200k");
+        vch.setLuuy("Áp dụng cho đơn trả thẻ");
+        vch.setMathang("Túi");
+        vch.setThoigian("24/11/2023");
+        vch.setSaleoff("Sale off 50%");
         vchList.add(vch);
+        Voucher vch1 = new Voucher();
+        vch1.setDieukien("Đơn hàng đạt 200k");
+        vch1.setLuuy("Áp dụng cho đơn trả thẻ");
+        vch1.setMathang("Túi");
+        vch1.setThoigian("24/11/2023");
+        vch1.setSaleoff("Sale off 50%");
+        vchList.add(vch1);
+
 
     }
 }

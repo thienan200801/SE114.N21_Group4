@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -21,42 +21,38 @@
             android:contentDescription="Back"
             android:onClick="onButtonClick"
             android:padding="16dp"
-            android:textAlignment="center"
             app:srcCompat="@drawable/back" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="100dp"
+            android:layout_centerVertical="true"
             android:fontFamily="@font/open_sans"
-            android:text="Voucher"
+            android:text="Đơn hàng của bạn"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="18sp" />
-    </LinearLayout>
-  <ScrollView
+    </RelativeLayout>
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/rectangle16"
             android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/voucherRecyclerView"
+                android:id="@+id/orderRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="15dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/rectangle16"
-                tools:listitem="@layout/voucher_item">
+                android:background="@drawable/order_bg"
+                tools:listitem="@layout/order_item">
 
             </androidx.recyclerview.widget.RecyclerView>
 
         </LinearLayout>
-   </ScrollView>
+    </ScrollView>
 
 
 
