@@ -3,7 +3,6 @@ package com.example.audace;
 public class Favorite {
     String id;
     String name;
-
     String quantity;
 
     public String getQuantity() {
