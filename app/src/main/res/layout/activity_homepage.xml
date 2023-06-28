@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
+    android:isScrollContainer="true"
+
+    tools:context=".MainActivity">
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity"
+        tools:ignore="HarcodedText">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/mainLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <FrameLayout
+                        android:id="@+id/frame_25"
+                        android:layout_width="match_parent"
+                        android:layout_height="154dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="2dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="135dp"
+                            android:divider="@drawable/empty_tall_divider"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:showDividers="middle">
+
+                            <FrameLayout
+                                android:id="@+id/frame_4"
+                                android:layout_width="331dp"
+                                android:layout_height="44dp"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="12dp">
+
+                                <TextView
+                                    android:id="@+id/audace"
+                                    android:layout_width="163dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="0dp"
+                                    android:fontFamily="@font/dancing_script_bold"
+                                    android:gravity="center_horizontal"
+                                    android:padding="0dp"
+                                    android:text="@string/audace"
+                                    android:textAppearance="@style/audace" />
+
+                                <ImageButton
+                                    android:id="@+id/drawerToggleButton"
+                                    android:layout_width="37dp"
+                                    android:layout_height="37dp"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginTop="2dp"
+                                    android:background="@drawable/ellipse_6"
+                                    android:contentDescription=" "
+                                    android:gravity="center_vertical"
+                                    android:src="@drawable/baseline_dehaze_24"
+                                    tools:ignore="TouchTargetSizeCheck" />
+
+                                <ImageButton
+                                    android:id="@+id/imageButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="end"
+                                    android:backgroundTint="@android:color/transparent"
+                                    android:contentDescription=" "
+                                    app:srcCompat="@drawable/local_mall"
+                                    tools:ignore="TouchTargetSizeCheck" />
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:id="@+id/rectangle_1"
+                                android:layout_width="300dp"
+                                android:layout_height="44dp"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentTop="true"
+                                android:background="@drawable/rectangle_1">
+
+                                <ImageButton
+                                    android:id="@+id/imageButton3"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical|end"
+                                    android:layout_marginEnd="10dp"
+                                    android:background="@android:color/transparent"
+                                    android:contentDescription="@string/audace"
+                                    app:srcCompat="?android:attr/actionModeWebSearchDrawable"
+                                    tools:ignore="TouchTargetSizeCheck" />
+
+                                <EditText
+                                    android:id="@+id/editTextTextPersonName3"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginStart="20dp"
+                                    android:background="@null"
+                                    android:ems="10"
+                                    android:hint=" "
+                                    android:inputType="text"
+                                    tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+                            </FrameLayout>
+
+                        </LinearLayout>
+                    </FrameLayout>
+
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/fragmentContainerView"
+                        android:name="androidx.navigation.fragment.NavHostFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="520dp"
+                        app:defaultNavHost="true"
+                        android:layout_marginBottom="10dp"
+                        app:navGraph="@navigation/nav_graph"
+                        tools:layout="@layout/fragment_home" />
+
+                </LinearLayout>
+
+                <com.google.android.material.bottomnavigation.BottomNavigationView
+                    android:id="@+id/bottomNavigation"
+                    android:layout_width="match_parent"
+                    android:layout_height="58dp"
+                    android:layout_gravity="bottom"
+                    android:background="#FFF2AC"
+                    android:paddingBottom="0dp"
+                    android:theme="@style/Widget.BottomNavigationView"
+                    app:itemIconTint="@android:color/black"
+                    app:itemTextColor="@android:color/black"
+                    app:labelVisibilityMode="labeled"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:menu="@menu/menu" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/drawerNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="#FFFAD0"
+            app:headerLayout="@layout/drawer_header_layout"
+            app:menu="@menu/drawer_menu"/>
+
+    </androidx.drawerlayout.widget.DrawerLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
