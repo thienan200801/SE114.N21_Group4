@@ -31,7 +31,7 @@ public class DataStorage {
 
     public DataStorage(){
         catagoryArrayList = new ArrayList<Catagory>();
-        AccessToken = "";
+        AccessToken = null;
     }
 
     private static final DataStorage storage = new DataStorage();

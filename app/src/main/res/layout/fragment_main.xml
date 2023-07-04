@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainFragment">
+
+    <LinearLayout
+        android:id="@+id/mainLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/frame_25"
+            android:layout_width="match_parent"
+            android:layout_height="154dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="135dp"
+                android:divider="@drawable/empty_tall_divider"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:showDividers="middle">
+
+                <FrameLayout
+                    android:id="@+id/frame_4"
+                    android:layout_width="331dp"
+                    android:layout_height="44dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="12dp">
+
+                    <TextView
+                        android:id="@+id/audace"
+                        android:layout_width="163dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="0dp"
+                        android:fontFamily="@font/dancing_script_bold"
+                        android:gravity="center_horizontal"
+                        android:padding="0dp"
+                        android:text="@string/audace"
+                        android:textAppearance="@style/audace" />
+
+                    <ImageButton
+                        android:id="@+id/drawerToggleButton"
+                        android:layout_width="37dp"
+                        android:layout_height="37dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="2dp"
+                        android:background="@drawable/ellipse_6"
+                        android:contentDescription=" "
+                        android:gravity="center_vertical"
+                        android:src="@drawable/baseline_dehaze_24"
+                        tools:ignore="TouchTargetSizeCheck" />
+
+                    <ImageButton
+                        android:id="@+id/imageButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:backgroundTint="@android:color/transparent"
+                        android:contentDescription=" "
+                        app:srcCompat="@drawable/local_mall"
+                        tools:ignore="TouchTargetSizeCheck" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/rectangle_1"
+                    android:layout_width="300dp"
+                    android:layout_height="44dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/rectangle_1">
+
+                    <ImageButton
+                        android:id="@+id/imageButton3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|end"
+                        android:layout_marginEnd="10dp"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/audace"
+                        app:srcCompat="?android:attr/actionModeWebSearchDrawable"
+                        tools:ignore="TouchTargetSizeCheck" />
+
+                    <EditText
+                        android:id="@+id/editTextTextPersonName3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="20dp"
+                        android:background="@null"
+                        android:ems="10"
+                        android:hint=" "
+                        android:inputType="text"
+                        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+                </FrameLayout>
+
+            </LinearLayout>
+        </FrameLayout>
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentContainerView"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="520dp"
+            android:layout_marginBottom="10dp"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/nav_graph"
+            tools:layout="@layout/fragment_home" />
+
+    </LinearLayout>
+
+</FrameLayout>

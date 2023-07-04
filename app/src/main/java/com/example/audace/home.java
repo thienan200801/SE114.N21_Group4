@@ -2,6 +2,7 @@ package com.example.audace;
 
 import android.app.Activity;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -69,6 +70,7 @@ public class home extends Fragment {
 
     ProductListAdapter saleProductListAdapter;
     Fragment fragment;
+    NavController navHostFragment;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -116,6 +118,7 @@ public class home extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         fragment = this;
+        navHostFragment =  ((NavHostFragment)fragment.getParentFragment().getParentFragmentManager().findFragmentById(R.id.fragmentContainerView)).getNavController() ;
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         fragment.getActivity().findViewById(R.id.drawerToggleButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -212,9 +215,9 @@ public class home extends Fragment {
         MediaType mediaType = MediaType.parse("text/plain");
         RequestBody body = RequestBody.create(mediaType, "");
         Request request = new Request.Builder()
-                .url("https://audace-ecomerce.herokuapp.com/categories?withImage=true")
+                .url("https://audace-ecomerce.herokuapp.com/categories")
                 .method("GET", null)
-                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
+                .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -265,7 +268,7 @@ public class home extends Fragment {
                         recyclerView.setAdapter(catagoryListAdapter);
                         catagoryListAdapter.notifyItemRangeInserted(0, products.size());
                         DataStorage.getInstance().setCatagoryArrayList(new ArrayList<>(catagories));
-                        populateDrawerMenu(NavHostFragment.findNavController(fragment));
+                        populateDrawerMenu(navHostFragment);
                     }
                 });
             }

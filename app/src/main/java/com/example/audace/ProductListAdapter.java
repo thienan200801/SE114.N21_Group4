@@ -112,7 +112,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             holder.getFavouriteButton().setButtonDrawable(R.drawable.baseline_favorite_24);
             holder.getFavouriteButton().setChecked(true);
         }
-        holder.setIsRecyclable(true);
         holder.getImgView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
