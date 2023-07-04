@@ -1,4 +1,4 @@
-package com.example.audace;
+package com.example.audace.adapter;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,8 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
+
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.audace.R;
+import com.example.audace.model.Banner;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,7 +50,7 @@ public class BannerListAdapter extends RecyclerView.Adapter<BannerListAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position){
         Log.i("message", "start crawl banner image");
-        HttpUrl url = HttpUrl.parse(banners.get(position).imgURL).newBuilder().build();
+        HttpUrl url = HttpUrl.parse(banners.get(position).getImgURL()).newBuilder().build();
         Request request = new Request.Builder().url(url).build();
         OkHttpClient client = new OkHttpClient();
         client.newCall(request).enqueue(new Callback() {

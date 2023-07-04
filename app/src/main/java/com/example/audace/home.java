@@ -2,7 +2,6 @@ package com.example.audace;
 
 import android.app.Activity;
 import android.graphics.Rect;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -12,8 +11,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.NavHost;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,22 +25,24 @@ import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.audace.adapter.BannerListAdapter;
+import com.example.audace.adapter.CatagoryListAdapter;
+import com.example.audace.adapter.ProductListAdapter;
+import com.example.audace.model.Banner;
+import com.example.audace.model.Catagory;
+import com.example.audace.model.Product;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -70,7 +68,6 @@ public class home extends Fragment {
 
     ProductListAdapter saleProductListAdapter;
     Fragment fragment;
-    NavController navHostFragment;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -118,18 +115,7 @@ public class home extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         fragment = this;
-        navHostFragment =  ((NavHostFragment)fragment.getParentFragment().getParentFragmentManager().findFragmentById(R.id.fragmentContainerView)).getNavController() ;
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        fragment.getActivity().findViewById(R.id.drawerToggleButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DrawerLayout drawerLayout = (DrawerLayout) fragment.getActivity().findViewById(R.id.drawerNavigationView).getParent();
-                if(drawerLayout.isOpen())
-                    drawerLayout.close();
-                else
-                    drawerLayout.open();
-            }
-        });
         catagories = new ArrayList<Catagory>();
         CrawlCatagory();
         catagoryListAdapter = new CatagoryListAdapter(catagories);
@@ -215,9 +201,9 @@ public class home extends Fragment {
         MediaType mediaType = MediaType.parse("text/plain");
         RequestBody body = RequestBody.create(mediaType, "");
         Request request = new Request.Builder()
-                .url("https://audace-ecomerce.herokuapp.com/categories")
+                .url("https://audace-ecomerce.herokuapp.com/categories?withImage=true")
                 .method("GET", null)
-                .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
+                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -268,7 +254,7 @@ public class home extends Fragment {
                         recyclerView.setAdapter(catagoryListAdapter);
                         catagoryListAdapter.notifyItemRangeInserted(0, products.size());
                         DataStorage.getInstance().setCatagoryArrayList(new ArrayList<>(catagories));
-                        populateDrawerMenu(navHostFragment);
+                        populateDrawerMenu(NavHostFragment.findNavController(fragment));
                     }
                 });
             }
@@ -443,25 +429,25 @@ public class home extends Fragment {
         for(int i = 0; i <catagoryArrayList.size(); i ++)
         {
             if(catagoryArrayList.get(i).getSubCatagories().size() == 0)
-                menu.add(catagoryArrayList.get(i).CatagoryName);
+                menu.add(catagoryArrayList.get(i).getCatagoryName());
             else
             {
-                SubMenu subMenu = menu.addSubMenu(catagoryArrayList.get(i).CatagoryName);
+                SubMenu subMenu = menu.addSubMenu(catagoryArrayList.get(i).getCatagoryName());
                 ArrayList<Catagory> child = catagoryArrayList.get(i).getSubCatagories();
                 for(int j = 0; j < child.size(); j ++)
                 {
-                    MenuItem item = subMenu.add(child.get(j).CatagoryName);
+                    MenuItem item = subMenu.add(child.get(j).getCatagoryName());
                     int index = j;
                     item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
-                            DataStorage.getInstance().setCatagoryId(child.get(index).imgID);
+                            DataStorage.getInstance().setCatagoryId(child.get(index).getCatagoryID());
                             navController.navigate(R.id.action_home_to_fragment_subcatagory);
                             ((DrawerLayout)navigationView.getParent()).closeDrawer(GravityCompat.START);
                             return true;
                         }
                     });
-                    Log.i("message", child.get(j).CatagoryName);
+                    Log.i("message", child.get(j).getCatagoryName());
                 }
                 subMenu.clearHeader();
 

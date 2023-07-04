@@ -18,7 +18,7 @@ public class IntroductionActivity3 extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Intent t=new Intent(IntroductionActivity3.this,HomepageActivity.class);
+                Intent t=new Intent(IntroductionActivity3.this,LoginScreen.class);
                 startActivity(t);
             }
         });

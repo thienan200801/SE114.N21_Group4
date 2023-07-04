@@ -1,5 +1,7 @@
 package com.example.audace;
 
+import com.example.audace.model.Catagory;
+
 import java.util.ArrayList;
 
 public class DataStorage {
@@ -18,7 +20,7 @@ public class DataStorage {
     public void setCatagoryArrayList(ArrayList<Catagory> catagoryArrayList) {
         this.catagoryArrayList = catagoryArrayList;
         if(catagoryArrayList.size() != 0)
-            catagoryId = catagoryArrayList.get(0).imgID;
+            catagoryId = catagoryArrayList.get(0).getCatagoryID();
     }
 
     public String getAccessToken() {

@@ -118,7 +118,6 @@ public class LoginScreen extends AppCompatActivity {
                     client.newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                            Toast.makeText(LoginScreen.this,"Sign Up failed",Toast.LENGTH_SHORT).show();
 
                         }
 
@@ -126,20 +125,6 @@ public class LoginScreen extends AppCompatActivity {
                         public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                             String body=response.body().string();
                             Log.e("data from server", body);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-
-                                    if (body.equals("")) {
-                                        Toast.makeText(LoginScreen.this, "Sign Up successfully", Toast.LENGTH_SHORT).show();
-                                        loginLayout.setVisibility(View.GONE);
-                                        signupLayout.setVisibility(View.VISIBLE);
-                                    }
-                                    else {
-                                        Toast.makeText(LoginScreen.this, body, Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
 
 
                         }
@@ -215,6 +200,7 @@ public class LoginScreen extends AppCompatActivity {
             case R.id.btnLogin:
                 loginLayout.setVisibility(View.VISIBLE);
                 signupLayout.setVisibility(View.GONE);
+
                 break;
             case R.id.btnSignUp:
                 loginLayout.setVisibility(View.GONE);
