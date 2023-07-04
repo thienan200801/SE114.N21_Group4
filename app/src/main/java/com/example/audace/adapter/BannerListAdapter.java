@@ -64,7 +64,7 @@ public class BannerListAdapter extends RecyclerView.Adapter<BannerListAdapter.Vi
                 if(response.isSuccessful())
                 {
                     try{
-                        final Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
+                         final Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
                         viewHolder.getImageView().setImageBitmap(bitmap);
                     }
                     catch (Exception e)

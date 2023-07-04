@@ -124,8 +124,6 @@ public class CatagoryListAdapter extends RecyclerView.Adapter<CatagoryListAdapte
             viewHolder.itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
-                    com.example.audace.homeDirections.ActionHomeToFragmentSubcatagory action = com.example.audace.homeDirections.actionHomeToFragmentSubcatagory();
-                    action.setId(catagories.get(viewHolder.getAdapterPosition()).getCatagoryID());
                     Navigation.findNavController(view).navigate(R.id.action_home_to_fragment_subcatagory);
                 }
             });
