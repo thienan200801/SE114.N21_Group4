@@ -46,6 +46,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class DetailActivity extends AppCompatActivity {
+
     private String productID;
     private TextView nameofproduct, rating, description, colorItem, sizeItem;
     private Handler handler;
@@ -68,10 +69,7 @@ public class DetailActivity extends AppCompatActivity {
         nameofproduct = (TextView) findViewById(R.id.nameofproduct);
         rating = (TextView) findViewById(R.id.rating);
         description = findViewById(R.id.description);
-        colorItem = (TextView) findViewById(R.id.color_item_detail);
-        sizeItem = (TextView)findViewById(R.id.size_item_detail);
         orderBtn = findViewById(R.id.bt3);
-        Log.i("message", nameofproduct.toString());
 
         sizeObjectList = new ArrayList<>();
         sizeObjectList.add(new SizeObject("test"));
@@ -102,6 +100,8 @@ public class DetailActivity extends AppCompatActivity {
                 startActivity(t);
             }
         });
+
+
     }
     private void renderData() {
         Log.i("message","start crawl information");
