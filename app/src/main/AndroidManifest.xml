@@ -29,11 +29,11 @@
         <activity
             android:name=".IntroductionActivity1"
             android:exported="true" >
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity
             android:name=".HomepageActivity"
@@ -48,6 +48,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ProfileScreen"/>
+        <activity android:name=".LoginScreen"/>
+        <activity android:name=".HistoryScreen"/>
+        <activity android:name=".FavoriteScreen"/>
+        <activity android:name=".InfoScreen"/>
+        <activity android:name=".VoucherScreen"/>
+        <activity android:name=".CartScreen"/>
+        <activity android:name=".ProductDetailScreen"/>
+        <activity android:name=".OrderScreen"/>
 
         <meta-data
             android:name="preloaded_fonts"

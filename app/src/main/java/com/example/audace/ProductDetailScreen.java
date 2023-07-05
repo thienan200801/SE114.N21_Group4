@@ -26,10 +26,13 @@ import okhttp3.Response;
 
 public class ProductDetailScreen extends AppCompatActivity {
     private ArrayList<ColorOption> colorOptionsList = new ArrayList<>();
-    private ColorAdapter colorAdapter;
+    private ArrayList<SizeOption> sizeOptions = new ArrayList<>();
 
+    private ColorAdapter colorAdapter;
+    private SizeAdapter sizeAdapter;
 
     private RecyclerView recyclerView;
+    private RecyclerView sizeRecyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +42,17 @@ public class ProductDetailScreen extends AppCompatActivity {
         recyclerView = findViewById(R.id.color_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
         colorAdapter = new ColorAdapter(this,colorOptionsList);
-        setupData();
         recyclerView.setAdapter(colorAdapter);
+
+
+        sizeRecyclerView = findViewById(R.id.size_recyclerView);
+        sizeRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        sizeAdapter = new SizeAdapter(this,sizeOptions);
+        sizeRecyclerView.setAdapter(sizeAdapter);
+
+
+        setupData();
+
 
     }
     private void setupData(){
@@ -80,8 +92,20 @@ public class ProductDetailScreen extends AppCompatActivity {
 
                                     colorOptionsList.add(colorOption);
                                 }
-
                             colorAdapter.notifyDataSetChanged();
+
+                            JSONArray sizes = jsonResponse.getJSONArray("sizes");
+                                for (int i = 0; i <sizes.length();i++) {
+                                    JSONObject productObject = sizes.getJSONObject(i);
+                                    String productWidth = productObject.getString("widthInCentimeter");
+                                    String productHeight = productObject.getString("heightInCentimeter");
+
+                                    SizeOption sizeOption = new SizeOption(productWidth, productHeight);
+
+                                    sizeOptions.add(sizeOption);
+                                }
+                            sizeAdapter.notifyDataSetChanged();
+
                         }catch (JSONException e) {
                             e.printStackTrace();}
                         catch (IOException e){

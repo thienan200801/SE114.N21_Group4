@@ -69,7 +69,7 @@
                     android:contentDescription="Đăng nhập"
                     android:onClick="onButtonClick"
                     android:padding="16dp"
-                    app:srcCompat="@drawable/rectangle6"
+                    app:srcCompat="@drawable/rec6"
                     android:textAlignment="center" />
 
                 <TextView
@@ -93,7 +93,7 @@
                     android:contentDescription="Đăng ký"
                     android:onClick="onButtonClick"
                     android:padding="16dp"
-                    app:srcCompat="@drawable/rectangle6"
+                    app:srcCompat="@drawable/rec6"
                     android:textAlignment="center"
                     />
 
