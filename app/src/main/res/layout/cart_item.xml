@@ -30,7 +30,10 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:orientation="horizontal">
-
+                <CheckBox
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"/>
                 <ImageView
                     android:id="@+id/profilePic"
                     android:layout_width="wrap_content"
@@ -58,22 +61,14 @@
                         android:layout_height="wrap_content">
                         <Spinner
                             android:id="@+id/size_spinner"
-                            android:layout_width="80dp"
-                            android:layout_height="15dp"
+                            android:layout_width="100dp"
+                            android:layout_height="20dp"
                             android:layout_marginStart="5dp"
                             android:layout_marginTop="5dp"
                             android:layout_marginEnd="5dp"
                             android:layout_marginBottom="5dp"
                             android:contentDescription="Choose size"/>
-                        <Spinner
-                            android:id="@+id/color_spinner"
-                            android:layout_width="80dp"
-                            android:layout_height="15dp"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginEnd="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:contentDescription="Choose color"/>
+
                     </LinearLayout>
 
 
@@ -91,7 +86,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <RelativeLayout
-                            android:layout_marginEnd="80dp"
+                            android:layout_marginEnd="30dp"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent">
 

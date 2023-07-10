@@ -69,7 +69,7 @@
                     android:contentDescription="Đăng nhập"
                     android:onClick="onButtonClick"
                     android:padding="16dp"
-                    app:srcCompat="@drawable/loginbutton"
+                    app:srcCompat="@drawable/rec6"
                     android:textAlignment="center" />
 
                 <TextView
@@ -85,6 +85,7 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
+
                 <ImageButton
                     android:id="@+id/btnSignUp"
                     android:layout_width="wrap_content"
@@ -93,9 +94,8 @@
                     android:contentDescription="Đăng ký"
                     android:onClick="onButtonClick"
                     android:padding="16dp"
-                    app:srcCompat="@drawable/loginbutton"
                     android:textAlignment="center"
-                    />
+                    app:srcCompat="@drawable/rec6" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -352,7 +352,7 @@
                         android:layout_height="wrap_content">
 
                         <ImageButton
-                            android:id="@+id/searchButton"
+                            android:id="@+id/imageButton3"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"

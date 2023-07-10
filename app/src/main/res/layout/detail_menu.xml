@@ -120,10 +120,12 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
-            <Button
-                android:layout_width="100dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="20dp" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/size_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                tools:listitem="@layout/size_item"/>
 
         </LinearLayout>
 
@@ -140,6 +142,7 @@
             android:background="@android:color/transparent"
             android:onClick="onButtonClick"
             android:padding="16dp"
+            app:srcCompat="@drawable/rec6"
             android:textAlignment="center" />
 
         <TextView

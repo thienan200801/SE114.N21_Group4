@@ -1,35 +1,9 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
-    android:id="@+id/fav_header"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content">
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_toLeftOf="@id/cart"
-        android:layout_toRightOf="@id/searchButton"
-        android:fontFamily="@font/dancing_script_bold"
-        android:text="Audace"
-        android:textAlignment="center"
-        android:textColor="#003A5D"
-        android:textSize="30sp" />
-    <ImageButton
-        android:id="@+id/searchButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:contentDescription="Back"
-        android:onClick="onButtonClick"
-        android:padding="16dp"
-        android:textAlignment="center"
-        app:srcCompat="@drawable/menu_bg" />
-
     <ImageButton
         android:id="@+id/cart"
         android:onClick="onButtonClick"
@@ -42,7 +16,6 @@
         android:paddingBottom="25dp"
 
         android:paddingTop="20dp"
-        android:layout_alignParentEnd="true"
         app:srcCompat="@drawable/local_mall" />
     <TextView
         android:id="@+id/cart_count"
@@ -57,4 +30,5 @@
         android:textSize="12sp"
         android:gravity="center"
         android:visibility="visible" />
+
 </RelativeLayout>

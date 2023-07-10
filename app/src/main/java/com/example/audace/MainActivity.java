@@ -10,6 +10,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_homepage);
+        Intent i = new Intent(MainActivity.this, HomepageActivity.class);
+        startActivity(i);
     }
 }
