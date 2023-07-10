@@ -1,12 +1,26 @@
 package com.example.audace;
 
+import static android.os.Looper.getMainLooper;
+
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,7 +38,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class ProductDetailScreen extends AppCompatActivity {
+public class ProductDetailScreen extends BottomSheetDialogFragment {
     private ArrayList<ColorOption> colorOptionsList = new ArrayList<>();
     private ArrayList<SizeOption> sizeOptions = new ArrayList<>();
 
@@ -33,28 +47,41 @@ public class ProductDetailScreen extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private RecyclerView sizeRecyclerView;
-    @Override
+    /*@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_menu);
 
 
-        recyclerView = findViewById(R.id.color_recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+
+
+
+    }*/
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.detail_menu, container, false);
+        recyclerView = view.findViewById(R.id.color_recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
         colorAdapter = new ColorAdapter(this,colorOptionsList);
         recyclerView.setAdapter(colorAdapter);
 
 
-        sizeRecyclerView = findViewById(R.id.size_recyclerView);
-        sizeRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        sizeRecyclerView = view.findViewById(R.id.size_recyclerView);
+        sizeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
         sizeAdapter = new SizeAdapter(this,sizeOptions);
         sizeRecyclerView.setAdapter(sizeAdapter);
 
 
         setupData();
 
-
+        Dialog dialog = getDialog();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setGravity(Gravity.CENTER);
+        return view;
     }
+
     private void setupData(){
         Handler handler = new Handler(getMainLooper());
         OkHttpClient client = new OkHttpClient().newBuilder()

@@ -73,7 +73,7 @@ public class OrderScreen extends AppCompatActivity {
                                 String productId = productObject.getString("_id");
                                 String productName = productObject.getJSONObject("productCheckoutInfos").getString("product");
                                 String imageURL = productObject.getJSONObject("").getString("imageURL");
-                                double currentPrice = productObject.getJSONObject("details").getDouble("currentPrice");
+                                String currentPrice = productObject.getJSONObject("details").getString("currentPrice");
                                 String productQuantity = productObject.getString("quantity");
                                 Favorite historyProduct = new Favorite(productId,productName,imageURL,currentPrice);
                                 historyProduct.setQuantity(productQuantity);

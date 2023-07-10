@@ -3,10 +3,13 @@ package com.example.audace;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,7 +31,7 @@ public class FavoriteScreen extends AppCompatActivity {
 
     private ArrayList<Favorite> favoriteArrayList = new ArrayList<>();
     private FavoriteAdapter favoriteAdapter;
-
+    private BottomSheetBehavior bottomSheetBehavior;
 
     private RecyclerView recyclerView;
     @Override
@@ -40,10 +43,13 @@ public class FavoriteScreen extends AppCompatActivity {
         recyclerView = findViewById(R.id.favRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         favoriteAdapter = new FavoriteAdapter(this,favoriteArrayList);
-        setupData();
         recyclerView.setAdapter(favoriteAdapter);
+  /*      LinearLayout bottomSheetLayout = findViewById(R.id.fav_menu);
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetLayout);*/
+        setupData();
 
     }
+
     public void setupData() {
         Handler handler = new Handler(getMainLooper());
         OkHttpClient client = new OkHttpClient().newBuilder()
@@ -75,7 +81,7 @@ public class FavoriteScreen extends AppCompatActivity {
                                 String productId = productObject.getString("_id");
                                 String productName = productObject.getString("name");
                                 String imageURL = productObject.getString("imageURL");
-                                double currentPrice = productObject.getDouble("currentPrice");
+                                String currentPrice = productObject.getString("currentPrice");
 
                                 Favorite favoriteProduct = new Favorite(productId,productName,imageURL,currentPrice);
 

@@ -75,7 +75,7 @@ public class HistoryScreen extends AppCompatActivity {
                                 String productId = productObject.getJSONObject("product").getString("_id");
                                 String productName = productObject.getJSONObject("product").getString("name");
                                 String imageURL = productObject.getJSONObject("product").getString("imageURL");
-                                double currentPrice = productObject.getJSONObject("product").getDouble("currentPrice");
+                                String currentPrice = productObject.getJSONObject("product").getString("currentPrice");
                                 String productQuantity = productObject.getString("quantity");
 
                                 Favorite historyProduct = new Favorite(productId,productName,imageURL,currentPrice);

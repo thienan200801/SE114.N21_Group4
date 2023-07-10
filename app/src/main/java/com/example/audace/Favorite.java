@@ -4,6 +4,8 @@ public class Favorite {
     String id;
     String name;
     String quantity;
+    String image;
+    String price;
 
     public String getQuantity() {
         return quantity;
@@ -13,7 +15,7 @@ public class Favorite {
         this.quantity = quantity;
     }
 
-    public Favorite(String id, String name, String image, double price) {
+    public Favorite(String id, String name, String image, String price) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -45,15 +47,14 @@ public class Favorite {
         this.image = image;
     }
 
-    public double getPrice() {
+    public  String getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
-    String image;
-    double price;
+
 
 }
