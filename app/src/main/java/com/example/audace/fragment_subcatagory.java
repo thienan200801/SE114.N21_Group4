@@ -112,11 +112,10 @@ public class fragment_subcatagory extends Fragment {
         View  view = inflater.inflate(R.layout.fragment_subcatagory, container, false);
         RecyclerView gridView = (RecyclerView) view.findViewById(R.id.itemGridView);
         productListAdapter = new ProductListAdapter(products);
-        productListAdapter.setDestinationId(R.id.action_fragment_subcatagory_to_detailActivity);
         gridLayoutManager = new GridLayoutManager(gridView.getContext(), 2);
         gridView.setLayoutManager(gridLayoutManager);
         gridView.setAdapter(productListAdapter);
-        int spanCount = 2; // 3 columns
+        int spanCount = 2; // 2 columns
         int spacing = 50; // 50px
         boolean includeEdge = false;
         gridView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));

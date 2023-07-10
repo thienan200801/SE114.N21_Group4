@@ -3,12 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-=========
-    xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.INTERNET" />
->>>>>>>>> Temporary merge branch 2
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -57,10 +51,16 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginScreen" />
+        <activity android:name=".VoucherScreen"/>
+        <activity android:name=".CartScreen"/>
+        <activity android:name=".ProfileScreen"/>
+        <activity android:name=".InfoScreen"/>
+        <activity android:name=".FavoriteScreen"/>
+        <activity android:name=".HistoryScreen"/>
+        <activity android:name=".OrderScreen"/>
+        <activity android:name=".ProductDetailScreen"/>
 
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

@@ -23,7 +23,7 @@
             android:textColor="@color/black"
             android:textSize="18sp" />
         <ImageButton
-            android:id="@+id/imageButton3"
+            android:id="@+id/searchButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
@@ -56,7 +56,8 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_margin="10dp"
-
+                    android:id="@+id/cartRecyclerView"
+                    tools:listitem="@layout/cart_item"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 

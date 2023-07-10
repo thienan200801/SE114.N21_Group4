@@ -13,6 +13,8 @@ public class DataStorage {
 
     private String catagoryId;
 
+    private String SearchText;
+
     public ArrayList<Catagory> getCatagoryArrayList() {
         return catagoryArrayList;
     }
@@ -54,5 +56,13 @@ public class DataStorage {
 
     public String getCatagoryId() {
         return catagoryId;
+    }
+
+    public String getSearchText() {
+        return SearchText;
+    }
+
+    public void setSearchText(String searchText) {
+        SearchText = searchText;
     }
 }

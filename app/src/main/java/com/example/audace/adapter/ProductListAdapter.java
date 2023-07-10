@@ -33,15 +33,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     private ArrayList<Product> products;
 
-    private int destinationId;
-
-    public int getDestinationId() {
-        return destinationId;
-    }
-
-    public void setDestinationId(int destinationId) {
-        this.destinationId = destinationId;
-    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView nameTextView;
@@ -131,7 +122,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                     Request request = new Request.Builder()
                             .url("https://audace-ecomerce.herokuapp.com/users/me/favourites")
                             .method("POST", body)
-                            .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
+                            .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
                             .addHeader("Content-Type", "application/json")
                             .build();
                     client.newCall(request).enqueue(new Callback() {
@@ -158,7 +149,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                     Request request = new Request.Builder()
                             .url("https://audace-ecomerce.herokuapp.com/users/me/favourites")
                             .method("DELETE", body)
-                            .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
+                            .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
                             .addHeader("Content-Type", "application/json")
                             .build();
                     client.newCall(request).enqueue(new Callback() {

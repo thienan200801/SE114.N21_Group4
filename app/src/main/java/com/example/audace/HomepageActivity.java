@@ -21,42 +21,51 @@ public class HomepageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_homepage);
-        loadFragment(new MainFragment());
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Log.i("message", String.format("%d",item.getItemId()));
-                switch (item.getItemId())
-                {
-
-                    case R.id.action_profile: {
-                        Intent intent = new Intent(HomepageActivity.this, ProfileActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    case R.id.action_favourite:{
-                        Intent intent = new Intent(HomepageActivity.this, Favourite.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    case R.id.action_history:{
-                        Intent intent = new Intent(HomepageActivity.this, HistoryActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    default:
+        if(DataStorage.getInstance().getAccessToken() != null)
+        {
+            setContentView(R.layout.activity_homepage);
+            loadFragment(new MainFragment());
+            BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+            bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    Log.i("message", String.format("%d",item.getItemId()));
+                    switch (item.getItemId())
                     {
-                        Intent intent = new Intent(HomepageActivity.this, HomepageActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
 
+                        case R.id.action_profile: {
+                            Intent intent = new Intent(HomepageActivity.this, ProfileScreen.class);
+                            startActivity(intent);
+                            break;
+                        }
+                        case R.id.action_favourite:{
+                            Intent intent = new Intent(HomepageActivity.this, FavoriteScreen.class);
+                            startActivity(intent);
+                            break;
+                        }
+                        case R.id.action_history:{
+                            Intent intent = new Intent(HomepageActivity.this, HistoryScreen.class);
+                            startActivity(intent);
+                            break;
+                        }
+                        default:
+                        {
+                            Intent intent = new Intent(HomepageActivity.this, HomepageActivity.class);
+                            startActivity(intent);
+                            break;
+                        }
+
+                    }
+                    return true;
                 }
-                return true;
-            }
-        });
+            });
+        }
+        else
+        {
+            Intent t = new Intent(HomepageActivity.this, LoginScreen.class);
+            startActivity(t);
+            this.finishActivity(0);
+        }
 
     }
     private void loadFragment(Fragment fragment) {

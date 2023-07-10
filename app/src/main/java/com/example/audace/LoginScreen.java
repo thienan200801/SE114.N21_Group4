@@ -9,13 +9,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -60,7 +58,7 @@ public class LoginScreen extends AppCompatActivity {
 
         btnLogin = (ImageButton) findViewById(R.id.btnLogin);
         btnSignUp = (ImageButton) findViewById(R.id.btnSignUp);
-        getBtnLogin = (ImageButton)  findViewById(R.id.imageButton3);
+        getBtnLogin = (ImageButton)  findViewById(R.id.searchButton);
 
         getBtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override

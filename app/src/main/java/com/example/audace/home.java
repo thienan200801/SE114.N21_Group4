@@ -142,7 +142,6 @@ public class home extends Fragment {
         products = new ArrayList<Product>();
         CrawlBanChayProduct();
         productListAdapter = new ProductListAdapter(products);
-        productListAdapter.setDestinationId(R.id.action_home_to_fragment_subcatagory);
         LinearLayoutManager productListManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
         RecyclerView banChayRecycleView = (RecyclerView) view.findViewById(R.id.banChayItemList);
 
@@ -156,7 +155,6 @@ public class home extends Fragment {
         saleProducts = new ArrayList<Product>();
         CrawlSaleOffProduct();
         saleProductListAdapter = new ProductListAdapter(saleProducts);
-        saleProductListAdapter.setDestinationId(R.id.action_home_to_fragment_subcatagory);
         RecyclerView saleOffRecycleView = (RecyclerView) view.findViewById(R.id.saleOffItemList);
         LinearLayoutManager saleOffLinearLayout = new LinearLayoutManager(saleOffRecycleView.getContext(), LinearLayoutManager.HORIZONTAL, false);
         saleOffRecycleView.setAdapter(saleProductListAdapter);
@@ -368,7 +366,6 @@ public class home extends Fragment {
                             products.add(item);
                         }
                         productListAdapter = new ProductListAdapter(products);
-                        productListAdapter.setDestinationId(R.id.action_home_to_detailActivity);
                         RecyclerView banChayRecycleView = (RecyclerView) fragment.getView().findViewById(R.id.banChayItemList);
                         banChayRecycleView.setAdapter(productListAdapter);
                         productListAdapter.notifyItemRangeInserted(0, products.size());

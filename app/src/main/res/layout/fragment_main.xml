@@ -61,7 +61,7 @@
                         tools:ignore="TouchTargetSizeCheck" />
 
                     <ImageButton
-                        android:id="@+id/imageButton"
+                        android:id="@+id/cartButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
@@ -80,7 +80,7 @@
                     android:background="@drawable/rectangle_1">
 
                     <ImageButton
-                        android:id="@+id/imageButton3"
+                        android:id="@+id/searchButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical|end"
@@ -91,7 +91,7 @@
                         tools:ignore="TouchTargetSizeCheck" />
 
                     <EditText
-                        android:id="@+id/editTextTextPersonName3"
+                        android:id="@+id/searchEditText"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginStart="20dp"
