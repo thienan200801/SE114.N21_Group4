@@ -6,8 +6,6 @@ import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,9 +17,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 
-import com.google.android.play.core.tasks.Task;
+import com.example.audace.adapter.CatagoryListAdapter;
+import com.example.audace.adapter.ProductListAdapter;
+import com.example.audace.model.Catagory;
+import com.example.audace.model.Product;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,13 +29,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -116,11 +112,10 @@ public class fragment_subcatagory extends Fragment {
         View  view = inflater.inflate(R.layout.fragment_subcatagory, container, false);
         RecyclerView gridView = (RecyclerView) view.findViewById(R.id.itemGridView);
         productListAdapter = new ProductListAdapter(products);
-        productListAdapter.setDestinationId(R.id.action_fragment_subcatagory_to_detailActivity);
         gridLayoutManager = new GridLayoutManager(gridView.getContext(), 2);
         gridView.setLayoutManager(gridLayoutManager);
         gridView.setAdapter(productListAdapter);
-        int spanCount = 2; // 3 columns
+        int spanCount = 2; // 2 columns
         int spacing = 50; // 50px
         boolean includeEdge = false;
         gridView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
@@ -159,7 +154,7 @@ public class fragment_subcatagory extends Fragment {
         Request request = new Request.Builder()
                 .url("https://audace-ecomerce.herokuapp.com/categories?withImage=false")
                 .method("GET", null)
-                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
+                .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -215,7 +210,7 @@ public class fragment_subcatagory extends Fragment {
         Request request = new Request.Builder()
                 .url(string)
                 .method("GET", null)
-                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
+                .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override

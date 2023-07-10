@@ -1,8 +1,12 @@
 package com.example.audace;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,20 +33,25 @@ public class CartScreen extends AppCompatActivity {
     private ArrayList<Cart> cartList = new ArrayList<>();
     private CartAdapter cartAdapter;
 
-
+    private ImageButton checkoutButton;
     private RecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cart);
-
-
+        checkoutButton = findViewById(R.id.btnPurchase);
         recyclerView = findViewById(R.id.cartRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         cartAdapter = new CartAdapter(this,cartList);
         setupData();
         recyclerView.setAdapter(cartAdapter);
-
+        checkoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent t = new Intent(CartScreen.this,Checkout.class);
+                startActivity(t);
+            }
+        });
     }
     public void setupData() {
         Handler handler = new Handler(getMainLooper());

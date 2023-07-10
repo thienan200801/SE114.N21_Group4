@@ -11,8 +11,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.NavHost;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,22 +25,24 @@ import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.audace.adapter.BannerListAdapter;
+import com.example.audace.adapter.CatagoryListAdapter;
+import com.example.audace.adapter.ProductListAdapter;
+import com.example.audace.model.Banner;
+import com.example.audace.model.Catagory;
+import com.example.audace.model.Product;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -117,16 +116,6 @@ public class home extends Fragment {
         // Inflate the layout for this fragment
         fragment = this;
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        fragment.getActivity().findViewById(R.id.drawerToggleButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DrawerLayout drawerLayout = (DrawerLayout) fragment.getActivity().findViewById(R.id.drawerNavigationView).getParent();
-                if(drawerLayout.isOpen())
-                    drawerLayout.close();
-                else
-                    drawerLayout.open();
-            }
-        });
         catagories = new ArrayList<Catagory>();
         CrawlCatagory();
         catagoryListAdapter = new CatagoryListAdapter(catagories);
@@ -153,7 +142,6 @@ public class home extends Fragment {
         products = new ArrayList<Product>();
         CrawlBanChayProduct();
         productListAdapter = new ProductListAdapter(products);
-        productListAdapter.setDestinationId(R.id.action_home_to_fragment_subcatagory);
         LinearLayoutManager productListManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
         RecyclerView banChayRecycleView = (RecyclerView) view.findViewById(R.id.banChayItemList);
 
@@ -167,7 +155,6 @@ public class home extends Fragment {
         saleProducts = new ArrayList<Product>();
         CrawlSaleOffProduct();
         saleProductListAdapter = new ProductListAdapter(saleProducts);
-        saleProductListAdapter.setDestinationId(R.id.action_home_to_fragment_subcatagory);
         RecyclerView saleOffRecycleView = (RecyclerView) view.findViewById(R.id.saleOffItemList);
         LinearLayoutManager saleOffLinearLayout = new LinearLayoutManager(saleOffRecycleView.getContext(), LinearLayoutManager.HORIZONTAL, false);
         saleOffRecycleView.setAdapter(saleProductListAdapter);
@@ -379,7 +366,6 @@ public class home extends Fragment {
                             products.add(item);
                         }
                         productListAdapter = new ProductListAdapter(products);
-                        productListAdapter.setDestinationId(R.id.action_home_to_detailActivity);
                         RecyclerView banChayRecycleView = (RecyclerView) fragment.getView().findViewById(R.id.banChayItemList);
                         banChayRecycleView.setAdapter(productListAdapter);
                         productListAdapter.notifyItemRangeInserted(0, products.size());
@@ -440,25 +426,25 @@ public class home extends Fragment {
         for(int i = 0; i <catagoryArrayList.size(); i ++)
         {
             if(catagoryArrayList.get(i).getSubCatagories().size() == 0)
-                menu.add(catagoryArrayList.get(i).CatagoryName);
+                menu.add(catagoryArrayList.get(i).getCatagoryName());
             else
             {
-                SubMenu subMenu = menu.addSubMenu(catagoryArrayList.get(i).CatagoryName);
+                SubMenu subMenu = menu.addSubMenu(catagoryArrayList.get(i).getCatagoryName());
                 ArrayList<Catagory> child = catagoryArrayList.get(i).getSubCatagories();
                 for(int j = 0; j < child.size(); j ++)
                 {
-                    MenuItem item = subMenu.add(child.get(j).CatagoryName);
+                    MenuItem item = subMenu.add(child.get(j).getCatagoryName());
                     int index = j;
                     item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
-                            DataStorage.getInstance().setCatagoryId(child.get(index).imgID);
+                            DataStorage.getInstance().setCatagoryId(child.get(index).getCatagoryID());
                             navController.navigate(R.id.action_home_to_fragment_subcatagory);
                             ((DrawerLayout)navigationView.getParent()).closeDrawer(GravityCompat.START);
                             return true;
                         }
                     });
-                    Log.i("message", child.get(j).CatagoryName);
+                    Log.i("message", child.get(j).getCatagoryName());
                 }
                 subMenu.clearHeader();
 

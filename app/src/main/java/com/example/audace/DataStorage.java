@@ -1,5 +1,7 @@
 package com.example.audace;
 
+import com.example.audace.model.Catagory;
+
 import java.util.ArrayList;
 
 public class DataStorage {
@@ -11,6 +13,8 @@ public class DataStorage {
 
     private String catagoryId;
 
+    private String SearchText;
+
     public ArrayList<Catagory> getCatagoryArrayList() {
         return catagoryArrayList;
     }
@@ -18,7 +22,7 @@ public class DataStorage {
     public void setCatagoryArrayList(ArrayList<Catagory> catagoryArrayList) {
         this.catagoryArrayList = catagoryArrayList;
         if(catagoryArrayList.size() != 0)
-            catagoryId = catagoryArrayList.get(0).imgID;
+            catagoryId = catagoryArrayList.get(0).getCatagoryID();
     }
 
     public String getAccessToken() {
@@ -31,7 +35,7 @@ public class DataStorage {
 
     public DataStorage(){
         catagoryArrayList = new ArrayList<Catagory>();
-        AccessToken = "";
+        AccessToken = null;
     }
 
     private static final DataStorage storage = new DataStorage();
@@ -52,5 +56,13 @@ public class DataStorage {
 
     public String getCatagoryId() {
         return catagoryId;
+    }
+
+    public String getSearchText() {
+        return SearchText;
+    }
+
+    public void setSearchText(String searchText) {
+        SearchText = searchText;
     }
 }

@@ -1,23 +1,21 @@
-package com.example.audace;
+package com.example.audace.adapter;
 
-import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.audace.DataStorage;
+import com.example.audace.R;
+import com.example.audace.model.Product;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,15 +33,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     private ArrayList<Product> products;
 
-    private int destinationId;
-
-    public int getDestinationId() {
-        return destinationId;
-    }
-
-    public void setDestinationId(int destinationId) {
-        this.destinationId = destinationId;
-    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView nameTextView;
@@ -82,9 +71,9 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     public void onBindViewHolder(ProductListAdapter.ViewHolder holder, int position) {
         Log.i("message", "binding product");
 
-        holder.getNameTextView().setText(products.get(position).name);
-        holder.getPriceTextVIew().setText(products.get(position).price);
-        HttpUrl url = HttpUrl.parse(products.get(position).imgUrl).newBuilder().build();
+        holder.getNameTextView().setText(products.get(position).getName());
+        holder.getPriceTextVIew().setText(products.get(position).getPrice());
+        HttpUrl url = HttpUrl.parse(products.get(position).getImgUrl()).newBuilder().build();
         Request request = new Request.Builder().url(url).build();
         OkHttpClient client = new OkHttpClient();
         client.newCall(request).enqueue(new Callback() {
@@ -108,15 +97,14 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 }
             }
         });
-        if(products.get(position).favourite) {
+        if(products.get(position).isFavourite()) {
             holder.getFavouriteButton().setButtonDrawable(R.drawable.baseline_favorite_24);
             holder.getFavouriteButton().setChecked(true);
         }
-        holder.setIsRecyclable(true);
         holder.getImgView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DataStorage.getInstance().setProductId(products.get(holder.getAdapterPosition()).productID);
+                DataStorage.getInstance().setProductId(products.get(holder.getAdapterPosition()).getProductID());
                 Navigation.findNavController(view).navigate(R.id.action_global_detailActivity);
             }
         });
@@ -129,12 +117,12 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                     OkHttpClient client = new OkHttpClient().newBuilder()
                             .build();
                     MediaType mediaType = MediaType.parse("application/json");
-                    String string = String.format("{\r\n    \"id\": \"%s\"\r\n}", products.get(holder.getAdapterPosition()).productID);
+                    String string = String.format("{\r\n    \"id\": \"%s\"\r\n}", products.get(holder.getAdapterPosition()).getProductID());
                     RequestBody body = RequestBody.create(mediaType, string);
                     Request request = new Request.Builder()
                             .url("https://audace-ecomerce.herokuapp.com/users/me/favourites")
                             .method("POST", body)
-                            .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
+                            .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
                             .addHeader("Content-Type", "application/json")
                             .build();
                     client.newCall(request).enqueue(new Callback() {
@@ -155,13 +143,13 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                     OkHttpClient client = new OkHttpClient().newBuilder()
                             .build();
                     MediaType mediaType = MediaType.parse("application/json");
-                    String string = String.format("{\r\n    \"id\": \"%s\"\r\n}", products.get(holder.getAdapterPosition()).productID);
+                    String string = String.format("{\r\n    \"id\": \"%s\"\r\n}", products.get(holder.getAdapterPosition()).getProductID());
 
                     RequestBody body = RequestBody.create(mediaType, string);
                     Request request = new Request.Builder()
                             .url("https://audace-ecomerce.herokuapp.com/users/me/favourites")
                             .method("DELETE", body)
-                            .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
+                            .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
                             .addHeader("Content-Type", "application/json")
                             .build();
                     client.newCall(request).enqueue(new Callback() {

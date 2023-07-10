@@ -9,13 +9,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -118,7 +116,6 @@ public class LoginScreen extends AppCompatActivity {
                     client.newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                            Toast.makeText(LoginScreen.this,"Sign Up failed",Toast.LENGTH_SHORT).show();
 
                         }
 
@@ -126,20 +123,6 @@ public class LoginScreen extends AppCompatActivity {
                         public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                             String body=response.body().string();
                             Log.e("data from server", body);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-
-                                    if (body.equals("")) {
-                                        Toast.makeText(LoginScreen.this, "Sign Up successfully", Toast.LENGTH_SHORT).show();
-
-                                    }
-                                    else {
-                                        Toast.makeText(LoginScreen.this, body, Toast.LENGTH_SHORT).show();
-
-                                    }
-                                }
-                            });
 
 
                         }
@@ -178,23 +161,25 @@ public class LoginScreen extends AppCompatActivity {
                     Response response = null;
                     try{
                         response = call.execute();
-                        String serverResponse = response.body().string();
-
+                        JSONObject serverResponse = new JSONObject(response.body().string());
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-
-                                if (!serverResponse.contains("statusCode")) {
-                                    Toast.makeText(LoginScreen.this,"Login Success", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(LoginScreen.this, MainActivity.class);
-                                    startActivity(intent);
+                                try {
+                                    String accessToken = serverResponse.getString("accessToken");
+                                    DataStorage.getInstance().setAccessToken(accessToken);
+                                    Toast.makeText(LoginScreen.this, "Login successfully", Toast.LENGTH_SHORT).show();
+                                    Intent t = new Intent(LoginScreen.this, HomepageActivity.class);
+                                    startActivity(t);
+                                } catch (JSONException e) {
+                                    Toast.makeText(LoginScreen.this, "Incorrect username or password", Toast.LENGTH_SHORT).show();
                                 }
-
-
                             }
                         });
                     }catch (IOException e){
                         e.printStackTrace();
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
                     }
                 }
             }).start();
