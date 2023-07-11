@@ -104,6 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="0dp"
                 android:layout_marginRight="20dp"
+                android:textSize="20dp"
                 android:text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
 
             <LinearLayout
@@ -116,7 +117,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Màu sắc:"
-                    android:textSize="16sp"
+                    android:textSize="20dp"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -138,7 +139,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Kích thước:"
-                    android:textSize="16sp"
+                    android:textSize="20dp"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -146,6 +147,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/sizeRecycler"
                 android:layout_width="wrap_content"
+                android:textSize="16dp"
                 android:layout_height="20dp" />
 
             <Button
