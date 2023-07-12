@@ -1,5 +1,6 @@
 package com.example.audace.adapter;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -90,7 +91,7 @@ public class CatagoryListAdapter extends RecyclerView.Adapter<CatagoryListAdapte
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int position){
+    public void onBindViewHolder(ViewHolder viewHolder, @SuppressLint("RecyclerView") final int position){
 
         viewHolder.getTextView().setText(catagories.get(position).getCatagoryName());
         viewHolder.getTextView().setTextSize(12);
@@ -99,6 +100,7 @@ public class CatagoryListAdapter extends RecyclerView.Adapter<CatagoryListAdapte
             HttpUrl url = HttpUrl.parse(catagories.get(position).getImgUrl()).newBuilder().build();
             Request request = new Request.Builder().url(url).build();
             OkHttpClient client = new OkHttpClient();
+            int index = position;
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
@@ -124,7 +126,9 @@ public class CatagoryListAdapter extends RecyclerView.Adapter<CatagoryListAdapte
             viewHolder.itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
-                    Navigation.findNavController(view).navigate(R.id.action_home_to_fragment_subcatagory);
+                    Log.i("message", Integer.toString(index));
+                    DataStorage.getInstance().setCatagoryId(DataStorage.getInstance().getCatagoryArrayList().get(index).getCatagoryID());
+                    Navigation.findNavController(view).navigate(R.id.action_global_fragment_subcatagory);
                 }
             });
         }

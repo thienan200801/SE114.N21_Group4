@@ -85,8 +85,8 @@ public class CheckoutItemDetailAdapter extends RecyclerView.Adapter<CheckoutItem
     public void onBindViewHolder(@NonNull CheckoutItemDetailAdapter.ViewHolder holder, int position) {
         holder.title.setText(checkoutItemDetailsArray.get(position).getName());
         holder.quantity.setText(checkoutItemDetailsArray.get(position).getQuantity());
-        holder.color.setText(checkoutItemDetailsArray.get(position).getColor());
-        holder.size.setText(checkoutItemDetailsArray.get(position).getSize());
+        holder.color.setText(checkoutItemDetailsArray.get(position).getColor().getColorName());
+        holder.size.setText(checkoutItemDetailsArray.get(position).getSize().getSizeInCentimeter());
         holder.price.setText(checkoutItemDetailsArray.get(position).getPrice());
 
         if(!Objects.equals(checkoutItemDetailsArray.get(position).getImageURL(), ""))

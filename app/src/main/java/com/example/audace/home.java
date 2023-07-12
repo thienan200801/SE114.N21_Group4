@@ -116,8 +116,7 @@ public class home extends Fragment {
         // Inflate the layout for this fragment
         fragment = this;
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        catagories = new ArrayList<Catagory>();
-        CrawlCatagory();
+        catagories = new ArrayList<>(DataStorage.getInstance().getCatagoryArrayList());
         catagoryListAdapter = new CatagoryListAdapter(catagories);
         LinearLayoutManager catagoryManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
         RecyclerView catagoryRecycleView = (RecyclerView) view.findViewById(R.id.catagoryListView);
@@ -167,7 +166,7 @@ public class home extends Fragment {
             @Override
             public void onClick(View view) {
                 NavController navController = NavHostFragment.findNavController(fragment);
-                navController.navigate(R.id.action_home_to_fragment_subcatagory);
+                navController.navigate(R.id.action_global_fragment_subcatagory);
             }
         });
 
@@ -176,7 +175,7 @@ public class home extends Fragment {
             @Override
             public void onClick(View view) {
                 NavController navController = NavHostFragment.findNavController(fragment);
-                navController.navigate(R.id.action_home_to_fragment_subcatagory);
+                navController.navigate(R.id.action_global_fragment_subcatagory);
             }
         });
 
@@ -185,78 +184,10 @@ public class home extends Fragment {
             @Override
             public void onClick(View view){
                 NavController navController = NavHostFragment.findNavController(fragment);
-                navController.navigate(R.id.action_home_to_fragment_subcatagory);
+                navController.navigate(R.id.action_global_fragment_subcatagory);
             }
         });
         return view;
-    }
-    public void CrawlCatagory(){
-        Handler handler = new Handler(getContext().getMainLooper());
-        OkHttpClient client = new OkHttpClient().newBuilder()
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .build();
-        MediaType mediaType = MediaType.parse("text/plain");
-        RequestBody body = RequestBody.create(mediaType, "");
-        Request request = new Request.Builder()
-                .url("https://audace-ecomerce.herokuapp.com/categories?withImage=true")
-                .method("GET", null)
-                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.i("message", call.toString());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        catagories.clear();
-                        JSONArray jsonArray = null;
-                        try {
-                            jsonArray = new JSONArray(response.body().string());
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                        for(int i = 0; i < jsonArray.length(); i ++)
-                        {
-                            JSONObject jsonObject = null;
-                            try {
-                                jsonObject = jsonArray.getJSONObject(i);
-                            } catch (JSONException e) {
-                                throw new RuntimeException(e);
-                            }
-                            Catagory item = null;
-                            try {
-                                item = new Catagory(jsonObject.get("_id").toString(), jsonObject.get("name").toString(), jsonObject.get("imageURL").toString());
-                                JSONArray childCatagory = jsonObject.getJSONArray("childCategories");
-                                for(int j = 0 ; j < childCatagory.length(); j++)
-                                {
-                                    JSONObject child = childCatagory.getJSONObject(j);
-                                    item.getSubCatagories().add(new Catagory(child.get("_id").toString(), child.get("name").toString(), "") );
-                                }
-
-                                catagories.add(item);
-                            } catch (Exception e) {
-                                Log.i("exception", e.toString());
-                            }
-                        }
-                        Log.i("message", catagories.toString());
-                        catagoryListAdapter = new CatagoryListAdapter(catagories);
-                        RecyclerView recyclerView = (RecyclerView) fragment.getView().findViewById(R.id.catagoryListView);
-                        recyclerView.setAdapter(catagoryListAdapter);
-                        catagoryListAdapter.notifyItemRangeInserted(0, products.size());
-                        DataStorage.getInstance().setCatagoryArrayList(new ArrayList<>(catagories));
-                        populateDrawerMenu(NavHostFragment.findNavController(fragment));
-                    }
-                });
-            }
-        });
     }
     public void CrawlBanner(){
         Handler handler = new Handler(getContext().getMainLooper());
@@ -269,7 +200,7 @@ public class home extends Fragment {
         Request request = new Request.Builder()
                 .url("https://audace-ecomerce.herokuapp.com/collections")
                 .method("GET", null)
-                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
+                .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -282,7 +213,7 @@ public class home extends Fragment {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        catagories.clear();
+                        banners.clear();
                         JSONArray jsonArray = null;
                         try {
                             jsonArray = new JSONArray(response.body().string());
@@ -308,8 +239,9 @@ public class home extends Fragment {
                             banners.add(item);
                         }
                         bannerListAdapter = new BannerListAdapter(banners);
-                        RecyclerView recyclerView = (RecyclerView) fragment.getView().findViewById(R.id.BannerRecyclerView);
-                        recyclerView.setAdapter(bannerListAdapter);
+                        RecyclerView recyclerView = (RecyclerView) getActivity().findViewById(R.id.BannerRecyclerView);
+                        if(recyclerView != null)
+                            recyclerView.setAdapter(bannerListAdapter);
                         bannerListAdapter.notifyItemRangeInserted(0, products.size());
                     }
                 });
@@ -327,7 +259,7 @@ public class home extends Fragment {
         Request request = new Request.Builder()
                 .url("https://audace-ecomerce.herokuapp.com/products/best-sellers?page=0")
                 .method("GET", null)
-                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
+                .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -359,15 +291,16 @@ public class home extends Fragment {
                             }
                             Product item = null;
                             try {
-                                item = new Product(jsonObject.getString("_id"),jsonObject.getString("name"), jsonObject.getString("currentPrice"), jsonObject.getBoolean("isFavourite"),jsonObject.getString("imageURL") );
+                                item = new Product(jsonObject.getString("_id"),jsonObject.getString("name"), jsonObject.getString("currentPrice"), jsonObject.getString("stablePrice"), jsonObject.getBoolean("isFavourite"),jsonObject.getString("imageURL") );
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
                             }
                             products.add(item);
                         }
                         productListAdapter = new ProductListAdapter(products);
-                        RecyclerView banChayRecycleView = (RecyclerView) fragment.getView().findViewById(R.id.banChayItemList);
-                        banChayRecycleView.setAdapter(productListAdapter);
+                        RecyclerView banChayRecycleView = (RecyclerView) getActivity().findViewById(R.id.banChayItemList);
+                        if(banChayRecycleView != null)
+                            banChayRecycleView.setAdapter(productListAdapter);
                         productListAdapter.notifyItemRangeInserted(0, products.size());
                     }
                 });
@@ -385,7 +318,7 @@ public class home extends Fragment {
         Request request = new Request.Builder()
                 .url("https://audace-ecomerce.herokuapp.com/products/best-sale-off?page=0")
                 .method("GET", null)
-                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
+                .addHeader("Authorization", "Bearer "+ DataStorage.getInstance().getAccessToken())
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -401,7 +334,7 @@ public class home extends Fragment {
                     for(int i = 0; i < jsonArray.length(); i ++)
                     {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        Product item = new Product(jsonObject.getString("_id"),jsonObject.getString("name"),jsonObject.getString("currentPrice"), jsonObject.getBoolean("isFavourite"),jsonObject.getString("imageURL") );
+                        Product item = new Product(jsonObject.getString("_id"),jsonObject.getString("name"),jsonObject.getString("currentPrice"), jsonObject.getString("stablePrice"), jsonObject.getBoolean("isFavourite"),jsonObject.getString("imageURL") );
                         saleProducts.add(item);
                     }
                     handler.post(new Runnable() {
@@ -416,42 +349,6 @@ public class home extends Fragment {
                 }
             }
         });
-    }
-    public void populateDrawerMenu(NavController navController)
-    {
-        NavigationView navigationView = (NavigationView) fragment.getActivity().findViewById(R.id.drawerNavigationView);
-        Menu menu = navigationView.getMenu();
-        ArrayList<Catagory> catagoryArrayList = DataStorage.getInstance().getCatagoryArrayList();
-        menu.clear();
-        for(int i = 0; i <catagoryArrayList.size(); i ++)
-        {
-            if(catagoryArrayList.get(i).getSubCatagories().size() == 0)
-                menu.add(catagoryArrayList.get(i).getCatagoryName());
-            else
-            {
-                SubMenu subMenu = menu.addSubMenu(catagoryArrayList.get(i).getCatagoryName());
-                ArrayList<Catagory> child = catagoryArrayList.get(i).getSubCatagories();
-                for(int j = 0; j < child.size(); j ++)
-                {
-                    MenuItem item = subMenu.add(child.get(j).getCatagoryName());
-                    int index = j;
-                    item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
-                            DataStorage.getInstance().setCatagoryId(child.get(index).getCatagoryID());
-                            navController.navigate(R.id.action_home_to_fragment_subcatagory);
-                            ((DrawerLayout)navigationView.getParent()).closeDrawer(GravityCompat.START);
-                            return true;
-                        }
-                    });
-                    Log.i("message", child.get(j).getCatagoryName());
-                }
-                subMenu.clearHeader();
-
-            }
-
-        }
-        navigationView.invalidate();
     }
 }
 

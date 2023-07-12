@@ -106,7 +106,6 @@ public class fragment_subcatagory extends Fragment {
                              Bundle savedInstanceState) {
         fragment = this;
         catagories = new ArrayList<>();
-        Log.i("message", DataStorage.getInstance().getCatagoryArrayList().toString());
         products = new ArrayList<>();
         // Inflate the layout for this fragment
         View  view = inflater.inflate(R.layout.fragment_subcatagory, container, false);
@@ -119,12 +118,6 @@ public class fragment_subcatagory extends Fragment {
         int spacing = 50; // 50px
         boolean includeEdge = false;
         gridView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
-        catagoryListAdapter = new CatagoryListAdapter(catagories);
-        RecyclerView catagoryRecycleView =  (RecyclerView) view.findViewById(R.id.catagoryRecyclerView);
-        catagoryManager = new LinearLayoutManager(catagoryRecycleView.getContext(), LinearLayoutManager.HORIZONTAL, false);
-        catagoryRecycleView.setLayoutManager(catagoryManager);
-        catagoryRecycleView.setAdapter(catagoryListAdapter);
-        catagoryListAdapter.notifyDataSetChanged();
         subCatagories = new ArrayList<>();
         subCatagoryListAdapter = new CatagoryListAdapter(subCatagories);
         LinearLayoutManager subCatagoryManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -141,65 +134,28 @@ public class fragment_subcatagory extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        CrawlCatagory();
-        CrawlProduct(0,999999999,DataStorage.getInstance().getCatagoryId());
-    }
-
-    public void CrawlCatagory(){
-        Handler handler = new Handler(Looper.getMainLooper());
-        OkHttpClient client = new OkHttpClient().newBuilder()
-                .build();
-        MediaType mediaType = MediaType.parse("text/plain");
-        RequestBody body = RequestBody.create(mediaType, "");
-        Request request = new Request.Builder()
-                .url("https://audace-ecomerce.herokuapp.com/categories?withImage=false")
-                .method("GET", null)
-                .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
-                .build();
-        client.newCall(request).enqueue(new Callback() {
+        catagories = new ArrayList<>(DataStorage.getInstance().getCatagoryArrayList(false));
+        Log.i("message", catagories.toString());
+        catagoryListAdapter = new CatagoryListAdapter(catagories);
+        RecyclerView catagoryRecycleView =  (RecyclerView) this.getView().findViewById(R.id.catagoryRecyclerView);
+        catagoryManager = new LinearLayoutManager(catagoryRecycleView.getContext(), LinearLayoutManager.HORIZONTAL, false);
+        catagoryRecycleView.setLayoutManager(catagoryManager);
+        catagoryRecycleView.setAdapter(catagoryListAdapter);
+        catagoryListAdapter.notifyDataSetChanged();
+        catagoryListAdapter.setRunnable(new Runnable() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                Log.i("message", call.toString());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        catagories.clear();
-                        JSONArray jsonArray = null;
-                        try {
-                            jsonArray = new JSONArray(response.body().string());
-                        } catch (JSONException | IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                        for(int i = 0; i < jsonArray.length(); i ++)
-                        {
-                            try {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                Catagory item = new Catagory(jsonObject.get("_id").toString(), jsonObject.get("name").toString(), "");
-                                catagories.add(item);
-                            }
-                            catch(JSONException e)
-                            {
-                                Log.i("exception", e.toString());
-                            }
-                        }
-                        catagoryListAdapter.setRunnable(new Runnable() {
-                            @Override
-                            public void run() {
-                                CrawlProduct(0, 99999999, DataStorage.getInstance().getCatagoryId());
-                            }
-                        });
-                        RecyclerView catagoryRecycleView =  (RecyclerView) fragment.requireView().findViewById(R.id.catagoryRecyclerView);
-                        catagoryRecycleView.getRecycledViewPool().clear();
-                        catagoryListAdapter.notifyDataSetChanged();
-                    }
-                });
+            public void run() {
+                CrawlProduct(0, 99999999, DataStorage.getInstance().getCatagoryId());
             }
         });
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
     public void CrawlProduct(int min, int max, String catagoryId){
         Log.i("message", "start Crawl product");
         @SuppressLint("DefaultLocale") String string = String.format("https://audace-ecomerce.herokuapp.com/products/search-filter?min=%d&max=%d&categoryId=%s&page=0",min,max,catagoryId);
@@ -226,7 +182,7 @@ public class fragment_subcatagory extends Fragment {
                     for(int i = 0; i < jsonArray.length(); i ++)
                     {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        Product item = new Product(jsonObject.getString("_id"),jsonObject.getString("name"), jsonObject.getString("currentPrice"), jsonObject.getBoolean("isFavourite"),jsonObject.getString("imageURL") );
+                        Product item = new Product(jsonObject.getString("_id"),jsonObject.getString("name"), jsonObject.getString("currentPrice"), jsonObject.getString("stablePrice"), jsonObject.getBoolean("isFavourite"),jsonObject.getString("imageURL") );
                         products.add(item);
                     }
                     handler.post(new Runnable() {

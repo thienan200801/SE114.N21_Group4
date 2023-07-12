@@ -135,6 +135,7 @@
         android:layout_alignParentBottom="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+
         <ImageButton
             android:id="@+id/btnEditProduct"
             android:layout_width="match_parent"
@@ -142,8 +143,8 @@
             android:background="@android:color/transparent"
             android:onClick="onButtonClick"
             android:padding="16dp"
-            app:srcCompat="@drawable/rec6"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            app:srcCompat="@drawable/rec6" />
 
         <TextView
             android:layout_width="wrap_content"
