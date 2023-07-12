@@ -18,9 +18,6 @@
             android:name=".Checkout"
             android:exported="false" />
         <activity
-            android:name=".DetailActivity"
-            android:exported="false" />
-        <activity
             android:name=".IntroductionActivity3"
             android:exported="false" />
         <activity

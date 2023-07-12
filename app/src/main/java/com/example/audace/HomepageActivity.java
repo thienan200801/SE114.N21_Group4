@@ -1,7 +1,9 @@
 package com.example.audace;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -62,13 +64,26 @@ public class HomepageActivity extends AppCompatActivity {
         }
         else
         {
-            Intent t = new Intent(HomepageActivity.this, LoginScreen.class);
-            startActivity(t);
-            this.finishActivity(0);
+            SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("token", Context.MODE_PRIVATE);
+            String token = sharedPreferences.getString("token", "");
+            Log.i("token from device", token);
+            if(!token.equals(""))
+            {
+                DataStorage.getInstance().tokenValidation(token);
+                Intent t = new Intent(HomepageActivity.this, HomepageActivity.class);
+                startActivity(t);
+                this.finishActivity(0);
+            }
+            else
+            {
+                Intent t = new Intent(HomepageActivity.this, LoginScreen.class);
+                startActivity(t);
+                this.finishActivity(0);
+            }
         }
 
     }
-    private void loadFragment(Fragment fragment) {
+    public void loadFragment(Fragment fragment) {
         // load fragment
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.bottomNavigationContainer, fragment);

@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -167,8 +169,13 @@ public class LoginScreen extends AppCompatActivity {
                             public void run() {
                                 try {
                                     String accessToken = serverResponse.getString("accessToken");
+                                    SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("token", Context.MODE_PRIVATE);
+                                    @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putString("token",accessToken);
+                                    editor.apply();
                                     DataStorage.getInstance().setAccessToken(accessToken);
                                     Toast.makeText(LoginScreen.this, "Login successfully", Toast.LENGTH_SHORT).show();
+
                                     Intent t = new Intent(LoginScreen.this, HomepageActivity.class);
                                     startActivity(t);
                                 } catch (JSONException e) {

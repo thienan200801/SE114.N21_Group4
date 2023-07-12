@@ -1,8 +1,12 @@
 package com.example.audace;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -12,13 +16,19 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.audace.model.Catagory;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -98,14 +108,19 @@ public class MainFragment extends Fragment {
             }
         });
         logoutButton = getActivity().findViewById(R.id.LogoutButton);
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DataStorage.getInstance().setAccessToken(null);
-                Intent t = new Intent(getActivity(), LoginScreen.class);
-                startActivity(t);
-            }
-        });
+        if(logoutButton != null)
+            logoutButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    DataStorage.getInstance().setAccessToken(null);
+                    Intent t = new Intent(getActivity(), LoginScreen.class);
+                    SharedPreferences.Editor editor = getContext().getSharedPreferences("token", Context.MODE_PRIVATE).edit();
+                    editor.remove("token");
+                    editor.apply();
+                    startActivity(t);
+                    getActivity().finishActivity(0);
+                }
+            });
         searchButton = view.findViewById(R.id.searchButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,6 +137,45 @@ public class MainFragment extends Fragment {
                 navController.navigate(R.id.action_global_searchFragment);
             }
         });
+        populateDrawerMenu();
         return view;
+    }
+    public void populateDrawerMenu()
+    {
+        NavigationView navigationView = (NavigationView) fragment.getActivity().findViewById(R.id.drawerNavigationView);
+        Menu menu = navigationView.getMenu();
+        ArrayList<Catagory> catagoryArrayList = DataStorage.getInstance().getCatagoryArrayList();
+        menu.clear();
+        for(int i = 0; i <catagoryArrayList.size(); i ++)
+        {
+            if(catagoryArrayList.get(i).getSubCatagories().size() == 0)
+                menu.add(catagoryArrayList.get(i).getCatagoryName());
+            else
+            {
+                SubMenu subMenu = menu.addSubMenu(catagoryArrayList.get(i).getCatagoryName());
+                ArrayList<Catagory> child = catagoryArrayList.get(i).getSubCatagories();
+                for(int j = 0; j < child.size(); j ++)
+                {
+                    MenuItem item = subMenu.add(child.get(j).getCatagoryName());
+                    int index = j;
+                    item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
+                            Log.i("message", "Item clicked");
+                            DataStorage.getInstance().setCatagoryId(child.get(index).getCatagoryID());
+                            if(getActivity().findViewById(R.id.fragmentContainerView) != null)
+                                Navigation.findNavController(getActivity().findViewById(R.id.fragmentContainerView)).navigate(R.id.action_global_fragment_subcatagory);
+                            ((DrawerLayout)navigationView.getParent()).closeDrawer(GravityCompat.START);
+                            return true;
+                        }
+                    });
+                    Log.i("message", child.get(j).getCatagoryName());
+                }
+                subMenu.clearHeader();
+
+            }
+
+        }
+        navigationView.invalidate();
     }
 }

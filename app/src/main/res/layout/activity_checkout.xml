@@ -9,7 +9,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
@@ -21,10 +24,9 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/baseline_arrow_back_ios_24"
-                android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
-                />
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/baseline_arrow_back_ios_24" />
 
             <TextView
                 android:id="@+id/CheckoutTitle"
@@ -48,15 +50,15 @@
             android:id="@+id/addressLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
+            android:layout_marginRight="10dp"
+            android:orientation="vertical">
 
             <Button
                 android:id="@+id/addressTitle"
-                android:layout_marginTop="10dp"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:backgroundTint="@color/yellow"
                 android:text="Địa chỉ giao hàng"
                 android:textColor="@color/black"
@@ -81,8 +83,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="80dp"
                     android:layout_weight="1"
-                    android:textSize="16dp"
-                    android:text="Trường đại học Công nghệ thông tin - Đại học quốc gia Hồ Chí Minh,đường Hàn Thuyên, Hồ Chí Minh." />
+                    android:textSize="16dp" />
 
                 <Button
                     android:id="@+id/changeAddressBtn"

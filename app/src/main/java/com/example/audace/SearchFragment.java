@@ -143,7 +143,7 @@ public class SearchFragment extends Fragment {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         if (jsonObject.getString("name").contains(search)) {
-                            Product item = new Product(jsonObject.getString("_id"), jsonObject.getString("name"), jsonObject.getString("currentPrice"), jsonObject.getBoolean("isFavourite"), jsonObject.getString("imageURL"));
+                            Product item = new Product(jsonObject.getString("_id"), jsonObject.getString("name"), jsonObject.getString("currentPrice"), jsonObject.getString("stablePrice"), jsonObject.getBoolean("isFavourite"), jsonObject.getString("imageURL"));
                             products.add(item);
                         }
 
