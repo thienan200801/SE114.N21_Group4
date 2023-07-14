@@ -10,5 +10,5 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="TextView"
-        android:textSize="10sp" />
+        android:textSize="8sp" />
 </FrameLayout>

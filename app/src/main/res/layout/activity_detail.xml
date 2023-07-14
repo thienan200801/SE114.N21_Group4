@@ -66,13 +66,13 @@
                     android:layout_marginRight="0dp"
                     android:layout_weight="0.8"
                     android:text="Tui Gucci"
-                    android:textSize="30dp" />
+                    android:textSize="28dp" />
 
                 <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="30dp"
+                    android:layout_height="36dp"
                     android:layout_gravity="right|center_vertical|end"
-                    android:layout_marginRight="0dp"
+                    android:layout_marginRight="20dp"
                     android:layout_weight="0.2"
                     android:foregroundGravity="right"
                     android:src="@drawable/baseline_favorite_24" />
