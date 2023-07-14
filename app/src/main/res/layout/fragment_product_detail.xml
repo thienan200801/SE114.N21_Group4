@@ -200,13 +200,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="0dp"
-<<<<<<< HEAD:app/src/main/res/layout/activity_detail.xml
                 android:layout_marginRight="20dp"
                 android:textSize="20dp"
                 android:text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
-=======
-                android:layout_marginRight="20dp" />
->>>>>>> 1da902f0a8ffcc1f6ba73d0ec902e6f69759ad16:app/src/main/res/layout/fragment_product_detail.xml
 
             <LinearLayout
                 android:layout_width="wrap_content"
