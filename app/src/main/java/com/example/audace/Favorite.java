@@ -7,6 +7,26 @@ public class Favorite {
     String image;
     String price;
 
+    String color;
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    String size;
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
     public String getQuantity() {
         return quantity;
     }

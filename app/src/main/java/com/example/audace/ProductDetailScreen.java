@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,7 +45,7 @@ public class ProductDetailScreen extends BottomSheetDialogFragment {
 
     private ColorAdapter colorAdapter;
     private SizeAdapter sizeAdapter;
-
+    private TextView nameTextView, descTextView, selectedColor, selectedSize;
     private RecyclerView recyclerView;
     private RecyclerView sizeRecyclerView;
     /*@Override
@@ -60,6 +61,12 @@ public class ProductDetailScreen extends BottomSheetDialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.detail_menu, container, false);
+
+        nameTextView = view.findViewById(R.id.product_name);
+        descTextView = view.findViewById(R.id.product_description);
+        selectedColor = view.findViewById(R.id.selected_color_txt);
+        selectedSize = view.findViewById(R.id.selected_size_txt);
+
         recyclerView = view.findViewById(R.id.color_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
         colorAdapter = new ColorAdapter(this,colorOptionsList);
@@ -71,8 +78,14 @@ public class ProductDetailScreen extends BottomSheetDialogFragment {
         sizeAdapter = new SizeAdapter(this,sizeOptions);
         sizeRecyclerView.setAdapter(sizeAdapter);
 
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            String productId = arguments.getString("productId");
+            if (productId != null) {
+                setupData(productId); // Call setupData() with the product ID
+            }
+        }
 
-        setupData();
 
         Dialog dialog = getDialog();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -82,7 +95,7 @@ public class ProductDetailScreen extends BottomSheetDialogFragment {
         return view;
     }
 
-    private void setupData(){
+    private void setupData(String productId){
         Handler handler = new Handler(getMainLooper());
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .connectTimeout(30, TimeUnit.SECONDS)
@@ -91,7 +104,7 @@ public class ProductDetailScreen extends BottomSheetDialogFragment {
         MediaType mediaType = MediaType.parse("text/plain");
         RequestBody body = RequestBody.create(mediaType, "");
         Request request = new Request.Builder()
-                .url("https://audace-ecomerce.herokuapp.com/products/product/6459ed39b33d8814d8301f2a")
+                .url("https://audace-ecomerce.herokuapp.com/products/product/"+productId)
                 .method("GET", null)
                 .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
                 .build();
@@ -107,16 +120,21 @@ public class ProductDetailScreen extends BottomSheetDialogFragment {
                     @Override
                     public void run() {
                         try {
+
                             JSONObject jsonResponse = new JSONObject(response.body().string());
 
-                                JSONArray colors = jsonResponse.getJSONArray("colors");
+                            String productName = jsonResponse.getString("name");
+                            nameTextView.setText(productName);
+                            String productDescription = jsonResponse.getString("description");
+                            descTextView.setText(productDescription);
+
+                            JSONArray colors = jsonResponse.getJSONArray("colors");
                                 for (int i = 0; i <colors.length();i++) {
                                     JSONObject productObject = colors.getJSONObject(i);
                                     String productColorName = productObject.getString("name");
                                     String productColor = productObject.getString("hex");
 
                                     ColorOption colorOption = new ColorOption(productColorName, productColor);
-
                                     colorOptionsList.add(colorOption);
                                 }
                             colorAdapter.notifyDataSetChanged();

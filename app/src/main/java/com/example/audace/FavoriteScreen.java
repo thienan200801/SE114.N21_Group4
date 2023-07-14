@@ -3,13 +3,11 @@ package com.example.audace;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,7 +29,6 @@ public class FavoriteScreen extends AppCompatActivity {
 
     private ArrayList<Favorite> favoriteArrayList = new ArrayList<>();
     private FavoriteAdapter favoriteAdapter;
-    private BottomSheetBehavior bottomSheetBehavior;
 
     private RecyclerView recyclerView;
     @Override
@@ -44,8 +41,6 @@ public class FavoriteScreen extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         favoriteAdapter = new FavoriteAdapter(this,favoriteArrayList);
         recyclerView.setAdapter(favoriteAdapter);
-  /*      LinearLayout bottomSheetLayout = findViewById(R.id.fav_menu);
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetLayout);*/
         setupData();
 
     }
@@ -78,13 +73,14 @@ public class FavoriteScreen extends AppCompatActivity {
                             JSONArray jsonResponse = new JSONArray(response.body().string());
                             for (int i = 0; i < jsonResponse.length(); i++) {
                                 JSONObject productObject = jsonResponse.getJSONObject(i);
-                                String productId = productObject.getString("_id");
-                                String productName = productObject.getString("name");
-                                String imageURL = productObject.getString("imageURL");
-                                String currentPrice = productObject.getString("currentPrice");
-
+                                JSONObject product = productObject.getJSONObject("product");
+                                String productId = product.getString("_id");
+                                String productName = product.getString("name");
+                                String imageURL = product.getString("imageURL");
+                                String currentPrice = product.getString("currentPrice");
+                                String productQuantity = productObject.getString("quantity");
                                 Favorite favoriteProduct = new Favorite(productId,productName,imageURL,currentPrice);
-
+                                favoriteProduct.setQuantity(productQuantity);
 
                                 favoriteArrayList.add(favoriteProduct);
                             }

@@ -157,7 +157,8 @@
                             tools:ignore="TouchTargetSizeCheck" />
 
                         <TextView
-                            android:id="@+id/numTextView"
+                            android:id="@+id/quantityTextView"
+                            android:textAlignment="center"
                             android:layout_width="20dp"
                             android:layout_height="match_parent" />
 

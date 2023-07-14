@@ -17,10 +17,11 @@
         app:srcCompat="@drawable/Rectangle54"/>-->
 
     <LinearLayout
+        android:id="@+id/detail_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="1dp"
         app:srcCompat="@android:color/transparent"
         android:background="@drawable/product_detail_bg"
         android:orientation="vertical"
@@ -33,7 +34,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/open_sans_semibold"
-            android:text="túi gucci "
             android:textAllCaps="true"
             android:textColor="@color/black"
             android:textSize="28sp" />
@@ -44,7 +44,6 @@
             android:layout_height="80dp"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/open_sans_condensed_light_italic"
-            android:text="fjjjjjjjjjjjjjjjjjjjjjjjjjjjjjfjjjjjjjjjjkdsjffffffffffff"
             android:textSize="20sp" />
 
         <LinearLayout
@@ -133,7 +132,7 @@
 
     </LinearLayout>
     <RelativeLayout
-        android:layout_alignParentBottom="true"
+        android:layout_alignBottom="@+id/detail_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <ImageButton

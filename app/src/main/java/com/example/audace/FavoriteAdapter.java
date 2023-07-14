@@ -68,6 +68,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         Favorite item = favoriteArrayList.get(position);
         holder.nameTextView.setText(item.getName());
         holder.priceTextView.setText(String.valueOf(item.getPrice()));
+        holder.quantityTextView.setText(item.getQuantity());
         holder.sizeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,6 +79,12 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
             @Override
             public void onClick(View view) {
                 navigateToProductDetail(item.getId());
+            }
+        });
+        holder.addtoCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addCart(item);
             }
         });
         Picasso.get()
@@ -94,11 +101,9 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         Button colorBtn;
         Button sizeBtn;
         TextView priceTextView ;
-        TextView numTextView;
+        TextView quantityTextView;
         ImageButton deleteFavorite;
         ImageButton addtoCart;
-
-
         ImageView favoriteImage;
 
 /*
@@ -115,18 +120,11 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
             addtoCart = view.findViewById(R.id.btnAddCart);
             colorBtn = view.findViewById(R.id.btnColor);
             sizeBtn = view.findViewById(R.id.btnSize);
+            quantityTextView = view.findViewById(R.id.quantityTextView);
 
 
 
 
-
-            addtoCart.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Favorite item = favoriteArrayList.get(getAdapterPosition());
-                    addCart(item);
-                }
-            });
 
         }
 
@@ -134,7 +132,6 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
     private void navigateToProductDetail(String productId) {
         ProductDetailScreen productDetailScreen = new ProductDetailScreen();
 
-        // Pass the product ID to the bottom sheet using a bundle
         Bundle bundle = new Bundle();
         bundle.putString("productId", productId);
         productDetailScreen.setArguments(bundle);
