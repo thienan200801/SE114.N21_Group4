@@ -163,13 +163,13 @@
                     android:layout_marginRight="0dp"
                     android:layout_weight="0.8"
                     android:text="Tui Gucci"
-                    android:textSize="30dp" />
+                    android:textSize="28dp" />
 
                 <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="30dp"
+                    android:layout_height="36dp"
                     android:layout_gravity="right|center_vertical|end"
-                    android:layout_marginRight="0dp"
+                    android:layout_marginRight="20dp"
                     android:layout_weight="0.2"
                     android:foregroundGravity="right"
                     android:src="@drawable/baseline_favorite_24" />
@@ -200,7 +200,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="0dp"
-                android:layout_marginRight="20dp" />
+                android:layout_marginRight="20dp"
+                android:textSize="20dp"
+                android:text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -212,7 +214,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Màu sắc:"
-                    android:textSize="16sp"
+                    android:textSize="20dp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -240,7 +242,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Kích thước:"
-                    android:textSize="16sp"
+                    android:textSize="20dp"
                     android:textStyle="bold" />
 
                 <TextView
