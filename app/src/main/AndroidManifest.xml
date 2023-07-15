@@ -53,6 +53,8 @@
         <activity android:name=".HistoryScreen"/>
         <activity android:name=".OrderScreen"/>
         <activity android:name=".ProductDetailScreen"/>
+        <activity android:name="com.example.audace.CheckOutSuccessActivity" />
+        <activity android:name="com.example.audace.CheckOutFailActivity" />
 
 
         <meta-data

@@ -93,8 +93,8 @@ public class SearchFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.i("message", adapterView.getItemAtPosition(i).toString());
                 products = Sort(products, i);
+                Log.i("products", products.toString());
                 adapter.notifyDataSetChanged();
             }
 
@@ -153,7 +153,6 @@ public class SearchFragment extends Fragment {
                         public void run() {
                             RecyclerView view = (RecyclerView) fragment.getView().findViewById(R.id.list);
                             view.getRecycledViewPool().clear();
-                            Log.i("message", products.toString());
                             adapter = new ProductListAdapter(Sort(products, 0));
                             view.setAdapter(adapter);
                             adapter.notifyDataSetChanged();

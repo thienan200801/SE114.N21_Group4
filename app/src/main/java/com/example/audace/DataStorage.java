@@ -38,6 +38,7 @@ public class DataStorage {
 
     private String SearchText;
 
+
     public ArrayList<Catagory> getCatagoryArrayList() {
         Log.i("catagories", catagoryArrayList.toString());
         if(catagoryArrayList == null || catagoryArrayList.size() == 0)

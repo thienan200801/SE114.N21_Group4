@@ -9,7 +9,7 @@
         android:id="@+id/catagoryImageView"
         android:layout_width="match_parent"
         android:layout_height="444dp"
-        app:srcCompat="@drawable/bag_example1" />
+        app:srcCompat="@drawable/baseline_downloading_24" />
 
     <TextView
         android:id="@+id/catagoryTextView"

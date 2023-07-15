@@ -41,7 +41,7 @@ public class InfoScreen extends AppCompatActivity {
 
             Request request = new Request.Builder()
                     .url("https://audace-ecomerce.herokuapp.com/users/me")
-                    .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODIwMDgxNjl9.Cgn99CpH3ypDpTVm_Fh_E1nn2anvJWZAnZHS4Qkwnn4")
+                    .addHeader("Authorization", "Bearer "+ DataStorage.getInstance().getAccessToken())
                     .build();
 
             client.newCall(request).enqueue(new Callback() {

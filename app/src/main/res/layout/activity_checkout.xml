@@ -7,183 +7,166 @@
     tools:context=".Checkout">
 
     <LinearLayout
+        android:id="@+id/titleLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/baseline_arrow_back_ios_24" />
+
+        <TextView
+            android:id="@+id/CheckoutTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:gravity="center"
+            android:text="Thanh Toán"
+            android:textColor="#000000"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvCheckoutList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleLayout" />
+
+    <LinearLayout
+        android:id="@+id/addressLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rvCheckoutList">
+
+        <Button
+            android:id="@+id/addressTitle"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/yellow"
+            android:text="Địa chỉ giao hàng"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:cornerRadius="10dp"
+            app:iconTint="#F5D000"
+            tools:ignore="MissingConstraints" />
+
         <LinearLayout
-            android:id="@+id/titleLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="73dp"
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/imageView7"
+                android:layout_width="59dp"
+                android:layout_height="58dp"
+                app:srcCompat="@drawable/shipicon" />
+
+            <EditText
+                android:id="@+id/addressEditText"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/baseline_arrow_back_ios_24" />
-
-            <TextView
-                android:id="@+id/CheckoutTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="20"
-                android:gravity="center"
-                android:text="Thanh Toán"
-                android:textColor="#000000"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvCheckoutList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <LinearLayout
-            android:id="@+id/addressLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/addressTitle"
-                android:layout_width="170dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:backgroundTint="@color/yellow"
-                android:text="Địa chỉ giao hàng"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                app:cornerRadius="10dp"
-                app:iconTint="#F5D000"
-                tools:ignore="MissingConstraints" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="73dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/imageView7"
-                    android:layout_width="59dp"
-                    android:layout_height="58dp"
-                    app:srcCompat="@drawable/shipicon" />
-
-                <EditText
-                    android:id="@+id/addressEditText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="80dp"
-                    android:layout_weight="1"
-                    android:textSize="16dp" />
-
-                <Button
-                    android:id="@+id/changeAddressBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="28dp"
-                    android:layout_marginTop="10dp"
-                    android:backgroundTint="@color/white"
-                    android:text="Thay đổi"
-                    android:textColor="@color/black"
-                    android:textSize="8sp"
-                    app:cornerRadius="80dp"
-                    app:iconTint="#F5D000"
-                    tools:ignore="MissingConstraints,TouchTargetSizeCheck" />
-
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/imageView8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="80dp"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/seperation" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/voucherLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:orientation="vertical">
+                android:textSize="16dp"
+                tools:ignore="SpeakableTextPresentCheck" />
 
             <Button
-                android:id="@+id/voucherTitle"
-                android:layout_width="170dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:backgroundTint="@color/yellow"
-                android:text="Chi tiết"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                app:cornerRadius="10dp"
-                app:iconTint="#F5D000"
-                tools:ignore="MissingConstraints" />
-
-            <ListView
-                android:id="@+id/rvSumListItem"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <ImageView
-                android:id="@+id/seperatedLine"
+                android:id="@+id/changeAddressBtn"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/seperation" />
-
-            <LinearLayout
-
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/orderPart"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView12"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="10dp"
-                android:gravity="right"
-                android:text="Tổng tiền:  $100000000"
-                android:textColor="#000000"
-                android:textSize="20sp"
-                android:textStyle="italic" />
-
-            <Button
-                android:id="@+id/button5"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="128dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="5dp"
-                android:backgroundTint="#F5D000"
-                android:text="Thanh Toán"
+                android:layout_height="32dp"
+                android:layout_gravity="center|center_vertical"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/white"
+                android:text="Thay đổi"
                 android:textColor="@color/black"
-                app:cornerRadius="20dp"
+                android:textSize="8sp"
+                app:cornerRadius="80dp"
                 app:iconTint="#F5D000"
-                tools:ignore="MissingConstraints" />
+                tools:ignore="MissingConstraints,TouchTargetSizeCheck" />
+
         </LinearLayout>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/voucherLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addressLayout">
+
+        <Button
+            android:id="@+id/voucherTitle"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/yellow"
+            android:text="Chi tiết"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:cornerRadius="10dp"
+            app:iconTint="#F5D000"
+            tools:ignore="MissingConstraints" />
+
+        <ListView
+            android:id="@+id/rvSumListItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_horizontal|center_vertical"
+            android:paddingHorizontal="20dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/orderPart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            android:gravity="right"
+            android:text="Tổng tiền:  $100000000"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="italic" />
+
+        <Button
+            android:id="@+id/thanhToanButton"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#F5D000"
+            android:text="Thanh Toán"
+            android:textColor="@color/black"
+            app:cornerRadius="20dp"
+            app:iconTint="#F5D000"
+            tools:ignore="MissingConstraints" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
