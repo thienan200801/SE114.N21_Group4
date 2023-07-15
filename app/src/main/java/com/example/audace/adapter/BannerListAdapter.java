@@ -9,9 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.example.audace.R;
 import com.example.audace.model.Banner;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,30 +52,15 @@ public class BannerListAdapter extends RecyclerView.Adapter<BannerListAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position){
         Log.i("message", "start crawl banner image");
-        HttpUrl url = HttpUrl.parse(banners.get(position).getImgURL()).newBuilder().build();
-        Request request = new Request.Builder().url(url).build();
-        OkHttpClient client = new OkHttpClient();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.i("message", e.toString());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if(response.isSuccessful())
-                {
-                    try{
-                         final Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
-                        viewHolder.getImageView().setImageBitmap(bitmap);
-                    }
-                    catch (Exception e)
-                    {
-                        Log.i("error", e.toString());
-                    }
-                }
-            }
-        });
+        CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(viewHolder.getImageView().getContext());
+        circularProgressDrawable.setStrokeWidth(5f);
+        circularProgressDrawable.setCenterRadius(30f);
+        circularProgressDrawable.start();
+        Picasso.get()
+                .load(banners.get(position).getImgURL())
+                .error(R.drawable.baseline_wifi_tethering_error_24)
+                .placeholder(circularProgressDrawable)
+                .into(viewHolder.getImageView());
     }
 
     @Override

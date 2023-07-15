@@ -11,8 +11,10 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -30,7 +32,9 @@ import com.example.audace.adapter.ColorAdapter;
 import com.example.audace.adapter.SizeAdapter;
 import com.example.audace.model.ColorObject;
 import com.example.audace.model.DetailOfItem;
+import com.example.audace.model.PurchaseProduct;
 import com.example.audace.model.SizeObject;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -157,38 +161,21 @@ public class fragment_productDetail extends Fragment {
                         ColorObject colorItemObject = new ColorObject(id, name, res);
                         colorObjectList.add(colorItemObject);
                     }
-                    HttpUrl url = HttpUrl.parse(jsonObject.getString("imageURL")).newBuilder().build();
-                    Request request = new Request.Builder().url(url).build();
-                    OkHttpClient client = new OkHttpClient();
-                    client.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            Log.i("message", e.toString());
-                        }
-
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-
-                            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if(response.isSuccessful())
-                                    {
-                                        try{
-                                            final Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
-                                            ((ImageView)getView().findViewById(R.id.img_detail)).setImageBitmap(bitmap);
-                                        }
-                                        catch (Exception e)
-                                        {
-                                            Looper.prepare();
-                                            Log.i("error",e.toString());
-                                            Toast.makeText(getContext(), "There is some error in fetching the image", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                }
-                            });
+                    handler.post(()->{
+                        CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(((ImageView)getView().findViewById(R.id.img_detail)).getContext());
+                        circularProgressDrawable.setStrokeWidth(5f);
+                        circularProgressDrawable.setCenterRadius(30f);
+                        circularProgressDrawable.start();
+                        try {
+                            Picasso.get()
+                                    .load(jsonObject.getString("imageURL"))
+                                    .placeholder(circularProgressDrawable)
+                                    .into(((ImageView)getView().findViewById(R.id.img_detail)));
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
                         }
                     });
+
                     if(d != null) {
                         handler.post(() -> {
                             nameofproduct.setText(d.getName());
@@ -306,26 +293,6 @@ public class fragment_productDetail extends Fragment {
         });
 
         return view;
-    }
-    private class PurchaseProduct
-    {
-        private String productId;
-        private String colorId;
-
-        private String sizeId;
-        private int quantity;
-
-        public PurchaseProduct(String productId, String colorId, String sizeId)
-        {
-            this.productId = productId;
-            this.colorId = colorId;
-            this.sizeId = sizeId;
-            this.quantity = 1;
-        }
-        @SuppressLint("DefaultLocale")
-        public String toJSON(){
-            return String.format("{\r\n            \"product\": \"%s\",\r\n            \"size\": \"%s\",\r\n            \"color\": \"%s\",\r\n            \"quantity\": %d \r\n        }", productId, colorId, sizeId, quantity);
-        }
     }
 
 }

@@ -22,6 +22,7 @@ import androidx.navigation.NavHost;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.example.audace.DataStorage;
 import com.example.audace.HomepageActivity;
@@ -29,6 +30,7 @@ import com.example.audace.R;
 import com.example.audace.fragment_productDetail;
 import com.example.audace.model.Product;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -103,30 +105,16 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
         holder.getNameTextView().setText(products.get(position).getName());
         holder.getPriceTextVIew().setText(products.get(position).getPrice());
-        HttpUrl url = HttpUrl.parse(products.get(position).getImgUrl()).newBuilder().build();
-        Request request = new Request.Builder().url(url).build();
-        OkHttpClient client = new OkHttpClient();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.i("message", e.toString());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if(response.isSuccessful())
-                {
-                    try{
-                        final Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
-                        holder.getImgView().setImageBitmap(bitmap);
-                    }
-                    catch (Exception e)
-                    {
-
-                    }
-                }
-            }
-        });
+        CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(holder.getImgView().getContext());
+        circularProgressDrawable.setStrokeWidth(5f);
+        circularProgressDrawable.setCenterRadius(30f);
+        circularProgressDrawable.start();
+        Picasso.get()
+                .load(products.get(position).getImgUrl())
+                .placeholder(circularProgressDrawable)
+                .error(R.drawable.baseline_wifi_tethering_error_24)
+                .fit()
+                .into(holder.getImgView());
         if(!Objects.equals(products.get(position).getStablePrice(), products.get(position).getPrice()))
         {
             Float stablePrice = Float.parseFloat(products.get(position).getStablePrice());

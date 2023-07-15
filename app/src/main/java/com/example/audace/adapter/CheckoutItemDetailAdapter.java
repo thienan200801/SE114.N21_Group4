@@ -1,5 +1,6 @@
 package com.example.audace.adapter;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -11,10 +12,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.example.audace.R;
 import com.example.audace.model.CheckoutItemDetails;
 import com.example.audace.model.SizeObject;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -81,40 +84,26 @@ public class CheckoutItemDetailAdapter extends RecyclerView.Adapter<CheckoutItem
         return new ViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull CheckoutItemDetailAdapter.ViewHolder holder, int position) {
         holder.title.setText(checkoutItemDetailsArray.get(position).getName());
-        holder.quantity.setText(checkoutItemDetailsArray.get(position).getQuantity());
-        holder.color.setText(checkoutItemDetailsArray.get(position).getColor().getColorName());
+        holder.quantity.setText("Số lượng: " + checkoutItemDetailsArray.get(position).getQuantity());
+        holder.color.setText("Màu sắc: " + checkoutItemDetailsArray.get(position).getColor().getColorName());
         holder.size.setText(checkoutItemDetailsArray.get(position).getSize().getSizeInCentimeter());
-        holder.price.setText(checkoutItemDetailsArray.get(position).getPrice());
+        holder.price.setText("$" + checkoutItemDetailsArray.get(position).getPrice());
 
         if(!Objects.equals(checkoutItemDetailsArray.get(position).getImageURL(), ""))
         {
-            HttpUrl url = HttpUrl.parse(checkoutItemDetailsArray.get(position).getImageURL()).newBuilder().build();
-            Request request = new Request.Builder().url(url).build();
-            OkHttpClient client = new OkHttpClient();
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    Log.i("message", e.toString());
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if(response.isSuccessful())
-                    {
-                        try{
-                            final Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
-                            holder.getImageView().setImageBitmap(bitmap);
-                        }
-                        catch (Exception e)
-                        {
-                            Log.i("message", e.toString());
-                        }
-                    }
-                }
-            });
+            CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(holder.getImageView().getContext());
+            circularProgressDrawable.setStrokeWidth(5f);
+            circularProgressDrawable.setCenterRadius(30f);
+            circularProgressDrawable.start();
+            Picasso.get()
+                    .load(checkoutItemDetailsArray.get(position).getImageURL())
+                    .placeholder(circularProgressDrawable)
+                    .fit()
+                    .into(holder.getImageView());
         }
     }
 

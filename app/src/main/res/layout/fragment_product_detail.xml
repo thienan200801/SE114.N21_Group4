@@ -105,12 +105,12 @@
 
     <ImageView
         android:id="@+id/img_detail"
-        android:src="@drawable/gucci"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_marginTop="100dp"
         app:layout_constraintTop_toTopOf="parent"
-        />
+
+        app:srcCompat="@drawable/baseline_downloading_24" />
 
     <Button
         android:id="@+id/btprice"
