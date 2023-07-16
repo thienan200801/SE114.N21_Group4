@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginTop="13dp"
+    android:layout_marginTop="10dp"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -10,20 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/order_item_bg"
-            android:layout_centerHorizontal="true"/>
+
 
             <ImageView
+                android:id ="@+id/order_head"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/order_txt"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
-                android:layout_alignTop="@id/imageView6"/>
+                android:layout_marginTop="5dp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:text="Đơn hàng của bạn đang được vận chuyển"
@@ -39,168 +35,45 @@
 
 
         <RelativeLayout
-            android:layout_alignLeft="@+id/imageView6"
-            android:layout_alignRight="@+id/imageView6"
-            android:layout_alignBottom="@+id/imageView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/order_head"
             android:layout_centerHorizontal="true">
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:orientation="horizontal">
-
-                <LinearLayout
+            <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/productRecyclerView"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/order_image"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:padding="5dp"
-                        app:srcCompat="@drawable/user" />
-                    <RelativeLayout
-                        android:layout_marginBottom="2dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            app:srcCompat="@drawable/order_status_txt" />
-                        <TextView
-                            android:id="@+id/order_status"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:gravity="center"/>
-                    </RelativeLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:paddingEnd="10dp">
-
-                    <TextView
-                        android:id="@+id/cart_name_txtView"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_margin="5dp"
-                        android:textColor="#000000"
-                        android:textSize="12sp" />
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <Spinner
-                            android:id="@+id/size_spinner"
-                            android:layout_width="80dp"
-                            android:layout_height="15dp"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginEnd="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:contentDescription="Choose size"/>
-                        <Spinner
-                            android:id="@+id/color_spinner"
-                            android:layout_width="80dp"
-                            android:layout_height="15dp"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginEnd="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:contentDescription="Choose color"/>
-                    </LinearLayout>
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/product_order_item"/>
+            </ScrollView>
 
 
-
-                    <TextView
-                        android:id="@+id/price_txtView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:text="$price"
-                        android:textColor="#000000"
-                        android:textSize="10sp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <RelativeLayout
-                            android:layout_marginEnd="80dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent">
-
-                            <ImageButton
-                                android:id="@+id/btnDel"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerInParent="true"
-                                android:background="@android:color/transparent"
-                                android:contentDescription="Delete Item"
-                                android:onClick="onCLick"
-                                android:textAlignment="center"
-                                app:srcCompat="@drawable/delete"
-                                tools:ignore="TouchTargetSizeCheck" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerInParent="true"
-                                android:text="Xóa"
-                                android:textSize="9sp" />
-                        </RelativeLayout>
-
-
-
-                        <ImageButton
-                            android:id="@+id/btnNumPlus"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:background="@android:color/transparent"
-                            android:contentDescription="Plus number"
-                            android:onClick="onCLick"
-                            android:textAlignment="center"
-                            app:srcCompat="@drawable/plus"
-                            tools:ignore="TouchTargetSizeCheck" />
-                        <TextView
-                            android:id="@+id/numTextView"
-                            android:layout_width="20dp"
-                            android:layout_height="match_parent"/>
-                        <ImageButton
-                            android:id="@+id/btnNumMinus"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:background="@android:color/transparent"
-                            android:contentDescription="Plus number"
-                            android:onClick="onClick"
-                            android:textAlignment="center"
-                            app:srcCompat="@drawable/minus"
-                            tools:ignore="TouchTargetSizeCheck" />
-
-                    </LinearLayout>
-
-
-                </LinearLayout>
-            </LinearLayout>
 
         </RelativeLayout>
 
     </RelativeLayout>
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tổng cộng: "/>
+        <TextView
+            android:id="@+id/totalPrice_txtView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+    </LinearLayout>
 
 
 

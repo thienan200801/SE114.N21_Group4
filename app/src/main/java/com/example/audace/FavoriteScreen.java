@@ -3,6 +3,11 @@ package com.example.audace;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,17 +30,26 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class FavoriteScreen extends AppCompatActivity {
+public class FavoriteScreen extends AppCompatActivity implements ProductDetailScreen.EditDetailClickListener {
 
     private ArrayList<Favorite> favoriteArrayList = new ArrayList<>();
     private FavoriteAdapter favoriteAdapter;
+
+
+    private ImageButton cartIcon;
+    private TextView cartCount;
+
+
 
     private RecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.favorite);
-
+        /*View cartLayout = getLayoutInflater().inflate(R.layout.cart_icon, null);
+        cartIcon = cartLayout.findViewById(R.id.cart);
+        cartCount = cartLayout.findViewById(R.id.cart_count);
+        updateCartCount();*/
 
         recyclerView = findViewById(R.id.favRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
@@ -44,7 +58,11 @@ public class FavoriteScreen extends AppCompatActivity {
         setupData();
 
     }
+    @Override
+    public void onEditDetailClicked(String selectedColor, String selectedSize) {
 
+        Toast.makeText(this, "Selected Color: " + selectedColor + ", Selected Size: " + selectedSize, Toast.LENGTH_SHORT).show();
+    }
     public void setupData() {
         Handler handler = new Handler(getMainLooper());
         OkHttpClient client = new OkHttpClient().newBuilder()
@@ -77,11 +95,15 @@ public class FavoriteScreen extends AppCompatActivity {
                                 String productId = product.getString("_id");
                                 String productName = product.getString("name");
                                 String imageURL = product.getString("imageURL");
-                                String currentPrice = product.getString("currentPrice");
-                                String productQuantity = productObject.getString("quantity");
+                                int currentPrice = product.getInt("currentPrice");
+                                int productQuantity = productObject.getInt("quantity");
+                                String selectedColor = productObject.getJSONObject("color").getString("_id");
+                                String selectedSize = productObject.getJSONObject("size").getString("_id");
+
                                 Favorite favoriteProduct = new Favorite(productId,productName,imageURL,currentPrice);
                                 favoriteProduct.setQuantity(productQuantity);
-
+                                favoriteProduct.setColor(selectedColor);
+                                favoriteProduct.setSize(selectedSize);
                                 favoriteArrayList.add(favoriteProduct);
                             }
                             favoriteAdapter.notifyDataSetChanged();
@@ -90,10 +112,10 @@ public class FavoriteScreen extends AppCompatActivity {
                         catch (IOException e){
                             e.printStackTrace();
                         }
-
                     }
                 });
             }
         });
     }
+
 }

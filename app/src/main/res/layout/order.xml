@@ -38,15 +38,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/order_bg"
             android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/orderRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/order_bg"
                 tools:listitem="@layout/order_item">
 
             </androidx.recyclerview.widget.RecyclerView>

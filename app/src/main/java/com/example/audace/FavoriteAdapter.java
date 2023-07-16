@@ -68,7 +68,8 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         Favorite item = favoriteArrayList.get(position);
         holder.nameTextView.setText(item.getName());
         holder.priceTextView.setText(String.valueOf(item.getPrice()));
-        holder.quantityTextView.setText(item.getQuantity());
+        holder.colorTextView.setText(item.getColor());
+        holder.quantityTextView.setText(String.valueOf(item.getQuantity()));
         holder.sizeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,9 +107,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         ImageButton addtoCart;
         ImageView favoriteImage;
 
-/*
-    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.spinner_items, android.R.layout.simple_spinner_item);
-*/
+
 
 
         ViewHolder( View view){
@@ -120,6 +119,8 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
             addtoCart = view.findViewById(R.id.btnAddCart);
             colorBtn = view.findViewById(R.id.btnColor);
             sizeBtn = view.findViewById(R.id.btnSize);
+            colorTextView = view.findViewById(R.id.colorTextView);
+            sizeTextView = view.findViewById(R.id.sizeTextView);
             quantityTextView = view.findViewById(R.id.quantityTextView);
 
 
@@ -147,21 +148,19 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
             OkHttpClient client = new OkHttpClient().newBuilder()
                     .build();
             MediaType mediaType = MediaType.parse("application/json");
-            JSONArray productCheckoutInfo = new JSONArray();
-            JSONObject jsonObject = new JSONObject();
+            JSONObject productJson = new JSONObject();
             try {
-                jsonObject.put("product", item.getId());
-                productCheckoutInfo.put(jsonObject);
-
-
+                productJson.put("product", item.getId());
+                productJson.put("size", item.getSize());
+                productJson.put("color", item.getColor());
+                productJson.put("quantity", item.getQuantity());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            /*  String id = item.getId();
-            String name = item.getName();
-            String image = item.getImage();
-            *//*String size = item.
-            String color =*/
+
+            JSONArray productCheckoutInfo = new JSONArray();
+            productCheckoutInfo.put(productJson);
+
 
 
             new Thread(new Runnable() {
@@ -174,6 +173,9 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
                         e.printStackTrace();
                     }
                     RequestBody body = RequestBody.create(mediaType, requestBody.toString());
+
+
+
 
                     Request request = new Request.Builder()
                             .url("https://audace-ecomerce.herokuapp.com/users/me/cart")
@@ -197,6 +199,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
                                 public void run() {
 
                                     if (body.equals("")) {
+
                                         Toast.makeText(activity, "Added to cart", Toast.LENGTH_SHORT).show();
 
                                     }

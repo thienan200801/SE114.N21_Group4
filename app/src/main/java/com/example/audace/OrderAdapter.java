@@ -3,29 +3,27 @@ package com.example.audace;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> {
 
-    private ArrayList<Favorite> favoriteArrayList;
+    private ArrayList<Order> orderArrayList;
     private OrderScreen activity;
 
 
 
-    public OrderAdapter(OrderScreen activity, ArrayList<Favorite> favoriteArrayList
+    public OrderAdapter(OrderScreen activity, ArrayList<Order> orderArrayList
     ){
         this.activity = activity;
-        this.favoriteArrayList = favoriteArrayList;
+        this.orderArrayList = orderArrayList;
     }
     @Override
     @NonNull
@@ -38,43 +36,28 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(OrderAdapter.ViewHolder holder, int position){
-        Favorite item = favoriteArrayList.get(position);
-        holder.nameTextView.setText(item.getName());
-        holder.priceTextView.setText(String.valueOf(item.getPrice()));
-        Picasso.get()
-                .load(item.getImage())
-                .resize(250,250)
-                .into(holder.orderImage);
+        Order item = orderArrayList.get(position);
+        holder.priceTextView.setText(item.getTotalPrice());
+        holder.bind(item);
 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView nameTextView ;
-        TextView colorTextView ;
-        TextView sizeTextView ;
         TextView priceTextView ;
-        TextView numTextView;
-        ImageButton deleteFavorite;
-        ImageButton addtoCart;
+        RecyclerView productRecyclerView;
 
-        Spinner spinner;
-        ImageView orderImage;
-/*
-    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.spinner_items, android.R.layout.simple_spinner_item);
-*/
 
 
         ViewHolder( View view){
             super(view);
-            nameTextView =view.findViewById(R.id.fav_nameTextView);
-            priceTextView= view.findViewById(R.id.priceTextView);
-            orderImage = view.findViewById(R.id.order_image);
-            deleteFavorite = view.findViewById(R.id.btnDel);
-            addtoCart = view.findViewById(R.id.btnCart);
-
-
-
-
+            priceTextView= view.findViewById(R.id.totalPrice_txtView);
+            productRecyclerView = view.findViewById(R.id.productRecyclerView);
+        }
+        public void bind(Order order){
+            ArrayList<Favorite> productList = order.getProductList();
+            ProductOrderAdapter productAdapter = new ProductOrderAdapter(activity,productList);
+            productRecyclerView.setAdapter(productAdapter);
+            productRecyclerView.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
 
         }
 
@@ -84,11 +67,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     @Override
     public int getItemCount() {
 
-        return favoriteArrayList.size();
+        return orderArrayList.size();
 
     }
-    public void setCartList(ArrayList<Favorite> favoriteArrayList){
-        this.favoriteArrayList = favoriteArrayList;
+    public void setOrderArrayList(ArrayList<Order> orderArrayList){
+        this.orderArrayList = orderArrayList;
 
     }
 }

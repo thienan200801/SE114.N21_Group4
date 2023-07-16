@@ -3,11 +3,12 @@ package com.example.audace;
 public class Favorite {
     String id;
     String name;
-    String quantity;
+    int quantity;
     String image;
-    String price;
-
+    int price;
     String color;
+    String size;
+
 
     public String getColor() {
         return color;
@@ -17,8 +18,6 @@ public class Favorite {
         this.color = color;
     }
 
-    String size;
-
     public String getSize() {
         return size;
     }
@@ -27,15 +26,15 @@ public class Favorite {
         this.size = size;
     }
 
-    public String getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(String quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
-    public Favorite(String id, String name, String image, String price) {
+    public Favorite(String id, String name, String image, int price) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -67,11 +66,11 @@ public class Favorite {
         this.image = image;
     }
 
-    public  String getPrice() {
+    public  int getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 

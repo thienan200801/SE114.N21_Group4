@@ -12,12 +12,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,7 +38,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class ProductDetailScreen extends BottomSheetDialogFragment {
+public class ProductDetailScreen extends BottomSheetDialogFragment implements ColorAdapter.ColorClickListener{
     private ArrayList<ColorOption> colorOptionsList = new ArrayList<>();
     private ArrayList<SizeOption> sizeOptions = new ArrayList<>();
 
@@ -48,16 +47,13 @@ public class ProductDetailScreen extends BottomSheetDialogFragment {
     private TextView nameTextView, descTextView, selectedColor, selectedSize;
     private RecyclerView recyclerView;
     private RecyclerView sizeRecyclerView;
-    /*@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.detail_menu);
+    private ImageButton editDetail;
+    public interface EditDetailClickListener {
+        void onEditDetailClicked(String selectedColor, String selectedSize);
+    }
+    private EditDetailClickListener editDetailClickListener;
 
 
-
-
-
-    }*/
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.detail_menu, container, false);
@@ -78,11 +74,27 @@ public class ProductDetailScreen extends BottomSheetDialogFragment {
         sizeAdapter = new SizeAdapter(this,sizeOptions);
         sizeRecyclerView.setAdapter(sizeAdapter);
 
+        editDetail = view.findViewById(R.id.btnEditProduct);
+
+        editDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String selectedColorText = selectedColor.getText().toString();
+                String selectedSizeText = selectedSize.getText().toString();
+
+                if (editDetailClickListener != null) {
+                    editDetailClickListener.onEditDetailClicked(selectedColorText, selectedSizeText);
+                }
+
+                dismiss();
+            }
+        });
+
         Bundle arguments = getArguments();
         if (arguments != null) {
             String productId = arguments.getString("productId");
             if (productId != null) {
-                setupData(productId); // Call setupData() with the product ID
+                setupData(productId);
             }
         }
 
@@ -94,7 +106,16 @@ public class ProductDetailScreen extends BottomSheetDialogFragment {
         dialog.getWindow().setGravity(Gravity.CENTER);
         return view;
     }
+    @Override
+    public void onColorClicked(ColorOption colorOption) {
+        selectedColor.setText(colorOption.getName());
 
+        for (ColorOption option : colorOptionsList) {
+            option.setSelected(option == colorOption);
+        }
+
+        colorAdapter.notifyDataSetChanged();
+    }
     private void setupData(String productId){
         Handler handler = new Handler(getMainLooper());
         OkHttpClient client = new OkHttpClient().newBuilder()
