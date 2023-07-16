@@ -1,6 +1,8 @@
 package com.example.audace.adapter;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +20,15 @@ import java.util.ArrayList;
 
 public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.ViewHolder>{
     ArrayList<ColorObject> colorArray;
+
     private int selectedItem;
-    public ColorAdapter(ArrayList<ColorObject> input) {
+
+    private TextView textView;
+
+    public ColorAdapter(ArrayList<ColorObject> input, TextView textView) {
         colorArray = input;
-        selectedItem = 0;
+        selectedItem = -1;
+        this.textView = textView;
     }
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private Button colorBtn;
@@ -45,8 +52,19 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ColorAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ColorAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.colorBtn.setBackgroundColor(Color.parseColor(colorArray.get(position).getColor()));
+        holder.colorBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                textView.setText(colorArray.get(position).getColorName());
+                selectedItem = position;
+            }
+        });
+    }
+
+    public int getSelectedItem() {
+        return selectedItem;
     }
 
     @Override

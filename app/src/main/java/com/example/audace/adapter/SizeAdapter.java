@@ -1,5 +1,6 @@
 package com.example.audace.adapter;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +17,12 @@ import java.util.ArrayList;
 public class SizeAdapter extends RecyclerView.Adapter<SizeAdapter.ViewHolder>{
     ArrayList<SizeObject> sizeArray;
     private int selectedItem;
-    public SizeAdapter(ArrayList<SizeObject> input) {
+
+    private TextView sizeTextView;
+    public SizeAdapter(ArrayList<SizeObject> input, TextView textView) {
         sizeArray = input;
-        selectedItem = 0;
+        selectedItem = -1;
+        this.sizeTextView = textView;
     }
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
@@ -42,8 +46,19 @@ public class SizeAdapter extends RecyclerView.Adapter<SizeAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SizeAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SizeAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.textView.setText(sizeArray.get(position).getSizeInCentimeter());
+        holder.textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sizeTextView.setText(sizeArray.get(position).getSizeInCentimeter());
+                selectedItem = position;
+            }
+        });
+    }
+
+    public int getSelectedItem() {
+        return selectedItem;
     }
 
     @Override

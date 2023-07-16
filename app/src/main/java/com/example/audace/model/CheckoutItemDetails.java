@@ -1,11 +1,15 @@
 package com.example.audace.model;
 
 public class CheckoutItemDetails {
-    private String name, size, color, imageURL;
+    private String name, imageURL;
+
+    private ColorObject color;
+
+    private SizeObject size;
     private  String price, quantity;
 
 
-    public CheckoutItemDetails(String name, String size, String color, String price, String quantity, String imageURL) {
+    public CheckoutItemDetails(String name, SizeObject size, ColorObject color, String price, String quantity, String imageURL) {
         this.name = name;
         this.size = size;
         this.color = color;
@@ -30,20 +34,20 @@ public class CheckoutItemDetails {
         return quantity;
     }
 
-    public String getColor() {
+    public ColorObject getColor() {
         return color;
     }
 
-    public String getSize() {
-        return size;
+    public void setColor(ColorObject color) {
+        this.color = color;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public SizeObject getSize() {
+        return size;
     }
 
     public void setPrice(String price) {
@@ -54,7 +58,7 @@ public class CheckoutItemDetails {
         this.quantity = quantity;
     }
 
-    public void setSize(String size) {
+    public void setSize(SizeObject size) {
         this.size = size;
     }
 

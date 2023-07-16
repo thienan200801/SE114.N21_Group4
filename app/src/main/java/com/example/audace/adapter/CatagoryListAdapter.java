@@ -1,11 +1,9 @@
-package com.example.audace;
+package com.example.audace.adapter;
 
-import android.app.Notification;
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.media.Image;
-import android.media.ImageReader;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,17 +12,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.cardview.widget.CardView;
-import androidx.navigation.NavController;
-import androidx.navigation.NavHost;
-import androidx.navigation.NavHostController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
-import java.io.BufferedInputStream;
+import com.example.audace.DataStorage;
+import com.example.audace.R;
+import com.example.audace.model.Catagory;
+import com.squareup.picasso.Picasso;
+
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -48,7 +45,7 @@ public class CatagoryListAdapter extends RecyclerView.Adapter<CatagoryListAdapte
         String catagoryID = DataStorage.getInstance().getCatagoryId();
         for(int i = 0; i < catagories.size(); i ++)
         {
-            if(catagories.get(i).imgID == catagoryID)
+            if(catagories.get(i).getCatagoryID() == catagoryID)
             {
                 selectedCatagory = i;
                 break;
@@ -83,7 +80,7 @@ public class CatagoryListAdapter extends RecyclerView.Adapter<CatagoryListAdapte
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType){
         View view;
-        if(!Objects.equals(catagories.get(0).ImgUrl, ""))
+        if(!Objects.equals(catagories.get(0).getImgUrl(), ""))
         {
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.catagory_button, viewGroup, false);
             view.getLayoutParams().width = 150;
@@ -96,41 +93,29 @@ public class CatagoryListAdapter extends RecyclerView.Adapter<CatagoryListAdapte
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int position){
+    public void onBindViewHolder(ViewHolder viewHolder, @SuppressLint("RecyclerView") final int position){
 
-        viewHolder.getTextView().setText(catagories.get(position).CatagoryName);
+        viewHolder.getTextView().setText(catagories.get(position).getCatagoryName());
         viewHolder.getTextView().setTextSize(12);
-        if(!Objects.equals(catagories.get(position).ImgUrl, ""))
+        if(!Objects.equals(catagories.get(position).getImgUrl(), ""))
         {
-            HttpUrl url = HttpUrl.parse(catagories.get(position).ImgUrl).newBuilder().build();
-            Request request = new Request.Builder().url(url).build();
-            OkHttpClient client = new OkHttpClient();
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    Log.i("message", e.toString());
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if(response.isSuccessful())
-                    {
-                        try{
-                            final Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
-                            viewHolder.getImageView().setImageBitmap(bitmap);
-                        }
-                        catch (Exception e)
-                        {
-
-                        }
-                    }
-                }
-            });
+            CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(viewHolder.getImageView().getContext());
+            circularProgressDrawable.setStrokeWidth(5f);
+            circularProgressDrawable.setCenterRadius(30f);
+            circularProgressDrawable.start();
+            Picasso.get()
+                    .load(catagories.get(position).getImgUrl())
+                    .error(R.drawable.baseline_wifi_tethering_error_24)
+                    .placeholder(circularProgressDrawable)
+                    .into(viewHolder.getImageView());
+            int index = position;
             viewHolder.getImageView().getLayoutParams().height = viewHolder.getImageView().getLayoutParams().width;
             viewHolder.itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
-                    Navigation.findNavController(view).navigate(R.id.action_home_to_fragment_subcatagory);
+                    Log.i("message", Integer.toString(index));
+                    DataStorage.getInstance().setCatagoryId(DataStorage.getInstance().getCatagoryArrayList().get(index).getCatagoryID());
+                    Navigation.findNavController(view).navigate(R.id.action_global_fragment_subcatagory);
                 }
             });
         }
@@ -140,15 +125,15 @@ public class CatagoryListAdapter extends RecyclerView.Adapter<CatagoryListAdapte
             if(viewHolder.getTextView().getWidth()  < pixels)
                 viewHolder.getTextView().setWidth(pixels);
             if(selectedCatagory == position)
-                viewHolder.getTextView().setBackgroundColor(Color.parseColor("#F5D000"));
+                viewHolder.getTextView().setBackgroundColor(Color.parseColor("#FFFAD0"));
             else
-                viewHolder.getTextView().setBackgroundColor(Color.parseColor("#ffffff"));
-            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                viewHolder.getTextView().setBackgroundColor(Color.WHITE);
+            viewHolder.getTextView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     notifyItemChanged(selectedCatagory);
-                    selectedCatagory = viewHolder.getPosition();
-                    DataStorage.getInstance().setCatagoryId(catagories.get(selectedCatagory).imgID);
+                    selectedCatagory = viewHolder.getLayoutPosition();
+                    DataStorage.getInstance().setCatagoryId(catagories.get(selectedCatagory).getCatagoryID());
                     notifyItemChanged(selectedCatagory);
                     if(runnable != null)
                         new Handler().post(runnable);

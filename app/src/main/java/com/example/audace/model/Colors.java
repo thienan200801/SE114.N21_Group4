@@ -23,4 +23,8 @@ public class Colors {
     public void setHex(String hex) {
         this.hex = hex;
     }
+
+    public static class NamePriceOfItem {
+
+    }
 }
