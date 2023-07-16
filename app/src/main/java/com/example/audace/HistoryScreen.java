@@ -40,8 +40,8 @@ public class HistoryScreen extends AppCompatActivity {
         recyclerView = findViewById(R.id.historyRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         historyAdapter = new HistoryAdapter(this,historyArrayList);
-        setupData();
         recyclerView.setAdapter(historyAdapter);
+        setupData();
 
     }
     public void setupData() {
@@ -72,14 +72,18 @@ public class HistoryScreen extends AppCompatActivity {
                             JSONArray jsonResponse = new JSONArray(response.body().string());
                             for (int i = 0; i < jsonResponse.length(); i++) {
                                 JSONObject productObject = jsonResponse.getJSONObject(i);
-                                String productId = productObject.getJSONObject("product").getString("_id");
-                                String productName = productObject.getJSONObject("product").getString("name");
-                                String imageURL = productObject.getJSONObject("product").getString("imageURL");
-                                double currentPrice = productObject.getJSONObject("product").getDouble("currentPrice");
-                                String productQuantity = productObject.getString("quantity");
-
+                                JSONObject product = productObject.getJSONObject("product");
+                                String productId = product.getString("_id");
+                                String productName = product.getString("name");
+                                String imageURL = product.getString("imageURL");
+                                int currentPrice = product.getInt("currentPrice");
+                                int productQuantity = productObject.getInt("quantity");
+                                String selectedColor = productObject.getJSONObject("color").getString("_id");
+                                String selectedSize = productObject.getJSONObject("size").getString("_id");
                                 Favorite historyProduct = new Favorite(productId,productName,imageURL,currentPrice);
                                 historyProduct.setQuantity(productQuantity);
+                                historyProduct.setSize(selectedSize);
+                                historyProduct.setColor(selectedColor);
 
 
                                 historyArrayList.add(historyProduct);

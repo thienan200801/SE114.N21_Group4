@@ -1,6 +1,8 @@
 package com.example.audace;
 
 public class SizeOption {
+    String id;
+    boolean selected;
     public SizeOption(String width, String height) {
         this.width = width;
         this.height = height;
@@ -8,6 +10,22 @@ public class SizeOption {
 
     String width;
     String height;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
 
     public String getWidth() {
         return width;

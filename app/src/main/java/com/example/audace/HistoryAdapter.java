@@ -1,5 +1,11 @@
 package com.example.audace;
 
+import static android.os.Looper.getMainLooper;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,13 +13,27 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 
@@ -41,14 +61,29 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         Favorite item = historyArrayList.get(position);
         holder.nameTextView.setText(item.getName());
         holder.priceTextView.setText(String.valueOf(item.getPrice()));
-        holder.quantityTextView.setText(item.getQuantity());
+        holder.colorTextView.setText(item.getColor());
+        holder.sizeTextView.setText(item.getSize());
+        holder.quantityTextView.setText(String.valueOf(item.getQuantity()));
+        holder.viewDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigateToDetailActivity(item.getId());
+            }
+        });
+
         Picasso.get()
                 .load(item.getImage())
                 .resize(250,250)
                 .into(holder.historyImage);
 
     }
+    private void navigateToDetailActivity(String productId) {
 
+        Intent intent = new Intent(activity, DetailActivity.class);
+        intent.putExtra("productId", productId);
+        activity.startActivity(intent);
+
+    }
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView nameTextView ;
         TextView colorTextView ;
@@ -56,13 +91,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
         TextView priceTextView ;
         TextView quantityTextView;
-        ImageButton addtoCart;
+        ImageButton viewDetail;
 
-        Spinner spinner;
         ImageView historyImage;
-/*
-    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.spinner_items, android.R.layout.simple_spinner_item);
-*/
 
 
         ViewHolder( View view){
@@ -71,8 +102,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             priceTextView= view.findViewById(R.id.price_txtView);
             historyImage = view.findViewById(R.id.historyImage);
             quantityTextView = view.findViewById(R.id.quantityTextView);
-
-
+            viewDetail = view.findViewById(R.id.btnViewDetail);
+            colorTextView = view.findViewById(R.id.colorTextView);
+            sizeTextView = view.findViewById(R.id.sizeTextView);
 
 
 
