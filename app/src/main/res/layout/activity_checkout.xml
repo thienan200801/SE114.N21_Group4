@@ -10,6 +10,7 @@
         android:id="@+id/titleLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,6 +57,7 @@
             android:id="@+id/addressTitle"
             android:layout_width="170dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/yellow"
             android:text="Địa chỉ giao hàng"
@@ -81,6 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="80dp"
                 android:layout_weight="1"
+                android:background="@android:color/transparent"
                 android:textSize="16dp"
                 tools:ignore="SpeakableTextPresentCheck" />
 
@@ -117,6 +120,7 @@
             android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/yellow"
             android:text="Chi tiết"
@@ -152,7 +156,6 @@
             android:layout_marginTop="20dp"
             android:layout_marginRight="10dp"
             android:gravity="right"
-            android:text="Tổng tiền:  $100000000"
             android:textColor="#000000"
             android:textSize="20sp"
             android:textStyle="italic" />

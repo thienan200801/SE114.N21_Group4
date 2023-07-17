@@ -88,13 +88,28 @@ public class SearchFragment extends Fragment {
         fragment = this;
         ((TextView) view.findViewById(R.id.timkiemtheoTextView)).setText("Kết quả tìm kiếm: " + DataStorage.getInstance().getSearchText());
         products = new ArrayList<Product>();
+        // Set the adapter
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        Context context = recyclerView.getContext();
+        recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
+        adapter = new ProductListAdapter(products);
+        int spanCount = 2; // 2 columns
+        int spacing = 50; // 50px
+        boolean includeEdge = false;
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
+        CrawlProduct();
+        //Set spinner
         Spinner spinner = (Spinner)view.findViewById(R.id.dropDown);
-        spinner.setAdapter(ArrayAdapter.createFromResource(view.getContext(), R.array.sap_xep_array, android.R.layout.simple_spinner_dropdown_item));
+        ArrayAdapter arrayAdapter = ArrayAdapter.createFromResource(view.getContext(), R.array.sap_xep_array, android.R.layout.simple_spinner_dropdown_item);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(arrayAdapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.i("Sort Option", Integer.toString(i));
                 products = Sort(products, i);
-                Log.i("products", products.toString());
+                adapter = new ProductListAdapter(products);
+                recyclerView.setAdapter(adapter );
                 adapter.notifyDataSetChanged();
             }
 
@@ -103,16 +118,6 @@ public class SearchFragment extends Fragment {
                 Log.i("message", "nothing selected");
             }
         });
-        // Set the adapter
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
-            Context context = recyclerView.getContext();
-            recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
-            adapter = new ProductListAdapter(products);
-        int spanCount = 2; // 2 columns
-        int spacing = 50; // 50px
-        boolean includeEdge = false;
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
-        CrawlProduct();
         return view;
     }
 
@@ -142,7 +147,7 @@ public class SearchFragment extends Fragment {
                     String search = DataStorage.getInstance().getSearchText();
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        if (jsonObject.getString("name").contains(search)) {
+                        if (jsonObject.getString("name").toLowerCase().contains(search.toLowerCase())) {
                             Product item = new Product(jsonObject.getString("_id"), jsonObject.getString("name"), jsonObject.getString("currentPrice"), jsonObject.getString("stablePrice"), jsonObject.getBoolean("isFavourite"), jsonObject.getString("imageURL"));
                             products.add(item);
                         }
@@ -215,7 +220,7 @@ public class SearchFragment extends Fragment {
                     }
                     boolean flag = false;
                     for(int j = 0; j < result.size(); j ++)
-                        if(element.getName().compareTo(result.get(j).getName()) < 0)
+                        if(element.getName().toLowerCase().compareTo(result.get(j).getName()) < 0)
                         {
                             result.add(j, element);
                             flag = true;
@@ -235,7 +240,7 @@ public class SearchFragment extends Fragment {
                     }
                     boolean flag = false;
                     for(int j = 0; j < result.size(); j ++)
-                        if(element.getPrice().compareTo(result.get(j).getPrice()) < 0)
+                        if(element.getPrice().toLowerCase().compareTo(result.get(j).getPrice()) < 0)
                         {
                             result.add(j, element);
                             flag = true;
@@ -255,7 +260,7 @@ public class SearchFragment extends Fragment {
                     }
                     boolean flag = false;
                     for(int j = 0; j < result.size(); j ++)
-                        if(element.getPrice().compareTo(result.get(j).getPrice()) > 0)
+                        if(element.getPrice().toLowerCase().compareTo(result.get(j).getPrice()) > 0)
                         {
                             result.add(j, element);
                             flag = true;

@@ -5,10 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -20,6 +23,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 public class HomepageActivity extends AppCompatActivity {
+    boolean doubleBackToExitPressedOnce = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,8 +56,6 @@ public class HomepageActivity extends AppCompatActivity {
                         }
                         default:
                         {
-                            Intent intent = new Intent(HomepageActivity.this, HomepageActivity.class);
-                            startActivity(intent);
                             break;
                         }
 
@@ -76,13 +78,45 @@ public class HomepageActivity extends AppCompatActivity {
             }
             else
             {
-                Intent t = new Intent(HomepageActivity.this, LoginScreen.class);
-                startActivity(t);
-                this.finishActivity(0);
+
+                boolean firstTime = sharedPreferences.getBoolean("firstTime", true);
+                if(firstTime)
+                {
+                    Intent t = new Intent(HomepageActivity.this, IntroductionActivity1.class);
+                    startActivity(t);
+                    this.finishActivity(0);
+                }
+                else
+                {
+                    Intent t = new Intent(HomepageActivity.this, LoginScreen.class);
+                    startActivity(t);
+                    this.finishActivity(0);
+                }
             }
         }
 
     }
+
+    @Override
+    public void onBackPressed() {
+        if(getSupportFragmentManager().findFragmentById(R.id.bottomNavigationContainer) instanceof MainFragment)
+        {
+            if(doubleBackToExitPressedOnce)
+                this.finishAffinity();
+            Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+            this.doubleBackToExitPressedOnce = true;
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce=false;
+                }
+            }, 2000);
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+
     public void loadFragment(Fragment fragment) {
         // load fragment
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
