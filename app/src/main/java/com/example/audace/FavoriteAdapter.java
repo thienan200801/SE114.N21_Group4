@@ -1,20 +1,48 @@
 package com.example.audace;
 
-import android.net.Uri;
+import static android.os.Looper.getMainLooper;
+
+import android.app.Dialog;
+
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHolder> {
 
@@ -22,9 +50,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
     private FavoriteScreen activity;
 
 
-
-    public FavoriteAdapter(FavoriteScreen activity, ArrayList<Favorite> favoriteArrayList
-    ){
+    public FavoriteAdapter(FavoriteScreen activity, ArrayList<Favorite> favoriteArrayList){
         this.activity = activity;
         this.favoriteArrayList = favoriteArrayList;
     }
@@ -42,6 +68,26 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         Favorite item = favoriteArrayList.get(position);
         holder.nameTextView.setText(item.getName());
         holder.priceTextView.setText(String.valueOf(item.getPrice()));
+        holder.colorTextView.setText(item.getColor());
+        holder.quantityTextView.setText(String.valueOf(item.getQuantity()));
+        holder.sizeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigateToProductDetail(item.getId());
+            }
+        });
+        holder.colorBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigateToProductDetail(item.getId());
+            }
+        });
+        holder.addtoCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addCart(item);
+            }
+        });
         Picasso.get()
                 .load(item.getImage())
                 .resize(250,250)
@@ -53,16 +99,15 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         TextView nameTextView ;
         TextView colorTextView ;
         TextView sizeTextView ;
+        Button colorBtn;
+        Button sizeBtn;
         TextView priceTextView ;
-        TextView numTextView;
+        TextView quantityTextView;
         ImageButton deleteFavorite;
         ImageButton addtoCart;
-
-        Spinner spinner;
         ImageView favoriteImage;
-/*
-    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.spinner_items, android.R.layout.simple_spinner_item);
-*/
+
+
 
 
         ViewHolder( View view){
@@ -71,7 +116,12 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
             priceTextView= view.findViewById(R.id.priceTextView);
             favoriteImage = view.findViewById(R.id.favoriteImage);
             deleteFavorite = view.findViewById(R.id.btnDel);
-            addtoCart = view.findViewById(R.id.btnCart);
+            addtoCart = view.findViewById(R.id.btnAddCart);
+            colorBtn = view.findViewById(R.id.btnColor);
+            sizeBtn = view.findViewById(R.id.btnSize);
+            colorTextView = view.findViewById(R.id.colorTextView);
+            sizeTextView = view.findViewById(R.id.sizeTextView);
+            quantityTextView = view.findViewById(R.id.quantityTextView);
 
 
 
@@ -80,7 +130,98 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         }
 
     }
+    private void navigateToProductDetail(String productId) {
+        ProductDetailScreen productDetailScreen = new ProductDetailScreen();
 
+        Bundle bundle = new Bundle();
+        bundle.putString("productId", productId);
+        productDetailScreen.setArguments(bundle);
+
+        productDetailScreen.show(activity.getSupportFragmentManager(), "ProductDetailBottomSheet");
+
+    }
+
+
+    private void addCart(Favorite item){
+        try {
+            Handler handler = new Handler(getMainLooper());
+            OkHttpClient client = new OkHttpClient().newBuilder()
+                    .build();
+            MediaType mediaType = MediaType.parse("application/json");
+            JSONObject productJson = new JSONObject();
+            try {
+                productJson.put("product", item.getId());
+                productJson.put("size", item.getSize());
+                productJson.put("color", item.getColor());
+                productJson.put("quantity", item.getQuantity());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            JSONArray productCheckoutInfo = new JSONArray();
+            productCheckoutInfo.put(productJson);
+
+
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject requestBody = new JSONObject();
+                    try {
+                        requestBody.put("productCheckoutInfos", productCheckoutInfo);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    RequestBody body = RequestBody.create(mediaType, requestBody.toString());
+
+
+
+
+                    Request request = new Request.Builder()
+                            .url("https://audace-ecomerce.herokuapp.com/users/me/cart")
+                            .method("POST", body)
+                            .addHeader("Authorization", " Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
+                            .build();
+
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                            Toast.makeText(activity,"Error: Cannot add to cart",Toast.LENGTH_SHORT).show();
+
+                        }
+
+                        @Override
+                        public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                            String body=response.body().string();
+                            Log.e("data from server", body);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    if (body.equals("")) {
+
+                                        Toast.makeText(activity, "Added to cart", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                    else {
+                                        Toast.makeText(activity, body, Toast.LENGTH_SHORT).show();
+
+                                    }
+                                }
+                            });
+
+
+                        }
+                    });
+
+                }
+            }).start();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public int getItemCount() {

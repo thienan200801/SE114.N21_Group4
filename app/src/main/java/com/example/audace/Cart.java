@@ -3,17 +3,16 @@ package com.example.audace;
 public class Cart {
     String id;
     String name;
-    double price;
-    String quantity;
+    int price;
+    int quantity;
     String color;
     String size;
     String image;
 
-    public Cart(String id, String name, double price, String quantity, String color, String size, String image) {
+    public Cart(String id, String name, int price, String color, String size, String image) {
         this.id = id;
         this.name = name;
         this.price = price;
-        this.quantity = quantity;
         this.color = color;
         this.size = size;
         this.image = image;
@@ -48,15 +47,15 @@ public class Cart {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
-    public String getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(String quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 

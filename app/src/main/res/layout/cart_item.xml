@@ -35,7 +35,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"/>
                 <ImageView
-                    android:id="@+id/profilePic"
+                    android:id="@+id/cartImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -59,15 +59,55 @@
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-                        <Spinner
-                            android:id="@+id/size_spinner"
-                            android:layout_width="100dp"
-                            android:layout_height="20dp"
+                        <RelativeLayout
                             android:layout_marginStart="5dp"
-                            android:layout_marginTop="5dp"
                             android:layout_marginEnd="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:contentDescription="Choose size"/>
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <Button
+                                android:id="@+id/btnSize"
+                                android:layout_width="60dp"
+                                android:layout_height="30dp"
+                                android:onClick="onClick"
+                                android:backgroundTint="#D9D9D9"
+                                android:contentDescription="Choose size" />
+
+                            <TextView
+                                android:id="@+id/sizeTextView"
+                                android:layout_width="60dp"
+                                android:layout_height="30dp"
+                                android:layout_centerInParent="true"
+                                android:paddingTop="5dp"
+                                android:textAlignment="center"
+                                android:translationZ="2dp" />
+
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <Button
+                                android:id="@+id/btnColor"
+                                android:layout_width="60dp"
+                                android:layout_height="30dp"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginEnd="5dp"
+                                android:onClick="onClick"
+                                android:backgroundTint="#D9D9D9"
+                                android:contentDescription="Choose color"/>
+
+                            <TextView
+                                android:id="@+id/colorTextView"
+                                android:layout_width="60dp"
+                                android:layout_height="30dp"
+                                android:layout_centerInParent="true"
+                                android:paddingTop="5dp"
+                                android:textAlignment="center"
+                                android:translationZ="2dp" />
+
+                        </RelativeLayout>
 
                     </LinearLayout>
 

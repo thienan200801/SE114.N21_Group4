@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,7 +31,7 @@ public class CartCount {
         void onCartCountReceived(int count);
     }
 
-    public static void updateCartCount(Context context, ImageView cartIcon, TextView cartCount) {
+    public static void updateCartCount(Context context, ImageButton cartIcon, TextView cartCount) {
         getCartCountFromDataSource(new CartCountCallback() {
             @Override
             public void onCartCountReceived(int count) {
