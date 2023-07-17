@@ -62,8 +62,8 @@ public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 public void onBindViewHolder(CartAdapter.ViewHolder holder, int position){
         Cart item = cartList.get(position);
         holder.nameTextView.setText(item.getName());
-        holder.colorTextView.setText(item.getColor());
-        holder.sizeTextView.setText(item.getSize());
+        holder.colorTextView.setText(item.getColorName());
+        holder.sizeTextView.setText(item.getSizeWidth() + " x "+item.getSizeHeight());
         holder.quantityTextView.setText(String.valueOf(item.getQuantity()));
         holder.priceTextView.setText(String.valueOf(item.getPrice()));
         Log.i("execute","ok");
@@ -72,13 +72,13 @@ public void onBindViewHolder(CartAdapter.ViewHolder holder, int position){
     holder.sizeBtn.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            navigateToProductDetail(item.getId());
+            navigateToProductDetail(item.getId(),item.getColor(),item.getSize());
         }
     });
     holder.colorBtn.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            navigateToProductDetail(item.getId());
+            navigateToProductDetail(item.getId(), item.getColor(), item.getSize());
         }
     });
     holder.btnDelete.setOnClickListener(new View.OnClickListener() {
@@ -100,11 +100,13 @@ public class ViewHolder extends RecyclerView.ViewHolder{
     TextView sizeTextView ;
     TextView priceTextView ;
     TextView quantityTextView;
-
-    Button colorBtn;
-    Button sizeBtn;
+    ImageButton colorBtn;
+    ImageButton sizeBtn;
     ImageView favoriteImage;
     ImageButton btnDelete;
+    ImageButton plus;
+    ImageButton minus;
+
 
 
 
@@ -119,17 +121,21 @@ public class ViewHolder extends RecyclerView.ViewHolder{
         sizeBtn = view.findViewById(R.id.btnSize);
         favoriteImage = view.findViewById(R.id.cartImage);
         btnDelete = view.findViewById(R.id.btnDel);
+        plus = view.findViewById(R.id.btnNumPlus);
+        minus = view.findViewById(R.id.btnNumMinus);
 
 
     }
 
 }
-    private void navigateToProductDetail(String productId) {
+    private void navigateToProductDetail(String productId,String selectedColor, String selectedSize) {
         ProductDetailScreen productDetailScreen = new ProductDetailScreen();
 
         Bundle bundle = new Bundle();
         bundle.putString("productId", productId);
         productDetailScreen.setArguments(bundle);
+        bundle.putString("selectedColor",selectedColor);
+        bundle.putString("selectedSize",selectedSize);
 
         productDetailScreen.show(activity.getSupportFragmentManager(), "ProductDetailBottomSheet");
 

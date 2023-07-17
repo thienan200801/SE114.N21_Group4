@@ -77,8 +77,15 @@ public class CartScreen extends AppCompatActivity {
                             for (int i = 0; i < cartArray.length(); i++) {
                                 JSONObject productObject = cartArray.getJSONObject(i);
                                 String productId = productObject.getString("product");
+                                String productColor;
+                                productColor = productObject.getString("color");
+                                String productSize;
+
+                                    productSize = productObject.getString("size");
+
+
                                 final int index = i;
-                                getProductInfo(productId, new OrderScreen.ProductInfoCallback() {
+                                getProductInfo(productId,productColor,productSize, new OrderScreen.ProductInfoCallback() {
                                     @Override
                                     public void onProductInfoReceived(Favorite product) {
                                         String productName = product.getName();
@@ -88,18 +95,8 @@ public class CartScreen extends AppCompatActivity {
                                         String imageURL = product.getImage();
                                         Log.i("img",imageURL);
 
-                                        String productColor = null;
-                                        try {
-                                            productColor = productObject.getString("color");
-                                        } catch (JSONException e) {
-                                            throw new RuntimeException(e);
-                                        }
-                                        String productSize = null;
-                                        try {
-                                            productSize = productObject.getString("size");
-                                        } catch (JSONException e) {
-                                            throw new RuntimeException(e);
-                                        }
+
+
                                         int productQuantity = 0;
                                         try {
                                             productQuantity = productObject.getInt("quantity");
@@ -108,6 +105,9 @@ public class CartScreen extends AppCompatActivity {
                                         }
 
                                         Cart cartItem = new Cart(productId,productName,productPrice,productColor,productSize,imageURL);
+                                        cartItem.setColorName(product.getColorName());
+                                        cartItem.setSizeHeight(product.getSizeHeight());
+                                        cartItem.setSizeWidth(product.getSizeWidth());
                                         cartItem.setQuantity(productQuantity);
                                         cartList.add(cartItem);
                                         Log.i("cartList",String.valueOf(cartList.size()));
@@ -136,7 +136,7 @@ public class CartScreen extends AppCompatActivity {
         });
     }
 
-    private void getProductInfo(String productId, OrderScreen.ProductInfoCallback callback) {
+    private void getProductInfo(String productId,String color,String size, OrderScreen.ProductInfoCallback callback) {
         Handler handler = new Handler(getMainLooper());
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .connectTimeout(30, TimeUnit.SECONDS)
@@ -170,7 +170,32 @@ public class CartScreen extends AppCompatActivity {
                     String productDescription = jsonResponse.getString("description");
                     String imageURL = jsonResponse.getString("imageURL");
                     int currentPrice = jsonResponse.getInt("currentPrice");
+                    JSONArray colorsArray = jsonResponse.getJSONArray("colors");
+                    String colorName = "";
+                    for (int j = 0; j < colorsArray.length(); j++) {
+                        JSONObject colorObject = colorsArray.getJSONObject(j);
+                        String colorObjectId = colorObject.getString("_id");
+                        if (colorObjectId.equals(color)) {
+                            colorName = colorObject.getString("name");
+                            break;
+                        }
+                    }
+                    JSONArray sizesArray = jsonResponse.getJSONArray("sizes");
+                    String sizeWidth = "";
+                    String sizeHeight = "";
+                    for (int k = 0; k < sizesArray.length(); k++) {
+                        JSONObject sizeObject = sizesArray.getJSONObject(k);
+                        String sizeObjectId = sizeObject.getString("_id");
+                        if (sizeObjectId.equals(size)) {
+                            sizeWidth = sizeObject.getString("widthInCentimeter");
+                            sizeHeight = sizeObject.getString("heightInCentimeter");
+                            break;
+                        }
+                    }
                     Favorite product = new Favorite(productId, productName, imageURL, currentPrice);
+                    product.setColorName(colorName);
+                    product.setSizeWidth(sizeWidth);
+                    product.setSizeHeight(sizeHeight);
                     handler.post(new Runnable() {
                         @Override
                         public void run() {

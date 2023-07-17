@@ -8,6 +8,34 @@ public class Favorite {
     int price;
     String color;
     String size;
+    String colorName;
+
+    public String getColorName() {
+        return colorName;
+    }
+
+    public void setColorName(String colorName) {
+        this.colorName = colorName;
+    }
+
+    public String getSizeWidth() {
+        return sizeWidth;
+    }
+
+    public void setSizeWidth(String sizeWidth) {
+        this.sizeWidth = sizeWidth;
+    }
+
+    public String getSizeHeight() {
+        return sizeHeight;
+    }
+
+    public void setSizeHeight(String sizeHeight) {
+        this.sizeHeight = sizeHeight;
+    }
+
+    String sizeWidth;
+    String sizeHeight;
 
 
     public String getColor() {

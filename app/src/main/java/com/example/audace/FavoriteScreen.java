@@ -1,5 +1,7 @@
 package com.example.audace;
 
+import static android.os.Looper.getMainLooper;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,7 +39,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class FavoriteScreen extends Fragment implements ProductDetailScreen.EditDetailClickListener {
+public class FavoriteScreen extends Fragment  {
 
     private ArrayList<Favorite> favoriteArrayList = new ArrayList<>();
     private FavoriteAdapter favoriteAdapter;
@@ -79,13 +81,9 @@ public class FavoriteScreen extends Fragment implements ProductDetailScreen.Edit
         return view;
     }
 
-    @Override
-    public void onEditDetailClicked(String selectedColor, String selectedSize) {
 
-        Toast.makeText(this.getContext(), "Selected Color: " + selectedColor + ", Selected Size: " + selectedSize, Toast.LENGTH_SHORT).show();
-    }
     public void setupData() {
-        Handler handler = new Handler(Looper.getMainLooper());
+        Handler handler = new Handler(getMainLooper());
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
@@ -113,6 +111,7 @@ public class FavoriteScreen extends Fragment implements ProductDetailScreen.Edit
                             for (int i = 0; i < jsonResponse.length(); i++) {
                                 JSONObject productObject = jsonResponse.getJSONObject(i);
                                 JSONObject product = productObject.getJSONObject("product");
+
                                 String productId = product.getString("_id");
                                 String productName = product.getString("name");
                                 String imageURL = product.getString("imageURL");
@@ -121,13 +120,45 @@ public class FavoriteScreen extends Fragment implements ProductDetailScreen.Edit
                                 String selectedColor = productObject.getJSONObject("color").getString("_id");
                                 String selectedSize = productObject.getJSONObject("size").getString("_id");
 
-                                Favorite favoriteProduct = new Favorite(productId,productName,imageURL,currentPrice);
-                                favoriteProduct.setQuantity(productQuantity);
-                                favoriteProduct.setColor(selectedColor);
-                                favoriteProduct.setSize(selectedSize);
-                                favoriteArrayList.add(favoriteProduct);
+                                getProductInfo(productId,selectedColor,selectedSize, new OrderScreen.ProductInfoCallback() {
+                                    @Override
+                                    public void onProductInfoReceived(Favorite product) {
+                                        String productName = product.getName();
+                                        Log.i("productName",productName);
+
+                                        int productPrice = product.getPrice();
+                                        String imageURL = product.getImage();
+                                        Log.i("img",imageURL);
+
+
+
+                                        int productQuantity = 0;
+                                        try {
+                                            productQuantity = productObject.getInt("quantity");
+                                        } catch (JSONException e) {
+                                            throw new RuntimeException(e);
+                                        }
+
+
+                                        Favorite favoriteProduct = new Favorite(productId,productName,imageURL,currentPrice);
+                                        favoriteProduct.setQuantity(productQuantity);
+                                        favoriteProduct.setColorName(product.getColorName());
+                                        favoriteProduct.setSizeWidth(product.getSizeWidth());
+                                        favoriteProduct.setSizeHeight(product.getSizeHeight());
+                                        favoriteProduct.setSize(selectedSize);
+                                        favoriteProduct.setColor(selectedColor);
+                                        favoriteArrayList.add(favoriteProduct);
+                                        favoriteAdapter.notifyDataSetChanged();
+                                    }
+
+                                    @Override
+                                    public void onFailure(String errorMessage) {
+                                        Log.i("error",errorMessage);
+                                    }
+                                });
+
                             }
-                            favoriteAdapter.notifyDataSetChanged();
+
                         }catch (JSONException e) {
                             e.printStackTrace();}
                         catch (IOException e){
@@ -135,6 +166,83 @@ public class FavoriteScreen extends Fragment implements ProductDetailScreen.Edit
                         }
                     }
                 });
+            }
+        });
+    }
+    private void getProductInfo(String productId,String color,String size, OrderScreen.ProductInfoCallback callback) {
+        Handler handler = new Handler(getMainLooper());
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build();
+        MediaType mediaType = MediaType.parse("text/plain");
+        RequestBody body = RequestBody.create(mediaType, "");
+        Request request = new Request.Builder()
+                .url("https://audace-ecomerce.herokuapp.com/products/product/" + productId)
+                .method("GET", null)
+                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                String errorMessage = e.getMessage();
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onFailure(errorMessage);
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseBody = response.body().string();
+                try {
+                    JSONObject jsonResponse = new JSONObject(responseBody);
+                    String productName = jsonResponse.getString("name");
+                    String productDescription = jsonResponse.getString("description");
+                    String imageURL = jsonResponse.getString("imageURL");
+                    int currentPrice = jsonResponse.getInt("currentPrice");
+                    JSONArray colorsArray = jsonResponse.getJSONArray("colors");
+                    String colorName = "";
+                    for (int j = 0; j < colorsArray.length(); j++) {
+                        JSONObject colorObject = colorsArray.getJSONObject(j);
+                        String colorObjectId = colorObject.getString("_id");
+                        if (colorObjectId.equals(color)) {
+                            colorName = colorObject.getString("name");
+                            break;
+                        }
+                    }
+                    JSONArray sizesArray = jsonResponse.getJSONArray("sizes");
+                    String sizeWidth = "";
+                    String sizeHeight = "";
+                    for (int k = 0; k < sizesArray.length(); k++) {
+                        JSONObject sizeObject = sizesArray.getJSONObject(k);
+                        String sizeObjectId = sizeObject.getString("_id");
+                        if (sizeObjectId.equals(size)) {
+                            sizeWidth = sizeObject.getString("widthInCentimeter");
+                            sizeHeight = sizeObject.getString("heightInCentimeter");
+                            break;
+                        }
+                    }
+                    Favorite product = new Favorite(productId, productName, imageURL, currentPrice);
+                    product.setColorName(colorName);
+                    product.setSizeWidth(sizeWidth);
+                    product.setSizeHeight(sizeHeight);
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onProductInfoReceived(product);
+                        }
+                    });
+                } catch (JSONException e) {
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onFailure(e.getMessage());
+                        }
+                    });
+                }
             }
         });
     }

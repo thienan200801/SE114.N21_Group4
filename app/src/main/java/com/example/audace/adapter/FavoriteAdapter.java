@@ -31,6 +31,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -64,20 +65,14 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         Favorite item = favoriteArrayList.get(position);
         holder.nameTextView.setText(item.getName());
         holder.priceTextView.setText(String.valueOf(item.getPrice()));
-        holder.colorTextView.setText(item.getColor());
+        holder.colorTextView.setText(item.getColorName());
+        holder.sizeTextView.setText(item.getSizeWidth() + " x "+item.getSizeHeight());
         holder.quantityTextView.setText(String.valueOf(item.getQuantity()));
-        holder.sizeBtn.setOnClickListener(new View.OnClickListener() {
+        holder.deleteFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                navigateToProductDetail(item.getId());
-            }
+            public void onClick(View view) {deleteItem(item.getId());}
         });
-        holder.colorBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navigateToProductDetail(item.getId());
-            }
-        });
+
         holder.addtoCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,8 +90,6 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         TextView nameTextView ;
         TextView colorTextView ;
         TextView sizeTextView ;
-        Button colorBtn;
-        Button sizeBtn;
         TextView priceTextView ;
         TextView quantityTextView;
         ImageButton deleteFavorite;
@@ -113,8 +106,6 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
             favoriteImage = view.findViewById(R.id.favoriteImage);
             deleteFavorite = view.findViewById(R.id.btnDel);
             addtoCart = view.findViewById(R.id.btnAddCart);
-            colorBtn = view.findViewById(R.id.btnColor);
-            sizeBtn = view.findViewById(R.id.btnSize);
             colorTextView = view.findViewById(R.id.colorTextView);
             sizeTextView = view.findViewById(R.id.sizeTextView);
             quantityTextView = view.findViewById(R.id.quantityTextView);
@@ -126,11 +117,13 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         }
 
     }
-    private void navigateToProductDetail(String productId) {
+    private void navigateToProductDetail(String productId,String selectedColor, String selectedSize) {
         ProductDetailScreen productDetailScreen = new ProductDetailScreen();
 
         Bundle bundle = new Bundle();
         bundle.putString("productId", productId);
+        bundle.putString("selectedColor",selectedColor);
+        bundle.putString("selectedSize",selectedSize);
         productDetailScreen.setArguments(bundle);
 
         productDetailScreen.show(activity.getActivity().getSupportFragmentManager(), "ProductDetailBottomSheet");
@@ -217,6 +210,68 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    private void deleteItem(String id){
+        Handler handler = new Handler(getMainLooper());
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build();
+
+        MediaType mediaType = MediaType.parse("application/json");
+        JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put("id", id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        RequestBody body = RequestBody.create(mediaType, requestBody.toString());
+
+        Request request = new Request.Builder()
+                .url("https://audace-ecomerce.herokuapp.com/users/me/favorites")
+                .delete(body)
+                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
+                .addHeader("Content-Type", "application/json")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                String body=response.body().string();
+                Log.e("data from server", body);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if (body.equals("")) {
+                            Toast.makeText(activity.getContext(), "Item deleted", Toast.LENGTH_SHORT).show();
+                            for (int i = 0; i < favoriteArrayList.size(); i++) {
+                                Favorite favoriteItem = favoriteArrayList.get(i);
+                                if (favoriteItem.getId().equals(id)) {
+                                    favoriteArrayList.remove(i);
+                                    notifyItemRemoved(i);
+                                    break;
+                                }
+                            }
+                        }
+                        else {
+                            Toast.makeText(activity.getContext(), body, Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
+
+            }
+        });
     }
 
     @Override

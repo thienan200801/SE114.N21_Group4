@@ -8,6 +8,35 @@ public class Cart {
     String color;
     String size;
     String image;
+    String colorName;
+    String sizeWidth;
+
+    public String getSizeWidth() {
+        return sizeWidth;
+    }
+
+    public void setSizeWidth(String sizeWidth) {
+        this.sizeWidth = sizeWidth;
+    }
+
+    public String getSizeHeight() {
+        return sizeHeight;
+    }
+
+    public void setSizeHeight(String sizeHeight) {
+        this.sizeHeight = sizeHeight;
+    }
+
+    String sizeHeight;
+
+    public String getColorName() {
+        return colorName;
+    }
+
+    public void setColorName(String colorName) {
+        this.colorName = colorName;
+    }
+
 
     public Cart(String id, String name, int price, String color, String size, String image) {
         this.id = id;
