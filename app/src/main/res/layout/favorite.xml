@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -22,21 +23,23 @@
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="18sp" />
+
         <ImageButton
-            android:onClick="onButtonClick"
-            android:id="@+id/imageButton3"
+            android:id="@+id/backButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:contentDescription="Back"
+            android:onClick="onButtonClick"
             android:padding="16dp"
             android:textAlignment="center"
             app:srcCompat="@drawable/back" />
+
         <include
             layout="@layout/cart_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"/>
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
 
@@ -49,6 +52,7 @@
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -56,9 +60,9 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/favRecyclerView"
-                    tools:listitem="@layout/favorite_item"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/favorite_item">
 
                 </androidx.recyclerview.widget.RecyclerView>
 

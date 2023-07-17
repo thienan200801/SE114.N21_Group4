@@ -1,7 +1,5 @@
 package com.example.audace;
 
-import static android.os.Looper.getMainLooper;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -9,6 +7,8 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.audace.adapter.OrderAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;

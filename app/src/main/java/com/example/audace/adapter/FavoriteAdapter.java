@@ -1,19 +1,13 @@
-package com.example.audace;
+package com.example.audace.adapter;
 
 import static android.os.Looper.getMainLooper;
 
-import android.app.Dialog;
-
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -21,10 +15,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.audace.DataStorage;
+import com.example.audace.Favorite;
+import com.example.audace.FavoriteScreen;
+import com.example.audace.ProductDetailScreen;
+import com.example.audace.R;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -33,11 +31,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -137,7 +133,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         bundle.putString("productId", productId);
         productDetailScreen.setArguments(bundle);
 
-        productDetailScreen.show(activity.getSupportFragmentManager(), "ProductDetailBottomSheet");
+        productDetailScreen.show(activity.getActivity().getSupportFragmentManager(), "ProductDetailBottomSheet");
 
     }
 
@@ -180,13 +176,13 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
                     Request request = new Request.Builder()
                             .url("https://audace-ecomerce.herokuapp.com/users/me/cart")
                             .method("POST", body)
-                            .addHeader("Authorization", " Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
+                            .addHeader("Authorization", " Bearer " + DataStorage.getInstance().getAccessToken())
                             .build();
 
                     client.newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                            Toast.makeText(activity,"Error: Cannot add to cart",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activity.getContext(),"Error: Cannot add to cart",Toast.LENGTH_SHORT).show();
 
                         }
 
@@ -200,11 +196,11 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
 
                                     if (body.equals("")) {
 
-                                        Toast.makeText(activity, "Added to cart", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(activity.getContext(), "Added to cart", Toast.LENGTH_SHORT).show();
 
                                     }
                                     else {
-                                        Toast.makeText(activity, body, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(activity.getContext(), body, Toast.LENGTH_SHORT).show();
 
                                     }
                                 }

@@ -1,39 +1,25 @@
-package com.example.audace;
+package com.example.audace.adapter;
 
-import static android.os.Looper.getMainLooper;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentContainerView;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.audace.DataStorage;
+import com.example.audace.Favorite;
+import com.example.audace.HistoryScreen;
+import com.example.audace.R;
+import com.example.audace.fragment_productDetail;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 
@@ -78,10 +64,13 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     }
     private void navigateToDetailActivity(String productId) {
+        DataStorage.getInstance().setProductId(productId);
+        FragmentContainerView navHostFragment = (FragmentContainerView) activity.getActivity().findViewById(R.id.bottomNavigationContainer);
+        FragmentTransaction transaction = navHostFragment.getFragment().getFragmentManager().beginTransaction();
+        transaction.replace(R.id.bottomNavigationContainer, new fragment_productDetail());
+        transaction.addToBackStack(null);
+        transaction.commit();
 
-        Intent intent = new Intent(activity, DetailActivity.class);
-        intent.putExtra("productId", productId);
-        activity.startActivity(intent);
 
     }
     public class ViewHolder extends RecyclerView.ViewHolder{

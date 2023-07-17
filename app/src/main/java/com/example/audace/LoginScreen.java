@@ -60,7 +60,7 @@ public class LoginScreen extends AppCompatActivity {
 
         btnLogin = (ImageButton) findViewById(R.id.btnLogin);
         btnSignUp = (ImageButton) findViewById(R.id.btnSignUp);
-        getBtnLogin = (ImageButton)  findViewById(R.id.imageButton3);
+        getBtnLogin = (ImageButton)  findViewById(R.id.backButton);
 
         getBtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
