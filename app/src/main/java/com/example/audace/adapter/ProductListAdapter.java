@@ -118,7 +118,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         if(!Objects.equals(products.get(position).getStablePrice(), products.get(position).getPrice()))
         {
             Float stablePrice = Float.parseFloat(products.get(position).getStablePrice());
-            Integer price =Integer.parseInt(products.get(position).getPrice());
+            Float price =Float.parseFloat(products.get(position).getPrice());
             if(price < stablePrice)
                 holder.getSaleOff().setText(Float.toString((price/stablePrice) * 100).substring(0, 2) + "%");
             else

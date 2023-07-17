@@ -1,18 +1,25 @@
 package com.example.audace;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
+import com.example.audace.adapter.FavoriteAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,7 +37,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class FavoriteScreen extends AppCompatActivity implements ProductDetailScreen.EditDetailClickListener {
+public class FavoriteScreen extends Fragment implements ProductDetailScreen.EditDetailClickListener {
 
     private ArrayList<Favorite> favoriteArrayList = new ArrayList<>();
     private FavoriteAdapter favoriteAdapter;
@@ -43,28 +50,42 @@ public class FavoriteScreen extends AppCompatActivity implements ProductDetailSc
 
     private RecyclerView recyclerView;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.favorite);
-        /*View cartLayout = getLayoutInflater().inflate(R.layout.cart_icon, null);
-        cartIcon = cartLayout.findViewById(R.id.cart);
-        cartCount = cartLayout.findViewById(R.id.cart_count);
-        updateCartCount();*/
+    }
 
-        recyclerView = findViewById(R.id.favRecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view =  inflater.inflate(R.layout.favorite, container, false);
+        recyclerView = view.findViewById(R.id.favRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         favoriteAdapter = new FavoriteAdapter(this,favoriteArrayList);
         recyclerView.setAdapter(favoriteAdapter);
+        view.findViewById(R.id.cart).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity().getBaseContext(), CartScreen.class);
+                startActivity(i);
+            }
+        });
+        view.findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().onBackPressed();
+            }
+        });
         setupData();
-
+        return view;
     }
+
     @Override
     public void onEditDetailClicked(String selectedColor, String selectedSize) {
 
-        Toast.makeText(this, "Selected Color: " + selectedColor + ", Selected Size: " + selectedSize, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this.getContext(), "Selected Color: " + selectedColor + ", Selected Size: " + selectedSize, Toast.LENGTH_SHORT).show();
     }
     public void setupData() {
-        Handler handler = new Handler(getMainLooper());
+        Handler handler = new Handler(Looper.getMainLooper());
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)

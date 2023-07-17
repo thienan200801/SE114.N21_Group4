@@ -1,16 +1,17 @@
-package com.example.audace;
+package com.example.audace.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.audace.Favorite;
+import com.example.audace.OrderScreen;
+import com.example.audace.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

@@ -195,6 +195,7 @@ public class DataStorage {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                Log.i("validation", "acesstoken Ok");
                     setAccessToken(token);
             }
         });

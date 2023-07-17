@@ -40,22 +40,20 @@ public class HomepageActivity extends AppCompatActivity {
                     {
 
                         case R.id.action_profile: {
-                            Intent intent = new Intent(HomepageActivity.this, ProfileScreen.class);
-                            startActivity(intent);
+                            loadFragment(new ProfileScreen());
                             break;
                         }
                         case R.id.action_favourite:{
-                            Intent intent = new Intent(HomepageActivity.this, FavoriteScreen.class);
-                            startActivity(intent);
+                            loadFragment(new FavoriteScreen());
                             break;
                         }
                         case R.id.action_history:{
-                            Intent intent = new Intent(HomepageActivity.this, HistoryScreen.class);
-                            startActivity(intent);
+                            loadFragment(new HistoryScreen());
                             break;
                         }
                         default:
                         {
+                            loadFragment(new MainFragment());
                             break;
                         }
 

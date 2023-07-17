@@ -1,13 +1,21 @@
 package com.example.audace;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.audace.adapter.HistoryAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,27 +33,46 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class HistoryScreen extends AppCompatActivity {
+public class HistoryScreen extends Fragment {
 
     private ArrayList<Favorite> historyArrayList = new ArrayList<>();
     private HistoryAdapter historyAdapter;
 
     private RecyclerView recyclerView;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.history);
-
-
-        recyclerView = findViewById(R.id.historyRecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        historyAdapter = new HistoryAdapter(this,historyArrayList);
-        recyclerView.setAdapter(historyAdapter);
-        setupData();
 
     }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        View view =  inflater.inflate(R.layout.history, container, false);
+        recyclerView = view.findViewById(R.id.historyRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+        historyAdapter = new HistoryAdapter(this,historyArrayList);
+        recyclerView.setAdapter(historyAdapter);
+        view.findViewById(R.id.cart).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity().getBaseContext(), CartScreen.class);
+                startActivity(i);
+            }
+        });
+        view.findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().onBackPressed();
+            }
+        });
+        setupData();
+        return view;
+    }
+
     public void setupData() {
-        Handler handler = new Handler(getMainLooper());
+        Handler handler = new Handler(Looper.getMainLooper());
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
@@ -55,7 +82,7 @@ public class HistoryScreen extends AppCompatActivity {
         Request request = new Request.Builder()
                 .url("https://audace-ecomerce.herokuapp.com/users/me/history")
                 .method("GET", null)
-                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
+                .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -70,6 +97,7 @@ public class HistoryScreen extends AppCompatActivity {
                     public void run() {
                         try {
                             JSONArray jsonResponse = new JSONArray(response.body().string());
+                            historyArrayList.clear();
                             for (int i = 0; i < jsonResponse.length(); i++) {
                                 JSONObject productObject = jsonResponse.getJSONObject(i);
                                 JSONObject product = productObject.getJSONObject("product");
@@ -84,8 +112,6 @@ public class HistoryScreen extends AppCompatActivity {
                                 historyProduct.setQuantity(productQuantity);
                                 historyProduct.setSize(selectedSize);
                                 historyProduct.setColor(selectedColor);
-
-
                                 historyArrayList.add(historyProduct);
                             }
                             historyAdapter.notifyDataSetChanged();
