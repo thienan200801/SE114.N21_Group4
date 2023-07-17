@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -150,6 +151,8 @@ public class MainFragment extends Fragment {
                     Toast.makeText(getActivity(), "Please insert something", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 DataStorage.getInstance().setSearchText(searchText);
                 NavController navController = Navigation.findNavController(getActivity().findViewById(R.id.fragmentContainerView));
                 navController.navigate(R.id.action_global_searchFragment);
@@ -158,6 +161,15 @@ public class MainFragment extends Fragment {
         populateDrawerMenu();
         NavigationView navigationView = (NavigationView) fragment.getActivity().findViewById(R.id.drawerNavigationView);
         getUserAvatar(navigationView.getHeaderView(0).findViewById(R.id.user_imageButton));
+        navigationView.getHeaderView(0).findViewById(R.id.user_imageButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DrawerLayout drawerNavigationView = view.getRootView().findViewById(R.id.drawerLayout);
+                drawerNavigationView.close();
+                Intent intent = new Intent(getContext(), ProfileScreen.class);
+                startActivity(intent);
+            }
+        });
         return view;
     }
 

@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id = "@+id/detailFragment"
+    android:id="@+id/detailFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -24,7 +24,8 @@
             android:divider="@drawable/empty_tall_divider"
             android:gravity="center"
             android:orientation="vertical"
-            android:showDividers="middle">
+            android:showDividers="middle"
+            tools:ignore="UselessParent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/frame_4"
@@ -39,35 +40,47 @@
                     android:layout_height="44dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:background="@drawable/rectangle_1"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/cartButton"
                     app:layout_constraintStart_toEndOf="@+id/drawerToggleButton"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <ImageButton
-                        android:id="@+id/searchButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical|end"
-                        android:layout_marginEnd="10dp"
-                        android:background="@android:color/transparent"
-                        android:contentDescription="@string/audace"
-                        app:srcCompat="?android:attr/actionModeWebSearchDrawable"
-                        tools:ignore="TouchTargetSizeCheck" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
-                    <EditText
-                        android:id="@+id/searchEditText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="20dp"
-                        android:background="@null"
-                        android:ems="10"
-                        android:hint=" "
-                        android:inputType="text"
-                        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+                        <EditText
+                            android:id="@+id/searchEditText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:ems="10"
+                            android:hint=" "
+                            android:inputType="text"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/searchButton"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+                        <ImageButton
+                            android:id="@+id/searchButton"
+                            android:layout_width="44dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical|end"
+                            android:background="@android:color/transparent"
+                            android:contentDescription="@string/audace"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="?android:attr/actionModeWebSearchDrawable"
+                            tools:ignore="TouchTargetSizeCheck" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
                 </FrameLayout>
 
                 <ImageButton
@@ -116,7 +129,7 @@
         android:id="@+id/btprice"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginRight="40dp"
+        android:layout_marginRight="30dp"
         android:backgroundTint="#F5D000"
         android:text="2000$"
         app:cornerRadius="20dp"
@@ -165,14 +178,15 @@
                     android:text="Tui Gucci"
                     android:textSize="30dp" />
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                <ImageButton
+                    android:id="@+id/favouriteButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_gravity="right|center_vertical|end"
-                    android:layout_marginRight="0dp"
-                    android:layout_weight="0.2"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/baseline_favorite_border_24"
                     android:foregroundGravity="right"
-                    android:src="@drawable/baseline_favorite_24" />
+                    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
             </LinearLayout>
 
             <LinearLayout
@@ -227,8 +241,7 @@
                 android:id="@+id/colorRecycler"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:orientation="horizontal"
-                />
+                android:orientation="horizontal" />
 
             <LinearLayout
                 android:layout_width="wrap_content"

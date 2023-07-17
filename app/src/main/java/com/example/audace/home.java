@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -108,6 +109,9 @@ public class home extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -133,10 +137,6 @@ public class home extends Fragment {
         RecyclerView bannerRecycleView = (RecyclerView) view.findViewById(R.id.BannerRecyclerView);
         bannerRecycleView.setLayoutManager(bannerManager);
         bannerRecycleView.setAdapter(bannerListAdapter);
-
-        DividerItemDecoration bannerDividerItemDecoration = new DividerItemDecoration(bannerRecycleView.getContext(), bannerManager.getOrientation());
-        bannerDividerItemDecoration.setDrawable(ContextCompat.getDrawable(bannerRecycleView.getContext(), R.drawable.recycler1_view_seperator));
-        bannerRecycleView.addItemDecoration(bannerDividerItemDecoration);
 
         products = new ArrayList<Product>();
         CrawlBanChayProduct();

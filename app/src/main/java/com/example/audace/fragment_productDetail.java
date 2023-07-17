@@ -2,6 +2,7 @@ package com.example.audace;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,7 +12,11 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
@@ -22,7 +27,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -77,6 +84,8 @@ public class fragment_productDetail extends Fragment {
     private RecyclerView rvSize, rvColor;
     ArrayList<SizeObject> sizeObjectList;
     ArrayList<ColorObject> colorObjectList;
+
+    private ImageButton searchButton;
     SizeAdapter sizeAdapter;
     ColorAdapter colorAdapter;
     private String colorId = null;
@@ -162,6 +171,76 @@ public class fragment_productDetail extends Fragment {
                         colorObjectList.add(colorItemObject);
                     }
                     handler.post(()->{
+                        if(d.getIsFavourite())
+                            ((ImageButton)getActivity().findViewById(R.id.favouriteButton)).setBackgroundResource(R.drawable.baseline_favorite_24);
+                        getActivity().findViewById(R.id.favouriteButton).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                handler.post(() -> {
+                                    CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(view.getContext());
+                                    circularProgressDrawable.setStrokeWidth(5f);
+                                    circularProgressDrawable.setCenterRadius(10f);
+                                    circularProgressDrawable.start();
+                                    view.setBackground(circularProgressDrawable);
+                                });
+
+                                if(!d.getIsFavourite())
+                                {
+                                    OkHttpClient client = new OkHttpClient().newBuilder()
+                                            .build();
+                                    MediaType mediaType = MediaType.parse("application/json");
+                                    String string = String.format("{\n    \"product\": \"%s\",\n    \"quantity\": 1\n}", DataStorage.getInstance().getProductId());
+                                    RequestBody body = RequestBody.create(mediaType, string);
+                                    Request request = new Request.Builder()
+                                            .url("https://audace-ecomerce.herokuapp.com/users/me/favourites")
+                                            .method("POST", body)
+                                            .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
+                                            .addHeader("Content-Type", "application/json")
+                                            .build();
+                                    client.newCall(request).enqueue(new Callback() {
+                                        @Override
+                                        public void onFailure(Call call, IOException e) {
+                                            Log.i("message", "fail to add");
+                                        }
+
+                                        @Override
+                                        public void onResponse(Call call, Response response) throws IOException {
+                                            d.setFavourite(true);
+                                            handler.post(() ->  view.setBackgroundResource(R.drawable.baseline_favorite_24));
+                                            Log.i("message", "Success to add");
+                                        }
+                                    });
+                                }
+                                else
+                                {
+                                    OkHttpClient client = new OkHttpClient().newBuilder()
+                                            .build();
+                                    MediaType mediaType = MediaType.parse("application/json");
+                                    String string = String.format("{\r\n    \"id\": \"%s\"\r\n}", DataStorage.getInstance().getProductId());
+
+                                    RequestBody body = RequestBody.create(mediaType, string);
+                                    Request request = new Request.Builder()
+                                            .url("https://audace-ecomerce.herokuapp.com/users/me/favourites")
+                                            .method("DELETE", body)
+                                            .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
+                                            .addHeader("Content-Type", "application/json")
+                                            .build();
+                                    client.newCall(request).enqueue(new Callback() {
+                                        @Override
+                                        public void onFailure(Call call, IOException e) {
+                                            Log.i("message", "fail to delete");
+                                        }
+
+                                        @Override
+                                        public void onResponse(Call call, Response response) throws IOException {
+                                            Log.i("message", "Susccess to delete");
+                                            d.setFavourite(false);
+                                            handler.post(() -> view.setBackgroundResource(R.drawable.baseline_favorite_border_24));
+                                        }
+                                    });
+                                }
+                            }
+                        });
                         CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(((ImageView)getView().findViewById(R.id.img_detail)).getContext());
                         circularProgressDrawable.setStrokeWidth(5f);
                         circularProgressDrawable.setCenterRadius(30f);
@@ -246,7 +325,7 @@ public class fragment_productDetail extends Fragment {
                 RequestBody body = RequestBody.create(mediaType, String.format("{\r\n    \"productCheckoutInfos\": [\r\n%s\r\n    ]\r\n}", purchasedProduct));
                 Request request = new Request.Builder()
                         .url("https://audace-ecomerce.herokuapp.com/users/me/cart")
-                        .method("POST", body)
+                        .method("PUT", body)
                         .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
                         .addHeader("Content-Type", "application/json")
                         .build();
@@ -291,7 +370,26 @@ public class fragment_productDetail extends Fragment {
                 startActivity(t);
             }
         });
-
+        searchButton = view.findViewById(R.id.searchButton);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String searchText = ((EditText)getActivity().findViewById(R.id.searchEditText)).getText().toString();
+                Log.i("search", searchText);
+                if(searchText.equals(""))
+                {
+                    Toast.makeText(getActivity(), "Please insert something", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                DataStorage.getInstance().setSearchText(searchText);
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.bottomNavigationContainer, new MainFragment());
+                fragmentTransaction.replace(R.id.fragmentContainerView, new SearchFragment());
+                fragmentTransaction.commit();
+            }
+        });
         return view;
     }
 

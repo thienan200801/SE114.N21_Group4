@@ -100,7 +100,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(ProductListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ProductListAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Log.i("message", "binding product");
 
         holder.getNameTextView().setText(products.get(position).getName());
@@ -150,23 +150,23 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                     OkHttpClient client = new OkHttpClient().newBuilder()
                             .build();
                     MediaType mediaType = MediaType.parse("application/json");
-                    String string = String.format("{\r\n    \"id\": \"%s\"\r\n}", products.get(holder.getAdapterPosition()).getProductID());
+                    String string = String.format("{\n    \"product\": \"%s\",\n    \"quantity\": 1\n}", products.get(position).getProductID());
                     RequestBody body = RequestBody.create(mediaType, string);
                     Request request = new Request.Builder()
                             .url("https://audace-ecomerce.herokuapp.com/users/me/favourites")
-                            .method("POST", body)
+                            .method("PUT", body)
                             .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
                             .addHeader("Content-Type", "application/json")
                             .build();
                     client.newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
-                            Log.i("message", "fail to delete");
+                            Log.i("message", "fail to add");
                         }
 
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
-                            Log.i("message", "Success to delete");
+                            Log.i("message", "Success to add");
                         }
                     });
                 }
@@ -188,12 +188,12 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                     client.newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
-                            Log.i("message", "fail to add");
+                            Log.i("message", "fail to delete");
                         }
 
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
-                            Log.i("message", "Susccess to add");
+                            Log.i("message", "Susccess to delete");
                         }
                     });
                 }

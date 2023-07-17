@@ -40,8 +40,15 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter android:label="filter_deeplink_audace">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "audace://home” -->
+                <data android:scheme="audace"
+                    android:host="home" />
             </intent-filter>
         </activity>
         <activity android:name=".LoginScreen" />
