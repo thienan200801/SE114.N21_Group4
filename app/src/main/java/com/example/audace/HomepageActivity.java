@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -27,6 +28,16 @@ public class HomepageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent i = getIntent();
+        Uri data = i.getData();
+        String uriToken = null;
+        if(data != null)
+        {
+            uriToken = data.getQueryParameter("access_token");
+            Log.i("message", data.toString());
+        }
+        if(uriToken != null)
+            DataStorage.getInstance().setAccessToken(uriToken);
         if(DataStorage.getInstance().getAccessToken() != null)
         {
             setContentView(R.layout.activity_homepage);
@@ -93,6 +104,11 @@ public class HomepageActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
     }
 
     @Override

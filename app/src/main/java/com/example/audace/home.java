@@ -269,34 +269,34 @@ public class home extends Fragment {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                products.clear();
+                JSONArray jsonArray = null;
+                try {
+                    jsonArray = new JSONArray(response.body().string());
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                for(int i = 0; i < jsonArray.length(); i ++)
+                {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = jsonArray.getJSONObject(i);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    Product item = null;
+                    try {
+                        item = new Product(jsonObject.getString("_id"),jsonObject.getString("name"), jsonObject.getString("currentPrice"), jsonObject.getString("stablePrice"), jsonObject.getBoolean("isFavourite"),jsonObject.getString("imageURL") );
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    products.add(item);
+                }
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        products.clear();
-                        JSONArray jsonArray = null;
-                        try {
-                            jsonArray = new JSONArray(response.body().string());
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                        for(int i = 0; i < jsonArray.length(); i ++)
-                        {
-                            JSONObject jsonObject = null;
-                            try {
-                                jsonObject = jsonArray.getJSONObject(i);
-                            } catch (JSONException e) {
-                                throw new RuntimeException(e);
-                            }
-                            Product item = null;
-                            try {
-                                item = new Product(jsonObject.getString("_id"),jsonObject.getString("name"), jsonObject.getString("currentPrice"), jsonObject.getString("stablePrice"), jsonObject.getBoolean("isFavourite"),jsonObject.getString("imageURL") );
-                            } catch (JSONException e) {
-                                throw new RuntimeException(e);
-                            }
-                            products.add(item);
-                        }
                         productListAdapter = new ProductListAdapter(products);
                         RecyclerView banChayRecycleView = (RecyclerView) getActivity().findViewById(R.id.banChayItemList);
                         if(banChayRecycleView != null)
