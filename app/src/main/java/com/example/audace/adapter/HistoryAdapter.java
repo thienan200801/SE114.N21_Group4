@@ -95,8 +95,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             colorTextView = view.findViewById(R.id.colorTextView);
             sizeTextView = view.findViewById(R.id.sizeTextView);
 
-
-
         }
 
     }

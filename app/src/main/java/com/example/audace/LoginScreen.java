@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -45,7 +46,6 @@ public class LoginScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-
         loginLayout = findViewById(R.id.login_layout);
         signupLayout = findViewById(R.id.signup_layout);
 
@@ -76,7 +76,20 @@ public class LoginScreen extends AppCompatActivity {
                 checkConfirmPass();
             }
         });
-
+        findViewById(R.id.googleLogin).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://audace-ecomerce.herokuapp.com/auth/google"));
+                startActivity(browserIntent);
+            }
+        });
+        findViewById(R.id.facebookLogin).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://audace-ecomerce.herokuapp.com/auth/facebook"));
+                startActivity(browserIntent);
+            }
+        });
     }
 
     private void checkConfirmPass() {
