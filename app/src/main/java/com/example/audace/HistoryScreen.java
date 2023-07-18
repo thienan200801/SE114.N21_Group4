@@ -1,6 +1,9 @@
 package com.example.audace;
 
+import static android.os.Looper.getMainLooper;
+
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -71,7 +74,7 @@ public class HistoryScreen extends Fragment {
         return view;
     }
 
-    public void setupData() {
+    public void getupData() {
         Handler handler = new Handler(Looper.getMainLooper());
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .connectTimeout(30, TimeUnit.SECONDS)
@@ -108,22 +111,216 @@ public class HistoryScreen extends Fragment {
                                 int productQuantity = productObject.getInt("quantity");
                                 String selectedColor = productObject.getJSONObject("color").getString("_id");
                                 String selectedSize = productObject.getJSONObject("size").getString("_id");
-                                Favorite historyProduct = new Favorite(productId,productName,imageURL,currentPrice);
-                                historyProduct.setQuantity(productQuantity);
-                                historyProduct.setSize(selectedSize);
-                                historyProduct.setColor(selectedColor);
-                                historyArrayList.add(historyProduct);
-                            }
-                            historyAdapter.notifyDataSetChanged();
-                        }catch (JSONException e) {
-                            e.printStackTrace();}
-                        catch (IOException e){
-                            e.printStackTrace();
-                        }
+                                getProductInfo(productId,selectedColor,selectedSize, new OrderScreen.ProductInfoCallback() {
+                                    @Override
+                                    public void onProductInfoReceived(Favorite product) {
+                                        String productName = product.getName();
+                                        Log.i("productName",productName);
 
+                                        int productPrice = product.getPrice();
+                                        String imageURL = product.getImage();
+                                        Log.i("img",imageURL);
+
+
+
+                                        int productQuantity = 0;
+                                        try {
+                                            productQuantity = productObject.getInt("quantity");
+                                        } catch (JSONException e) {
+                                            throw new RuntimeException(e);
+                                        }
+                                        Favorite historyProduct = new Favorite(productId,productName,imageURL,currentPrice);
+                                        historyProduct.setQuantity(productQuantity);
+                                        historyProduct.setSizeWidth(product.getSizeWidth());
+                                        historyProduct.setSizeHeight(product.getSizeHeight());
+                                        historyProduct.setColorName(product.getColorName());
+                                        historyArrayList.add(historyProduct);
+                                        historyAdapter.notifyDataSetChanged();
+
+                                    }
+                                    @Override
+                                    public void onFailure(String errorMessage) {
+                                        Log.i("error",errorMessage);
+                                    }
+                                });
+
+                            }
+
+                            }catch (JSONException e) {
+                                e.printStackTrace();}
+                            catch (IOException e){
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    public void setupData() {
+        new AsyncTask<Void, Void, JSONArray>() {
+            @Override
+            protected JSONArray doInBackground(Void... voids) {
+                OkHttpClient client = new OkHttpClient().newBuilder()
+                        .connectTimeout(30, TimeUnit.SECONDS)
+                        .readTimeout(30, TimeUnit.SECONDS)
+                        .build();
+                MediaType mediaType = MediaType.parse("text/plain");
+                RequestBody body = RequestBody.create(mediaType, "");
+                Request request = new Request.Builder()
+                        .url("https://audace-ecomerce.herokuapp.com/users/me/history")
+                        .method("GET", null)
+                        .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
+                        .build();
+
+                try {
+                    Response response = client.newCall(request).execute();
+                    if (response.isSuccessful()) {
+                        String responseString = response.body().string();
+                        return new JSONArray(responseString);
+                    }
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(JSONArray jsonResponse) {
+                if (jsonResponse != null) {
+                    try {
+                        historyArrayList.clear();
+                        for (int i = 0; i < jsonResponse.length(); i++) {
+                            JSONObject productObject = jsonResponse.getJSONObject(i);
+                            JSONObject product = productObject.getJSONObject("product");
+                            String productId = product.getString("_id");
+                            String productName = product.getString("name");
+                            String imageURL = product.getString("imageURL");
+                            int currentPrice = product.getInt("currentPrice");
+                            int productQuantity = productObject.getInt("quantity");
+                            String selectedColor = productObject.getJSONObject("color").getString("_id");
+                            String selectedSize = productObject.getJSONObject("size").getString("_id");
+
+                            final int index = i;
+                            getProductInfo(productId, selectedColor, selectedSize, new OrderScreen.ProductInfoCallback() {
+                                @Override
+                                public void onProductInfoReceived(Favorite product) {
+                                    String productName = product.getName();
+                                    Log.i("productName",productName);
+
+                                    int productPrice = product.getPrice();
+                                    String imageURL = product.getImage();
+                                    Log.i("img",imageURL);
+
+
+
+                                    int productQuantity = 0;
+                                    try {
+                                        productQuantity = productObject.getInt("quantity");
+                                    } catch (JSONException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                    Favorite historyProduct = new Favorite(productId,productName,imageURL,currentPrice);
+                                    historyProduct.setQuantity(productQuantity);
+                                    historyProduct.setSizeWidth(product.getSizeWidth());
+                                    historyProduct.setSizeHeight(product.getSizeHeight());
+                                    historyProduct.setColorName(product.getColorName());
+                                    historyArrayList.add(historyProduct);
+
+                                    if (index == jsonResponse.length() - 1) {
+                                        historyAdapter.notifyDataSetChanged();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(String errorMessage) {
+                                    Log.i("error", errorMessage);
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.execute();
+    }
+
+    private void getProductInfo(String productId,String color,String size, OrderScreen.ProductInfoCallback callback) {
+                Handler handler = new Handler(getMainLooper());
+                OkHttpClient client = new OkHttpClient().newBuilder()
+                        .connectTimeout(30, TimeUnit.SECONDS)
+                        .readTimeout(30, TimeUnit.SECONDS)
+                        .build();
+                MediaType mediaType = MediaType.parse("text/plain");
+                RequestBody body = RequestBody.create(mediaType, "");
+                Request request = new Request.Builder()
+                        .url("https://audace-ecomerce.herokuapp.com/products/product/" + productId)
+                        .method("GET", null)
+                        .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
+                        .build();
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        String errorMessage = e.getMessage();
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                callback.onFailure(errorMessage);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String responseBody = response.body().string();
+                        try {
+                            JSONObject jsonResponse = new JSONObject(responseBody);
+                            String productName = jsonResponse.getString("name");
+                            String productDescription = jsonResponse.getString("description");
+                            String imageURL = jsonResponse.getString("imageURL");
+                            int currentPrice = jsonResponse.getInt("currentPrice");
+                            JSONArray colorsArray = jsonResponse.getJSONArray("colors");
+                            String colorName = "";
+                            for (int j = 0; j < colorsArray.length(); j++) {
+                                JSONObject colorObject = colorsArray.getJSONObject(j);
+                                String colorObjectId = colorObject.getString("_id");
+                                if (colorObjectId.equals(color)) {
+                                    colorName = colorObject.getString("name");
+                                    break;
+                                }
+                            }
+                            JSONArray sizesArray = jsonResponse.getJSONArray("sizes");
+                            String sizeWidth = "";
+                            String sizeHeight = "";
+                            for (int k = 0; k < sizesArray.length(); k++) {
+                                JSONObject sizeObject = sizesArray.getJSONObject(k);
+                                String sizeObjectId = sizeObject.getString("_id");
+                                if (sizeObjectId.equals(size)) {
+                                    sizeWidth = sizeObject.getString("widthInCentimeter");
+                                    sizeHeight = sizeObject.getString("heightInCentimeter");
+                                    break;
+                                }
+                            }
+                            Favorite product = new Favorite(productId, productName, imageURL, currentPrice);
+                            product.setColorName(colorName);
+                            product.setSizeWidth(sizeWidth);
+                            product.setSizeHeight(sizeHeight);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onProductInfoReceived(product);
+                                }
+                            });
+                        } catch (JSONException e) {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onFailure(e.getMessage());
+                                }
+                            });
+                        }
                     }
                 });
             }
-        });
-    }
 }

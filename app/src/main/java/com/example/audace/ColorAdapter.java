@@ -38,12 +38,21 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ColorOption item = colorArrayList.get(position);
         holder.color.setBackgroundColor(Color.parseColor(item.getHex()));
+        holder.color.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (colorClickListener != null) {
+                    colorClickListener.onColorClicked(item);
+                }
+            }
+        });
 
         if (item.isSelected()) {
             holder.color.setSelected(true);
         } else {
             holder.color.setSelected(false);
         }
+
     }
 
     @Override
@@ -51,27 +60,15 @@ public class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.ViewHolder> 
         return colorArrayList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         Button color;
 
         ViewHolder(View view) {
             super(view);
             color = view.findViewById(R.id.color);
-            color.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View view) {
-            int position = getAdapterPosition();
-            if (position != RecyclerView.NO_POSITION) {
-                ColorOption colorOption = colorArrayList.get(position);
-                colorOption.setSelected(true);
 
-                if (colorClickListener != null) {
-                    colorClickListener.onColorClicked(colorOption);
-                }
-            }
-        }
     }
 
     public interface ColorClickListener {

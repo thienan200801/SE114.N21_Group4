@@ -47,8 +47,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         Favorite item = historyArrayList.get(position);
         holder.nameTextView.setText(item.getName());
         holder.priceTextView.setText(String.valueOf(item.getPrice()));
-        holder.colorTextView.setText(item.getColor());
-        holder.sizeTextView.setText(item.getSize());
+        holder.colorTextView.setText(item.getColorName());
+        holder.sizeTextView.setText(item.getSizeWidth() + " x "+item.getSizeHeight());
         holder.quantityTextView.setText(String.valueOf(item.getQuantity()));
         holder.viewDetail.setOnClickListener(new View.OnClickListener() {
             @Override

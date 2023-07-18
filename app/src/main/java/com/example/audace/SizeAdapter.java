@@ -15,8 +15,11 @@ public class SizeAdapter extends RecyclerView.Adapter<SizeAdapter.ViewHolder> {
 
     private ArrayList<SizeOption> sizeArrayList;
     private ProductDetailScreen activity;
+    SizeClickListener sizeClickListener;
 
-
+    public void setSizeClickListener(SizeAdapter.SizeClickListener listener) {
+        this.sizeClickListener = listener;
+    }
 
     public SizeAdapter(ProductDetailScreen activity, ArrayList<SizeOption> sizeArrayList
     ){
@@ -36,6 +39,20 @@ public class SizeAdapter extends RecyclerView.Adapter<SizeAdapter.ViewHolder> {
     public void onBindViewHolder(SizeAdapter.ViewHolder holder, int position){
         SizeOption item = sizeArrayList.get(position);
         holder.sizeTextView.setText(item.getWidth()+"cm"+"x"+item.getHeight()+"cm");
+        holder.size.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (sizeClickListener != null) {
+                    sizeClickListener.onSizeClicked(item);
+                }
+            }
+        });
+
+        if (item.isSelected()) {
+            holder.size.setSelected(true);
+        } else {
+            holder.size.setSelected(false);
+        }
 
     }
 
@@ -64,6 +81,9 @@ public class SizeAdapter extends RecyclerView.Adapter<SizeAdapter.ViewHolder> {
     public void setSizeList(ArrayList<SizeOption> sizeArrayList){
         this.sizeArrayList = sizeArrayList;
 
+    }
+    public interface SizeClickListener {
+        void onSizeClicked(SizeOption sizeOption);
     }
 }
 

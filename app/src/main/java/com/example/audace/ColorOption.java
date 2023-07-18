@@ -3,14 +3,19 @@ package com.example.audace;
 public class ColorOption {
 
     String id;
-    boolean selected;
     String name;
-    String hex;
 
-    public ColorOption(String name, String hex) {
+    public ColorOption(String id, String name, String hex) {
+        this.id = id;
         this.name = name;
         this.hex = hex;
     }
+
+    String hex;
+    boolean selected;
+
+
+
     public String getId() {
         return id;
     }

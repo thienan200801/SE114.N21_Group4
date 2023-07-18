@@ -41,6 +41,10 @@ public class ProductOrderAdapter extends RecyclerView.Adapter<ProductOrderAdapte
         Favorite item = productArrayList.get(position);
         holder.nameTextView.setText(item.getName());
         holder.priceTextView.setText(String.valueOf(item.getPrice()));
+        holder.colorTextView.setText(item.getColorName());
+        holder.sizeTextView.setText(item.getSizeWidth() + " x "+item.getSizeHeight());
+        holder.quantityTextView.setText(String.valueOf(item.getQuantity()));
+
         Picasso.get()
                 .load(item.getImage())
                 .resize(250,250)
@@ -54,6 +58,7 @@ public class ProductOrderAdapter extends RecyclerView.Adapter<ProductOrderAdapte
         TextView sizeTextView ;
         TextView priceTextView ;
         ImageView orderImage;
+        TextView quantityTextView;
 
 
         ViewHolder( View view){
@@ -61,7 +66,9 @@ public class ProductOrderAdapter extends RecyclerView.Adapter<ProductOrderAdapte
             nameTextView =view.findViewById(R.id.product_name_txtView);
             priceTextView= view.findViewById(R.id.price_txtView);
             orderImage = view.findViewById(R.id.order_image);
-
+            colorTextView = view.findViewById(R.id.colorTextView);
+            sizeTextView = view.findViewById(R.id.sizeTextView);
+            quantityTextView = view.findViewById(R.id.quantityTextView);
 
 
 

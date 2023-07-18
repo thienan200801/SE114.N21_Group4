@@ -3,7 +3,8 @@ package com.example.audace;
 public class SizeOption {
     String id;
     boolean selected;
-    public SizeOption(String width, String height) {
+    public SizeOption(String id,String width, String height) {
+        this.id = id;
         this.width = width;
         this.height = height;
     }
