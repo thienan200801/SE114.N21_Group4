@@ -6,12 +6,15 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.fragment.app.Fragment;
@@ -167,6 +170,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             Log.i("message", "Success to add");
+                            new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getActivity(view), "Success to add item to favourites", Toast.LENGTH_SHORT).show());
                         }
                     });
                 }
@@ -194,6 +198,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             Log.i("message", "Susccess to delete");
+                            new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getActivity(view), "Success to delete item from favourites", Toast.LENGTH_SHORT).show());
                         }
                     });
                 }

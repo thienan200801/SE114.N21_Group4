@@ -7,6 +7,7 @@
     android:layout_height="match_parent">
 
     <ScrollView
+        android:id="@+id/loginScrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -402,15 +403,17 @@
                     </RelativeLayout>
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:gravity="center"
                         android:orientation="horizontal">
 
                         <LinearLayout
                             android:id="@+id/googleLogin"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="left"
                             android:layout_marginRight="10dp"
                             android:gravity="center"
                             android:orientation="horizontal">
@@ -422,6 +425,7 @@
                                 android:src="@drawable/google_icon" />
 
                             <com.google.android.material.button.MaterialButton
+                                android:id="@+id/googleButton"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="left"
@@ -435,7 +439,8 @@
                             android:id="@+id/facebookLogin"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
+                            android:layout_gravity="right"
+                            android:layout_marginLeft="10dp"
                             android:gravity="center"
                             android:orientation="horizontal">
 
@@ -446,6 +451,7 @@
                                 android:src="@drawable/fb_icon" />
 
                             <com.google.android.material.button.MaterialButton
+                                android:id="@+id/facebookButton"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:background="@android:color/transparent"
@@ -456,6 +462,27 @@
 
                     </LinearLayout>
                 </LinearLayout>
+
+                <FrameLayout
+                    android:id="@+id/loadingLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:background="#FFFAD0"
+                    android:foregroundGravity="center"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/login_layout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        style="@android:style/Widget.Holo.Light.ProgressBar.Large"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center" />
+                </FrameLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 

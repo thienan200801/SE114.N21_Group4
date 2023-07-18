@@ -129,7 +129,6 @@ public class home extends Fragment {
         DividerItemDecoration catagoryDividerItemDecoration = new DividerItemDecoration(catagoryRecycleView.getContext(), catagoryManager.getOrientation());
         catagoryDividerItemDecoration.setDrawable(ContextCompat.getDrawable(catagoryRecycleView.getContext(), R.drawable.recycler1_view_seperator));
         catagoryRecycleView.addItemDecoration(catagoryDividerItemDecoration);
-
         banners = new ArrayList<>();
         CrawlBanner();
         bannerListAdapter = new BannerListAdapter(banners);
@@ -187,6 +186,7 @@ public class home extends Fragment {
                 navController.navigate(R.id.action_global_fragment_subcatagory);
             }
         });
+
         return view;
     }
     public void CrawlBanner(){

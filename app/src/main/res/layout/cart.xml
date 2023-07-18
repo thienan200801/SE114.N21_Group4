@@ -31,11 +31,6 @@
             android:padding="16dp"
             android:textAlignment="center"
             app:srcCompat="@drawable/back" />
-        <include
-            layout="@layout/cart_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"/>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -74,12 +69,12 @@
 
             <ImageButton
                 android:id="@+id/btnPurchase"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
                 android:background="@android:color/transparent"
                 android:contentDescription="Đăng nhập"
-                android:onClick="onButtonClick"
                 android:padding="16dp"
                 android:textAlignment="center"
                 app:srcCompat="@drawable/rec9" />
@@ -87,7 +82,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_centerInParent="true"
                 android:layout_gravity="center"
                 android:fontFamily="@font/open_sans"

@@ -8,7 +8,7 @@
     android:layout_marginTop="10dp"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/fav_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -18,13 +18,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
             android:layout_toLeftOf="@id/cart"
             android:layout_toRightOf="@id/backButton"
             android:fontFamily="@font/open_sans"
             android:text="Lịch sử"
             android:textAlignment="center"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/backButton"
@@ -32,24 +37,28 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:contentDescription="Back"
-            android:onClick="onButtonClick"
 
+            android:onClick="onButtonClick"
             android:padding="16dp"
             android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
             app:srcCompat="@drawable/back" />
 
-        <ImageButton
-            android:id="@+id/cart"
-            android:layout_width="wrap_content"
-
-            android:layout_height="wrap_content"
+        <include
+            android:id="@+id/include"
+            layout="@layout/cart_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignParentEnd="true"
-            android:background="@android:color/transparent"
-            android:contentDescription="Cart"
-            android:onClick="onButtonClick"
-            android:padding="16dp"
-            app:srcCompat="@drawable/local_mall" />
-    </RelativeLayout>
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <ScrollView

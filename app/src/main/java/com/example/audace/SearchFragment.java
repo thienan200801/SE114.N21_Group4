@@ -97,6 +97,7 @@ public class SearchFragment extends Fragment {
         int spacing = 50; // 50px
         boolean includeEdge = false;
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
+        view.findViewById(R.id.loadingLayout).setVisibility(View.VISIBLE);
         CrawlProduct();
         //Set spinner
         Spinner spinner = (Spinner)view.findViewById(R.id.dropDown);
@@ -106,11 +107,13 @@ public class SearchFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                getView().findViewById(R.id.loadingLayout).setVisibility(View.VISIBLE);
                 Log.i("Sort Option", Integer.toString(i));
                 products = Sort(products, i);
                 adapter = new ProductListAdapter(products);
                 recyclerView.setAdapter(adapter );
                 adapter.notifyDataSetChanged();
+                getView().findViewById(R.id.loadingLayout).setVisibility(View.GONE);
             }
 
             @Override
@@ -161,6 +164,7 @@ public class SearchFragment extends Fragment {
                             adapter = new ProductListAdapter(Sort(products, 0));
                             view.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
+                            getView().findViewById(R.id.loadingLayout).setVisibility(View.GONE);
                         }
                     });
                 } catch (JSONException e) {

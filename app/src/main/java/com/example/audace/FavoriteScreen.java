@@ -65,13 +65,21 @@ public class FavoriteScreen extends Fragment  {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         favoriteAdapter = new FavoriteAdapter(this,favoriteArrayList);
         recyclerView.setAdapter(favoriteAdapter);
+
+        if(DataStorage.getInstance().getCartCount() != null && DataStorage.getInstance().getCartCount() != 0)
+        {
+            view.findViewById(R.id.cart_count).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.cart_count_text).setVisibility(View.VISIBLE);
+            ((TextView)view.findViewById(R.id.cart_count_text)).setText(Integer.toString(DataStorage.getInstance().getCartCount()));
+        }
         view.findViewById(R.id.cart).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getActivity().getBaseContext(), CartScreen.class);
-                startActivity(i);
+                Intent t = new Intent(getActivity().getBaseContext(), CartScreen.class);
+                startActivity(t);
             }
         });
+
         view.findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -185,7 +193,7 @@ public class FavoriteScreen extends Fragment  {
         Request request = new Request.Builder()
                 .url("https://audace-ecomerce.herokuapp.com/products/product/" + productId)
                 .method("GET", null)
-                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
+                .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override

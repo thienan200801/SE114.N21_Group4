@@ -173,7 +173,7 @@ public class ProfileScreen extends Fragment {
                             JSONObject jsonObject = new JSONObject(jsonData);
 
                             // Extract the required data from the JSON response
-                            String username = jsonObject.getString("username");
+                            String username = jsonObject.getString("fullname");
                             String address = jsonObject.getString("address");
                             String email = jsonObject.getString("email");
                             // Add more fields as needed

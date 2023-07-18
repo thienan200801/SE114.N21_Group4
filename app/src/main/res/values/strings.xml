@@ -28,4 +28,5 @@
         <item>Tăng dần</item>
         <item>Giảm dần</item>
     </string-array>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>
