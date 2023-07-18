@@ -3,6 +3,7 @@ package com.example.audace;
 import static android.os.Looper.getMainLooper;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -73,7 +74,7 @@ public class HistoryScreen extends Fragment {
         return view;
     }
 
-    public void setupData() {
+    public void getupData() {
         Handler handler = new Handler(Looper.getMainLooper());
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .connectTimeout(30, TimeUnit.SECONDS)
@@ -145,17 +146,107 @@ public class HistoryScreen extends Fragment {
 
                             }
 
-                        }catch (JSONException e) {
-                            e.printStackTrace();}
-                        catch (IOException e){
-                            e.printStackTrace();
+                            }catch (JSONException e) {
+                                e.printStackTrace();}
+                            catch (IOException e){
+                                e.printStackTrace();
+                            }
                         }
+                    });
+                }
+            });
+        }
+    public void setupData() {
+        new AsyncTask<Void, Void, JSONArray>() {
+            @Override
+            protected JSONArray doInBackground(Void... voids) {
+                OkHttpClient client = new OkHttpClient().newBuilder()
+                        .connectTimeout(30, TimeUnit.SECONDS)
+                        .readTimeout(30, TimeUnit.SECONDS)
+                        .build();
+                MediaType mediaType = MediaType.parse("text/plain");
+                RequestBody body = RequestBody.create(mediaType, "");
+                Request request = new Request.Builder()
+                        .url("https://audace-ecomerce.herokuapp.com/users/me/history")
+                        .method("GET", null)
+                        .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
+                        .build();
+
+                try {
+                    Response response = client.newCall(request).execute();
+                    if (response.isSuccessful()) {
+                        String responseString = response.body().string();
+                        return new JSONArray(responseString);
                     }
-                });
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                }
+
+                return null;
             }
-        });
+
+            @Override
+            protected void onPostExecute(JSONArray jsonResponse) {
+                if (jsonResponse != null) {
+                    try {
+                        historyArrayList.clear();
+                        for (int i = 0; i < jsonResponse.length(); i++) {
+                            JSONObject productObject = jsonResponse.getJSONObject(i);
+                            JSONObject product = productObject.getJSONObject("product");
+                            String productId = product.getString("_id");
+                            String productName = product.getString("name");
+                            String imageURL = product.getString("imageURL");
+                            int currentPrice = product.getInt("currentPrice");
+                            int productQuantity = productObject.getInt("quantity");
+                            String selectedColor = productObject.getJSONObject("color").getString("_id");
+                            String selectedSize = productObject.getJSONObject("size").getString("_id");
+
+                            final int index = i;
+                            getProductInfo(productId, selectedColor, selectedSize, new OrderScreen.ProductInfoCallback() {
+                                @Override
+                                public void onProductInfoReceived(Favorite product) {
+                                    String productName = product.getName();
+                                    Log.i("productName",productName);
+
+                                    int productPrice = product.getPrice();
+                                    String imageURL = product.getImage();
+                                    Log.i("img",imageURL);
+
+
+
+                                    int productQuantity = 0;
+                                    try {
+                                        productQuantity = productObject.getInt("quantity");
+                                    } catch (JSONException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                    Favorite historyProduct = new Favorite(productId,productName,imageURL,currentPrice);
+                                    historyProduct.setQuantity(productQuantity);
+                                    historyProduct.setSizeWidth(product.getSizeWidth());
+                                    historyProduct.setSizeHeight(product.getSizeHeight());
+                                    historyProduct.setColorName(product.getColorName());
+                                    historyArrayList.add(historyProduct);
+
+                                    if (index == jsonResponse.length() - 1) {
+                                        historyAdapter.notifyDataSetChanged();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(String errorMessage) {
+                                    Log.i("error", errorMessage);
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.execute();
     }
-            private void getProductInfo(String productId,String color,String size, OrderScreen.ProductInfoCallback callback) {
+
+    private void getProductInfo(String productId,String color,String size, OrderScreen.ProductInfoCallback callback) {
                 Handler handler = new Handler(getMainLooper());
                 OkHttpClient client = new OkHttpClient().newBuilder()
                         .connectTimeout(30, TimeUnit.SECONDS)

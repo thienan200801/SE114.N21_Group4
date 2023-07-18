@@ -1,5 +1,6 @@
 package com.example.audace;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -45,96 +46,96 @@ public class CartScreen extends AppCompatActivity {
 
 
     }
+
     public void setupData() {
-        Handler handler = new Handler(getMainLooper());
-        OkHttpClient client = new OkHttpClient().newBuilder()
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .build();
-        MediaType mediaType = MediaType.parse("text/plain");
-        RequestBody body = RequestBody.create(mediaType, "");
-        Request request = new Request.Builder()
-                .url("https://audace-ecomerce.herokuapp.com/users/me/profile")
-                .method("GET", null)
-                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
-                .build();
-        client.newCall(request).enqueue(new Callback() {
+        new AsyncTask<Void, Void, String>() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                Log.i("message", call.toString());
-            }
+            protected String doInBackground(Void... voids) {
+                OkHttpClient client = new OkHttpClient().newBuilder()
+                        .connectTimeout(30, TimeUnit.SECONDS)
+                        .readTimeout(30, TimeUnit.SECONDS)
+                        .build();
+                MediaType mediaType = MediaType.parse("text/plain");
+                RequestBody body = RequestBody.create(mediaType, "");
+                Request request = new Request.Builder()
+                        .url("https://audace-ecomerce.herokuapp.com/users/me/profile")
+                        .method("GET", null)
+                        .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
+                        .build();
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        cartList.clear();
-                        try {
-                            JSONObject jsonResponse = new JSONObject(response.body().string());
-                            JSONArray cartArray = jsonResponse.getJSONArray("cart");
-                            Log.i("cartSize",String.valueOf(cartArray.length()));
-                            for (int i = 0; i < cartArray.length(); i++) {
-                                JSONObject productObject = cartArray.getJSONObject(i);
-                                String productId = productObject.getString("product");
-                                String productColor;
-                                productColor = productObject.getString("color");
-                                String productSize;
-
-                                    productSize = productObject.getString("size");
-
-
-                                final int index = i;
-                                getProductInfo(productId,productColor,productSize, new OrderScreen.ProductInfoCallback() {
-                                    @Override
-                                    public void onProductInfoReceived(Favorite product) {
-                                        String productName = product.getName();
-                                        Log.i("productName",productName);
-
-                                        int productPrice = product.getPrice();
-                                        String imageURL = product.getImage();
-                                        Log.i("img",imageURL);
-
-
-
-                                        int productQuantity = 0;
-                                        try {
-                                            productQuantity = productObject.getInt("quantity");
-                                        } catch (JSONException e) {
-                                            throw new RuntimeException(e);
-                                        }
-
-                                        Cart cartItem = new Cart(productId,productName,productPrice,productColor,productSize,imageURL);
-                                        cartItem.setColorName(product.getColorName());
-                                        cartItem.setSizeHeight(product.getSizeHeight());
-                                        cartItem.setSizeWidth(product.getSizeWidth());
-                                        cartItem.setQuantity(productQuantity);
-                                        cartList.add(cartItem);
-                                        Log.i("cartList",String.valueOf(cartList.size()));
-                                        if (index == cartArray.length() - 1) {
-                                            cartAdapter.notifyDataSetChanged();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onFailure(String errorMessage) {
-                                        Log.i("error",errorMessage);
-                                    }
-                                });
-
-
-                            }
-                        }catch (JSONException e) {
-                            e.printStackTrace();}
-                        catch (IOException e){
-                            e.printStackTrace();
-                        }
-
+                try {
+                    Response response = client.newCall(request).execute();
+                    if (response.isSuccessful()) {
+                        return response.body().string();
                     }
-                });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                return null;
             }
-        });
+
+            @Override
+            protected void onPostExecute(String responseString) {
+                if (responseString != null) {
+                    try {
+                        JSONObject jsonResponse = new JSONObject(responseString);
+                        JSONArray cartArray = jsonResponse.getJSONArray("cart");
+                        Log.i("cartSize", String.valueOf(cartArray.length()));
+                        for (int i = 0; i < cartArray.length(); i++) {
+                            JSONObject productObject = cartArray.getJSONObject(i);
+                            String productId = productObject.getString("product");
+                            String productColor;
+                            productColor = productObject.getString("color");
+                            String productSize;
+                            productSize = productObject.getString("size");
+
+                            final int index = i;
+                            getProductInfo(productId, productColor, productSize, new OrderScreen.ProductInfoCallback() {
+                                @Override
+                                public void onProductInfoReceived(Favorite product) {
+                                    String productName = product.getName();
+                                    Log.i("productName",productName);
+
+                                    int productPrice = product.getPrice();
+                                    String imageURL = product.getImage();
+                                    Log.i("img",imageURL);
+
+
+
+                                    int productQuantity = 0;
+                                    try {
+                                        productQuantity = productObject.getInt("quantity");
+                                    } catch (JSONException e) {
+                                        throw new RuntimeException(e);
+                                    }
+
+                                    Cart cartItem = new Cart(productId,productName,productPrice,productColor,productSize,imageURL);
+                                    cartItem.setColorName(product.getColorName());
+                                    cartItem.setSizeHeight(product.getSizeHeight());
+                                    cartItem.setSizeWidth(product.getSizeWidth());
+                                    cartItem.setQuantity(productQuantity);
+                                    cartList.add(cartItem);
+                                    Log.i("cartList",String.valueOf(cartList.size()));
+                                    if (index == cartArray.length() - 1) {
+                                        cartAdapter.notifyDataSetChanged();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(String errorMessage) {
+                                    Log.i("error", errorMessage);
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.execute();
     }
+
 
     private void getProductInfo(String productId,String color,String size, OrderScreen.ProductInfoCallback callback) {
         Handler handler = new Handler(getMainLooper());
