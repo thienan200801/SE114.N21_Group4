@@ -70,7 +70,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         holder.quantityTextView.setText(String.valueOf(item.getQuantity()));
         holder.deleteFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {deleteItem(item.getId());}
+            public void onClick(View view) {deleteItem(item);}
         });
 
         holder.addtoCart.setOnClickListener(new View.OnClickListener() {
@@ -211,7 +211,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
             e.printStackTrace();
         }
     }
-    private void deleteItem(String id){
+    private void deleteItem(Favorite item){
         Handler handler = new Handler(getMainLooper());
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .connectTimeout(30, TimeUnit.SECONDS)
@@ -221,7 +221,10 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         MediaType mediaType = MediaType.parse("application/json");
         JSONObject requestBody = new JSONObject();
         try {
-            requestBody.put("id", id);
+            requestBody.put("product", item.getId());
+            requestBody.put("size", item.getSize());
+            requestBody.put("color", item.getColor());
+            requestBody.put("quantity", item.getQuantity());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -256,7 +259,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
                             Toast.makeText(activity.getContext(), "Item deleted", Toast.LENGTH_SHORT).show();
                             for (int i = 0; i < favoriteArrayList.size(); i++) {
                                 Favorite favoriteItem = favoriteArrayList.get(i);
-                                if (favoriteItem.getId().equals(id)) {
+                                if (favoriteItem.getId().equals(item.getId())) {
                                     favoriteArrayList.remove(i);
                                     notifyItemRemoved(i);
                                     break;

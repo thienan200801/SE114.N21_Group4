@@ -80,13 +80,23 @@ public class ProductDetailScreen extends BottomSheetDialogFragment implements Co
             public void onClick(View view) {
                 String selectedColorText = selectedColorTextView.getText().toString();
                 String selectedSizeText = selectedSizeTextView.getText().toString();
+                String[] sizeValues = selectedSizeText.split(" x ");
+                String sizeWidth = "";
+                String sizeHeight = "";
+                if (sizeValues.length == 2) {
+                    sizeWidth = sizeValues[0].trim();
+                    sizeHeight = sizeValues[1].trim();}
+                String selectedSizeId = getSizeIdFromDimensions(sizeWidth, sizeHeight);
+                String selectedColorId = getColorIdFromName(selectedColorText);
                 Bundle arguments = getArguments();
-                String productId = arguments != null ? arguments.getString("productId") : null;
+                if (arguments != null) {
+                    String productId = arguments.getString("productId");
 
-                if (productId != null) {
-                    String selectedColorId = getColorIdFromName(selectedColorText);
-                    updateCartDetails(productId, selectedColorId, selectedSizeText);
+                    if (productId != null) {
+                        updateCartDetails(productId, selectedColorId, selectedSizeId);
+                    }
                 }
+
 
 
                 dismiss();
@@ -114,11 +124,24 @@ public class ProductDetailScreen extends BottomSheetDialogFragment implements Co
     private String getColorIdFromName(String colorName) {
         for (ColorOption colorOption : colorOptionsList) {
             if (colorOption.getName().equals(colorName)) {
+
                 return colorOption.getId();
             }
         }
         return null;
     }
+    private String getSizeIdFromDimensions(String sizeWidth, String sizeHeight) {
+        for (SizeOption sizeOption : sizeOptions) {
+            if (sizeOption.getWidth().equals(sizeWidth) && sizeOption.getHeight().equals(sizeHeight)) {
+                Log.i("sizeId", sizeOption.getId());
+
+                return sizeOption.getId();
+
+            }
+        }
+        return null; // If no matching size is found
+    }
+
     @Override
     public void onColorClicked(ColorOption colorOption) {
         selectedColorTextView.setText(colorOption.getName());
@@ -179,7 +202,7 @@ public class ProductDetailScreen extends BottomSheetDialogFragment implements Co
                                     String productColorName = productObject.getString("name");
                                     String productColor = productObject.getString("hex");
 
-                                    ColorOption colorOption = new ColorOption(productColorName, productColor);
+                                    ColorOption colorOption = new ColorOption(productColorId,productColorName, productColor);
                                     colorOptionsList.add(colorOption);
 
                                     if (productColorId.equals(selectedColor)) {
@@ -196,7 +219,7 @@ public class ProductDetailScreen extends BottomSheetDialogFragment implements Co
                                     String productWidth = productObject.getString("widthInCentimeter");
                                     String productHeight = productObject.getString("heightInCentimeter");
 
-                                    SizeOption sizeOption = new SizeOption(productWidth, productHeight);
+                                    SizeOption sizeOption = new SizeOption(productSizeId,productWidth, productHeight);
 
                                     sizeOptions.add(sizeOption);
 
@@ -229,6 +252,7 @@ public class ProductDetailScreen extends BottomSheetDialogFragment implements Co
             productCheckoutInfoObject.put("quantity", 2);
             productCheckoutInfosArray.put(productCheckoutInfoObject);
             requestBody.put("productCheckoutInfos", productCheckoutInfosArray);
+            Log.i("execute","ok");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -258,9 +282,9 @@ public class ProductDetailScreen extends BottomSheetDialogFragment implements Co
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (body.equals("")) {
+                        if (response.isSuccessful()) {
 
-                            Toast.makeText(getContext(), "Update product", Toast.LENGTH_SHORT).show();
+                            Log.i("update", "Update product");
 
                         }
                         else {
