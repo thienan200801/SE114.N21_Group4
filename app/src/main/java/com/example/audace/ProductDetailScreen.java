@@ -242,8 +242,105 @@ public class ProductDetailScreen extends BottomSheetDialogFragment implements Co
         });
     }
     private void updateCartDetails(String productId, String selectedColor, String selectedSize) {
+        Handler handler = new Handler(getMainLooper());
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build();
+
+        // Retrieve the existing productCheckoutInfos array
+        Request getRequest = new Request.Builder()
+                .url("https://audace-ecomerce.herokuapp.com/users/me/profile")
+                .method("GET", null)
+                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
+                .build();
+
+        client.newCall(getRequest).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.i("message", call.toString());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    try {
+                        String responseBody = response.body().string();
+                        JSONObject jsonResponse = new JSONObject(responseBody);
+                        JSONArray productCheckoutInfosArray = jsonResponse.getJSONArray("cart");
+
+                        // Find the index of the item to be updated
+                        int itemIndex = -1;
+                        for (int i = 0; i < productCheckoutInfosArray.length(); i++) {
+                            JSONObject itemObject = productCheckoutInfosArray.getJSONObject(i);
+                            String existingProductId = itemObject.getString("product");
+                            if (existingProductId.equals(productId)) {
+                                itemIndex = i;
+                                break;
+                            }
+                        }
+
+                        // Update the specific item or add a new item if not found
+                        JSONObject productCheckoutInfoObject = new JSONObject();
+                        productCheckoutInfoObject.put("product", productId);
+                        productCheckoutInfoObject.put("color", selectedColor);
+                        productCheckoutInfoObject.put("size", selectedSize);
+                        productCheckoutInfoObject.put("quantity", 2);
+
+                        if (itemIndex != -1) {
+                            // Replace the existing item
+                            productCheckoutInfosArray.put(itemIndex, productCheckoutInfoObject);
+                        } else {
+                            // Add the new item to the array
+                            productCheckoutInfosArray.put(productCheckoutInfoObject);
+                        }
+
+                        // Construct the updated request body
+                        JSONObject requestBody = new JSONObject();
+                        requestBody.put("productCheckoutInfos", productCheckoutInfosArray);
+
+                        // Send the updated request
+                        MediaType mediaType = MediaType.parse("application/json");
+                        RequestBody body = RequestBody.create(mediaType, requestBody.toString());
+                        Request updateRequest = new Request.Builder()
+                                .url("https://audace-ecomerce.herokuapp.com/users/me/cart")
+                                .method("PATCH", body)
+                                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
+                                .addHeader("Content-Type", "application/json")
+                                .build();
+
+                        client.newCall(updateRequest).enqueue(new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                Log.i("message", call.toString());
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (response.isSuccessful()) {
+                                            Log.i("update", "Update product");
+                                        } else {
+                                            Log.i("error", body.toString());
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    private void updateCartDetails1(String productId, String selectedColor, String selectedSize) {
         JSONObject requestBody = new JSONObject();
         try {
+
             JSONArray productCheckoutInfosArray = new JSONArray();
             JSONObject productCheckoutInfoObject = new JSONObject();
             productCheckoutInfoObject.put("product", productId);
