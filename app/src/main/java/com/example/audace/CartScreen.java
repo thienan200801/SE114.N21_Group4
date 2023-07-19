@@ -1,11 +1,15 @@
 package com.example.audace;
 
 import android.content.Intent;
+import android.media.Image;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,6 +35,7 @@ public class CartScreen extends AppCompatActivity {
 
     private ArrayList<Cart> cartList = new ArrayList<>();
     private CartAdapter cartAdapter;
+    ImageButton btnPurchase;
     private RecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +49,22 @@ public class CartScreen extends AppCompatActivity {
         recyclerView.setAdapter(cartAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         setupData();
-        findViewById(R.id.btnPurchase).setOnClickListener(new View.OnClickListener() {
+
+        btnPurchase = findViewById(R.id.btnPurchase);
+        btnPurchase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getBaseContext(), Checkout.class);
-                startActivity(i);
+                if (cartList.isEmpty()){
+                    Toast.makeText(CartScreen.this, "Giỏ hàng chưa có sản phẩm", Toast.LENGTH_SHORT).show();
+
+                }
+                else {
+
+                }
             }
         });
+
+
 
     }
 
@@ -124,9 +138,9 @@ public class CartScreen extends AppCompatActivity {
                                     cartItem.setQuantity(productQuantity);
                                     cartList.add(cartItem);
                                     Log.i("cartList",String.valueOf(cartList.size()));
-                                    if (index == cartArray.length() - 1) {
-                                        cartAdapter.notifyDataSetChanged();
-                                    }
+
+                                    cartAdapter.notifyDataSetChanged();
+
                                 }
 
                                 @Override
@@ -155,7 +169,7 @@ public class CartScreen extends AppCompatActivity {
         Request request = new Request.Builder()
                 .url("https://audace-ecomerce.herokuapp.com/products/product/" + productId)
                 .method("GET", null)
-                .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
+                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override

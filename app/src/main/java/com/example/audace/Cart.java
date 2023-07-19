@@ -72,7 +72,7 @@ public class Cart {
         this.name = name;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 

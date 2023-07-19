@@ -177,23 +177,23 @@
                             android:textSize="9sp" />
                     </RelativeLayout>
 
-                    <ImageButton
-                        android:id="@+id/btnNumPlus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:background="@android:color/transparent"
-                        android:contentDescription="Plus number"
-                        android:onClick="onCLick"
-                        android:textAlignment="center"
-                        app:srcCompat="@drawable/plus"
-                        tools:ignore="TouchTargetSizeCheck" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
 
-                    <TextView
-                        android:id="@+id/quantityTextView"
-                        android:layout_width="20dp"
-                        android:layout_height="match_parent"
-                        android:textAlignment="center" />
+                            android:layout_centerVertical="true"
+                            android:background="@android:color/transparent"
+                            android:text = "Số lượng"
+                            android:textSize = "11sp"
+                            android:textAlignment="center"
+                            app:srcCompat="@drawable/plus"
+                            tools:ignore="TouchTargetSizeCheck" />
+
+                        <TextView
+                            android:id="@+id/quantityTextView"
+                            android:textAlignment="center"
+                            android:layout_width="20dp"
+                            android:layout_height="match_parent" />
 
                     <ImageButton
                         android:id="@+id/btnNumMinus"
@@ -206,6 +206,7 @@
                         android:textAlignment="center"
                         app:srcCompat="@drawable/minus"
                         tools:ignore="TouchTargetSizeCheck" />
+
 
                 </LinearLayout>
 
