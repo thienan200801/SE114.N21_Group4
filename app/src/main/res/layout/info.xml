@@ -97,13 +97,7 @@
                 android:text="Giới tính:"
                 android:textSize="16sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
-                android:text="Ngày sinh:"
-                android:textSize="16sp" />
+
 
 
         </LinearLayout>
@@ -115,6 +109,7 @@
             android:orientation="vertical">
 
             <EditText
+                android:id="@+id/profile_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
@@ -124,8 +119,9 @@
                 tools:ignore="TouchTargetSizeCheck" />
 
             <TextView
+                android:id="@+id/profile_id"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="10dp"
@@ -135,9 +131,10 @@
                 android:textSize="16sp"
                 tools:ignore="TouchTargetSizeCheck" />
 
-            <EditText
+            <TextView
+                android:id="@+id/profile_pass"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_marginEnd="20dp"
                 android:layout_weight="1"
                 android:gravity="end"
@@ -148,6 +145,7 @@
 
 
             <EditText
+                android:id="@+id/profile_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
@@ -159,6 +157,7 @@
 
 
             <EditText
+                android:id="@+id/profile_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
@@ -167,9 +166,8 @@
                 android:hint="Email"
                 android:textSize="16sp"
                 tools:ignore="TouchTargetSizeCheck" />
-
-
             <Spinner
+                android:id="@+id/profile_gender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -179,25 +177,11 @@
                 android:contentDescription="Giới tính"
                 android:textSize="16sp"
                 tools:ignore="TouchTargetSizeCheck" />
-
-            <EditText
-                android:id="@+id/editText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginEnd="20dp"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:hint="dd/mm/yy"
-                android:textSize="16sp"
-                tools:ignore="TouchTargetSizeCheck" />
-
         </LinearLayout>
-
-
     </LinearLayout>
 
     <Button
+        android:id="@+id/btnUpdate"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
