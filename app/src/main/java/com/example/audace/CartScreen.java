@@ -137,9 +137,9 @@ public class CartScreen extends AppCompatActivity {
                                     cartItem.setQuantity(productQuantity);
                                     cartList.add(cartItem);
                                     Log.i("cartList",String.valueOf(cartList.size()));
-                                    if (index == cartArray.length() - 1) {
-                                        cartAdapter.notifyDataSetChanged();
-                                    }
+
+                                    cartAdapter.notifyDataSetChanged();
+
                                 }
 
                                 @Override

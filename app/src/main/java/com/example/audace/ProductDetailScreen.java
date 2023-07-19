@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -274,7 +273,6 @@ public class ProductDetailScreen extends BottomSheetDialogFragment implements Co
                         JSONObject jsonResponse = new JSONObject(responseBody);
                         JSONArray productCheckoutInfosArray = jsonResponse.getJSONArray("cart");
 
-                        // Find the index of the item to be updated
                         int itemIndex = -1;
                         for (int i = 0; i < productCheckoutInfosArray.length(); i++) {
                             JSONObject itemObject = productCheckoutInfosArray.getJSONObject(i);
@@ -285,26 +283,21 @@ public class ProductDetailScreen extends BottomSheetDialogFragment implements Co
                             }
                         }
 
-                        // Update the specific item or add a new item if not found
                         JSONObject productCheckoutInfoObject = new JSONObject();
                         productCheckoutInfoObject.put("product", productId);
                         productCheckoutInfoObject.put("color", selectedColor);
                         productCheckoutInfoObject.put("size", selectedSize);
-                        productCheckoutInfoObject.put("quantity", 2);
+                        productCheckoutInfoObject.put("quantity", 1);
 
                         if (itemIndex != -1) {
-                            // Replace the existing item
                             productCheckoutInfosArray.put(itemIndex, productCheckoutInfoObject);
                         } else {
-                            // Add the new item to the array
                             productCheckoutInfosArray.put(productCheckoutInfoObject);
                         }
 
-                        // Construct the updated request body
                         JSONObject requestBody = new JSONObject();
                         requestBody.put("productCheckoutInfos", productCheckoutInfosArray);
 
-                        // Send the updated request
                         MediaType mediaType = MediaType.parse("application/json");
                         RequestBody body = RequestBody.create(mediaType, requestBody.toString());
                         Request updateRequest = new Request.Builder()
@@ -342,60 +335,5 @@ public class ProductDetailScreen extends BottomSheetDialogFragment implements Co
         });
     }
 
-    private void updateCartDetails1(String productId, String selectedColor, String selectedSize) {
-        JSONObject requestBody = new JSONObject();
-        try {
-
-            JSONArray productCheckoutInfosArray = new JSONArray();
-            JSONObject productCheckoutInfoObject = new JSONObject();
-            productCheckoutInfoObject.put("product", productId);
-            productCheckoutInfoObject.put("color", selectedColor);
-            productCheckoutInfoObject.put("size", selectedSize);
-            productCheckoutInfoObject.put("quantity", 2);
-            productCheckoutInfosArray.put(productCheckoutInfoObject);
-            requestBody.put("productCheckoutInfos", productCheckoutInfosArray);
-            Log.i("execute","ok");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        Handler handler = new Handler(getMainLooper());
-        OkHttpClient client = new OkHttpClient().newBuilder()
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .build();
-        MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType, requestBody.toString());
-        Request request = new Request.Builder()
-                .url("https://audace-ecomerce.herokuapp.com/users/me/cart")
-                .method("PATCH", body)
-                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
-                .addHeader("Content-Type", "application/json")
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.i("message", call.toString());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (response.isSuccessful()) {
-
-                            Log.i("update", "Update product");
-
-                        }
-                        else {
-                            Log.i("error",body.toString());
-                        }
-                    }
-                });
-            }
-        });
-    }
 
 }
