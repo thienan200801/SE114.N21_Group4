@@ -163,14 +163,14 @@
                                 android:textSize="9sp" />
                         </RelativeLayout>
 
-                        <ImageButton
-                            android:id="@+id/btnNumPlus"
+                        <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
+                            android:layout_height="20dp"
+
+                            android:layout_centerVertical="true"
                             android:background="@android:color/transparent"
-                            android:contentDescription="Plus number"
-                            android:onClick="onCLick"
+                            android:text = "Số lượng"
+                            android:textSize = "11sp"
                             android:textAlignment="center"
                             app:srcCompat="@drawable/plus"
                             tools:ignore="TouchTargetSizeCheck" />
@@ -181,17 +181,7 @@
                             android:layout_width="20dp"
                             android:layout_height="match_parent" />
 
-                        <ImageButton
-                            android:id="@+id/btnNumMinus"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:background="@android:color/transparent"
-                            android:contentDescription="Plus number"
-                            android:onClick="onClick"
-                            android:textAlignment="center"
-                            app:srcCompat="@drawable/minus"
-                            tools:ignore="TouchTargetSizeCheck" />
+
 
                     </LinearLayout>
 

@@ -121,7 +121,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:text="Ngày sinh:" />
+                        android:text="Giới tính: " />
 
                 </LinearLayout>
 
@@ -146,11 +146,11 @@
                     <TextView
                         android:id="@+id/profile_email"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="20dp"
                         android:layout_margin="5dp" />
 
                     <TextView
-                        android:id="@+id/profile_dob"
+                        android:id="@+id/profile_gender"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp" />
