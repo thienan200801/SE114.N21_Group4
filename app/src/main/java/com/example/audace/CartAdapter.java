@@ -63,9 +63,11 @@ public void onBindViewHolder(CartAdapter.ViewHolder holder, int position){
         Cart item = cartList.get(position);
         holder.nameTextView.setText(item.getName());
         holder.colorTextView.setText(item.getColorName());
-        holder.sizeTextView.setText(item.getSizeWidth() + " x "+item.getSizeHeight());
+        holder.sizeTextView.setText(item.getSizeWidth() + "cm x "+item.getSizeHeight() + "cm");
         holder.quantityTextView.setText(String.valueOf(item.getQuantity()));
-        holder.priceTextView.setText(String.valueOf(item.getPrice()));
+        holder.priceTextView.setText("$" + item.getPrice());
+        if(cartList.size() > 0)
+            activity.findViewById(R.id.purchaseLayout).setVisibility(View.VISIBLE);
         Log.i("execute","ok");
 
 

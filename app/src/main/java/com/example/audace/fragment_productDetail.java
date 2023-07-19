@@ -207,7 +207,7 @@ public class fragment_productDetail extends Fragment {
                                     OkHttpClient client = new OkHttpClient().newBuilder()
                                             .build();
                                     MediaType mediaType = MediaType.parse("application/json");
-                                    String string = String.format("{\r\n    \"id\": \"%s\"\r\n}", DataStorage.getInstance().getProductId());
+                                    String string = String.format("{\r\n    \"product\": \"%s\"\r\n}", DataStorage.getInstance().getProductId());
 
                                     RequestBody body = RequestBody.create(mediaType, string);
                                     Request request = new Request.Builder()

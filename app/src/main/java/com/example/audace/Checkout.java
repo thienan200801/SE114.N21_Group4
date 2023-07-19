@@ -38,12 +38,9 @@ import com.example.audace.model.PurchaseProduct;
 import com.example.audace.model.SizeObject;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -85,22 +82,25 @@ public class Checkout extends AppCompatActivity {
     private ArrayList<NamePrice> namepriceList = new ArrayList<NamePrice>();
     ArrayList<CheckoutItemDetails> checkoutItemDetailsArrayList = new ArrayList<CheckoutItemDetails>();
     CheckoutItemDetailAdapter checkoutItemDetailAdapter;
+    private GoogleMap mMap;
+    private final static int PLACE_PICKER_REQUEST = 999;
+    private final static int LOCATION_REQUEST_CODE = 23;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
-        addressEditText = findViewById(R.id.addressEditText);
         rvCheckoutItemDetails = (RecyclerView) findViewById(R.id.rvCheckoutList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        addressEditText = findViewById(R.id.addressEditText);
         rvCheckoutItemDetails.setLayoutManager(layoutManager);
         rvCheckoutItemDetails.setHasFixedSize(false);
         checkoutItemDetailAdapter = new CheckoutItemDetailAdapter(checkoutItemDetailsArrayList);
         rvCheckoutItemDetails.setAdapter(checkoutItemDetailAdapter);
-        GetCart();
         listOfCheckoutItemNamePrice = findViewById(R.id.rvSumListItem);
         namepriceAdapter = new NamePriceOfItemAdapter(this, namepriceList);
         listOfCheckoutItemNamePrice.setAdapter(namepriceAdapter);
+        GetCart();
         //Call API to get Item list
 
         ///////////////////////////////////////
@@ -112,21 +112,15 @@ public class Checkout extends AppCompatActivity {
         changeAddressBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
-
-                try {
-                    startActivity(intentBuilder.build(Checkout.this));
-                } catch (GooglePlayServicesRepairableException |
-                         GooglePlayServicesNotAvailableException e) {
-                    throw new RuntimeException(e);
-                }
+                Intent i = new Intent(getBaseContext(), MapActivity.class);
+                startActivityForResult(i, 1);
             }
         });
         findViewById(R.id.thanhToanButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (address == null)
-                    Toast.makeText(Checkout.this, "Hãy nhập address và nhấn thay đổi", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Checkout.this, "Hãy chọn địa chỉ gửi hàng", Toast.LENGTH_SHORT).show();
                 else
                     thanhToanHandler();
             }
@@ -136,14 +130,15 @@ public class Checkout extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1)
-            if (resultCode == RESULT_OK) {
-                Place place = PlacePicker.getPlace(this, data);
-                StringBuilder stringBuilder = new StringBuilder();
-                addressEditText.setText(place.getAddress());
-                postAddress();
-            }
+        if( requestCode == 1 && resultCode == 1){
+            getAddress();
+        }
+    }
 
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+        getAddress();
     }
 
     private void initNamePriceData() {
@@ -180,8 +175,8 @@ public class Checkout extends AppCompatActivity {
                 try {
                     Log.i("message", "Call API get Item Cart successful");
                     JSONArray cartResponse = new JSONObject(response.body().string()).getJSONArray("cart");
-                    cart = cartResponse.toString();
                     Log.i("response", cartResponse.toString());
+                    checkoutItemDetailsArrayList.clear();
                     for (int i = 0; i < cartResponse.length(); i++) {
                         String colorId = cartResponse.getJSONObject(i).getString("color");
                         String sizeId = cartResponse.getJSONObject(i).getString("size");
@@ -231,13 +226,13 @@ public class Checkout extends AppCompatActivity {
                                             jsonResponse.getString("currentPrice"),
                                             cartResponse.getJSONObject(finalI).getString("quantity"),
                                             jsonResponse.getString("imageURL")));
-                                    initNamePriceData();
                                     //Total
                                     int sum = 0;
                                     for (int i = 0; i < checkoutItemDetailsArrayList.size(); i++)
                                         sum += Float.parseFloat(checkoutItemDetailsArrayList.get(i).getPrice()) * Integer.parseInt(checkoutItemDetailsArrayList.get(i).getQuantity());
                                     int finalSum = sum;
                                     handler.post(() -> {
+                                        initNamePriceData();
                                         checkoutItemDetailAdapter.notifyDataSetChanged();
                                         total = findViewById(R.id.textView12);
                                         total.setText("Tổng tiền: $" + finalSum);
@@ -336,67 +331,10 @@ public class Checkout extends AppCompatActivity {
         }
     }
 
-    private void postAddress() {
-        Log.i("message", "start crawl user address");
-        OkHttpClient changeAddressClient = new OkHttpClient().newBuilder()
-                .build();
-        MediaType changeAddressMediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(changeAddressMediaType, "{\r\n    \"address\": \"" + addressEditText.getText().toString() + "\"\r\n}");
-        Request changeAddressRequest = new Request.Builder()
-                .url("https://audace-ecomerce.herokuapp.com/users/me/address")
-                .method("PATCH", body)
-                .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
-                .addHeader("Content-Type", "application/json")
-                .build();
-        changeAddressClient.newCall(changeAddressRequest).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.i("failure", e.toString());
-            }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                Log.i("message", "Address Changed");
-            }
-        });
-    }
     @Override
     protected void onResume() {
         super.onResume();
-        if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            //TODO: Get current location
-        } else {
-            requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_CODE_GPS_PERMISSION);
-        }
     }
-    private void getCurrentLocation() {
-        FusedLocationProviderClient mFusedLocationClient =
-                LocationServices.getFusedLocationProviderClient(this);
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        mFusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        if (location == null) {
-                            return;
-                        }
-                        LatLng currentLocation =
-                                new LatLng(location.getLatitude(), location.getLongitude());
-                        GoogleMap mMap = null;
-                        mMap.addMarker(new MarkerOptions().position(currentLocation).title("Marker in current location"));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
-                    }
-                });
-    }
+
 }

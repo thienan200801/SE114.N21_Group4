@@ -142,6 +142,7 @@ public class fragment_subcatagory extends Fragment {
         catagoryRecycleView.setLayoutManager(catagoryManager);
         catagoryRecycleView.setAdapter(catagoryListAdapter);
         catagoryListAdapter.notifyDataSetChanged();
+        CrawlProduct(0, 99999999, DataStorage.getInstance().getCatagoryId());
         catagoryListAdapter.setRunnable(new Runnable() {
             @Override
             public void run() {
@@ -158,6 +159,7 @@ public class fragment_subcatagory extends Fragment {
 
     public void CrawlProduct(int min, int max, String catagoryId){
         Log.i("message", "start Crawl product");
+        getView().findViewById(R.id.nothingLayout).setVisibility(View.GONE);
         @SuppressLint("DefaultLocale") String string = String.format("https://audace-ecomerce.herokuapp.com/products/search-filter?min=%d&max=%d&categoryId=%s&page=0",min,max,catagoryId);
         Handler handler = new Handler(Looper.getMainLooper());
         OkHttpClient client = new OkHttpClient().newBuilder()
@@ -188,12 +190,17 @@ public class fragment_subcatagory extends Fragment {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            RecyclerView view = (RecyclerView) fragment.getView().findViewById(R.id.itemGridView);
-                            view.getRecycledViewPool().clear();
-                            Log.i("message",products.toString());
-                            productListAdapter = new ProductListAdapter(products);
-                            view.setAdapter(productListAdapter);
-                            productListAdapter.notifyDataSetChanged();
+                            if (products.size() > 0)
+                            {
+                                RecyclerView view = (RecyclerView) fragment.getView().findViewById(R.id.itemGridView);
+                                view.getRecycledViewPool().clear();
+                                Log.i("message",products.toString());
+                                productListAdapter = new ProductListAdapter(products);
+                                view.setAdapter(productListAdapter);
+                                productListAdapter.notifyDataSetChanged();
+                            }
+                            else
+                                getView().findViewById(R.id.nothingLayout).setVisibility(View.VISIBLE);
                         }
                     });
                 } catch (JSONException e) {

@@ -104,7 +104,7 @@ public class ProfileScreen extends Fragment {
             // Get the values from the EditText fields
                     Request request = new Request.Builder()
                             .url("https://audace-ecomerce.herokuapp.com/users/me")
-                            .method("POST", null)
+                            .method("GET", null)
                             .addHeader("Authorization", "Bearer "+ DataStorage.getInstance().getAccessToken())
                             .build();
 
@@ -183,7 +183,7 @@ public class ProfileScreen extends Fragment {
                                 @Override
                                 public void run() {
                                     name.setText(username);
-
+                                    emailText.setText(email);
                                     // Set other TextViews or update UI elements as needed
                                 }
                             });

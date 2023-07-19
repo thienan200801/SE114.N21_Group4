@@ -180,8 +180,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                     OkHttpClient client = new OkHttpClient().newBuilder()
                             .build();
                     MediaType mediaType = MediaType.parse("application/json");
-                    String string = String.format("{\r\n    \"id\": \"%s\"\r\n}", products.get(holder.getAdapterPosition()).getProductID());
-
+                    String string = String.format("{\r\n    \"product\": \"%s\"\r\n}", products.get(holder.getAdapterPosition()).getProductID());
+                    Log.i("product", string);
                     RequestBody body = RequestBody.create(mediaType, string);
                     Request request = new Request.Builder()
                             .url("https://audace-ecomerce.herokuapp.com/users/me/favourites")

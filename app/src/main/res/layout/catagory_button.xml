@@ -17,7 +17,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
         android:fontFamily="@font/open_sans"
-        android:text="Bag"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
         android:textColor="@color/black"
         android:textSize="48sp" />
 </androidx.cardview.widget.CardView>

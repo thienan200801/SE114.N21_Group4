@@ -1,5 +1,6 @@
 package com.example.audace.adapter;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -8,9 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
+import com.example.audace.DataStorage;
 import com.example.audace.R;
 import com.example.audace.model.Banner;
 import com.squareup.picasso.Picasso;
@@ -50,7 +55,7 @@ public class BannerListAdapter extends RecyclerView.Adapter<BannerListAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int position){
+    public void onBindViewHolder(ViewHolder viewHolder, @SuppressLint("RecyclerView") final int position){
         Log.i("message", "start crawl banner image");
         CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(viewHolder.getImageView().getContext());
         circularProgressDrawable.setStrokeWidth(5f);
@@ -61,6 +66,14 @@ public class BannerListAdapter extends RecyclerView.Adapter<BannerListAdapter.Vi
                 .error(R.drawable.baseline_wifi_tethering_error_24)
                 .placeholder(circularProgressDrawable)
                 .into(viewHolder.getImageView());
+        viewHolder.getImageView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DataStorage.getInstance().setSearchText("*BST:" + banners.get(position).getBannerID());
+                NavController navController = Navigation.findNavController(view);
+                navController.navigate(R.id.action_global_searchFragment);
+            }
+        });
     }
 
     @Override

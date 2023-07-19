@@ -108,9 +108,10 @@
     <LinearLayout
         android:id="@+id/voucherLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/orderPart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/addressLayout">

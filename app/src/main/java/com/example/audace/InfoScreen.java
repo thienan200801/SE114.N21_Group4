@@ -38,9 +38,9 @@ public class InfoScreen extends AppCompatActivity {
             RequestBody body = RequestBody.create(mediaType, "");
             // Get the values from the EditText fields
 
-
             Request request = new Request.Builder()
                     .url("https://audace-ecomerce.herokuapp.com/users/me")
+                    .method("GET", null)
                     .addHeader("Authorization", "Bearer "+ DataStorage.getInstance().getAccessToken())
                     .build();
 

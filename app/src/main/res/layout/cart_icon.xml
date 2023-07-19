@@ -27,7 +27,8 @@
         android:background="@drawable/badge_background"
         android:gravity="center"
         android:textColor="#FFFFFF"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/cart_count_text"
@@ -43,6 +44,7 @@
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@android:color/white"
-        android:textSize="8sp" />
+        android:textSize="8sp"
+        android:visibility="gone" />
 
 </RelativeLayout>

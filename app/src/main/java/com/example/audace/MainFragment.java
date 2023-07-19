@@ -237,7 +237,7 @@ public class MainFragment extends Fragment {
         transaction.replace(R.id.bottomNavigationContainer, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
-        if(DataStorage.getInstance().getCartCount() != null && DataStorage.getInstance().getCartCount() != 0)
+        if(DataStorage.getInstance().getCartCount() != null && DataStorage.getInstance().getCartCount() > 0)
         {
             fragment.getView().findViewById(R.id.cart_count).setVisibility(View.VISIBLE);
             fragment.getView().findViewById(R.id.cart_count_text).setVisibility(View.VISIBLE);
