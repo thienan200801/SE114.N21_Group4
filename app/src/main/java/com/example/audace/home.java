@@ -129,7 +129,6 @@ public class home extends Fragment {
         DividerItemDecoration catagoryDividerItemDecoration = new DividerItemDecoration(catagoryRecycleView.getContext(), catagoryManager.getOrientation());
         catagoryDividerItemDecoration.setDrawable(ContextCompat.getDrawable(catagoryRecycleView.getContext(), R.drawable.recycler1_view_seperator));
         catagoryRecycleView.addItemDecoration(catagoryDividerItemDecoration);
-
         banners = new ArrayList<>();
         CrawlBanner();
         bannerListAdapter = new BannerListAdapter(banners);
@@ -161,21 +160,13 @@ public class home extends Fragment {
         saleOffRecycleView.setLayoutManager(saleOffLinearLayout);
         saleOffRecycleView.addItemDecoration(productDividerItemDecoration);
 
-        View bstButton = view.findViewById(R.id.bst_more_button);
-        bstButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                NavController navController = NavHostFragment.findNavController(fragment);
-                navController.navigate(R.id.action_global_fragment_subcatagory);
-            }
-        });
-
         View banChayButton = view.findViewById(R.id.banchaymore_button);
         banChayButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+                DataStorage.getInstance().setSearchText("*best-sale*");
                 NavController navController = NavHostFragment.findNavController(fragment);
-                navController.navigate(R.id.action_global_fragment_subcatagory);
+                navController.navigate(R.id.action_global_searchFragment);
             }
         });
 
@@ -183,10 +174,12 @@ public class home extends Fragment {
         saleOffButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
+                DataStorage.getInstance().setSearchText("*sale-off*");
                 NavController navController = NavHostFragment.findNavController(fragment);
-                navController.navigate(R.id.action_global_fragment_subcatagory);
+                navController.navigate(R.id.action_global_searchFragment);
             }
         });
+
         return view;
     }
     public void CrawlBanner(){

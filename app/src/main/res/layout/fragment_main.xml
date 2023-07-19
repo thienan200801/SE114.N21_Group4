@@ -10,7 +10,7 @@
     <FrameLayout
         android:id="@+id/frame_25"
         android:layout_width="match_parent"
-        android:layout_height="154dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,15 +57,12 @@
                     android:src="@drawable/baseline_dehaze_24"
                     tools:ignore="TouchTargetSizeCheck" />
 
-                <ImageButton
-                    android:id="@+id/cartButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:backgroundTint="@android:color/transparent"
-                    android:contentDescription=" "
-                    app:srcCompat="@drawable/local_mall"
-                    tools:ignore="TouchTargetSizeCheck" />
+                <include
+                    layout="@layout/cart_icon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_gravity="bottom|end" />
             </FrameLayout>
 
             <FrameLayout

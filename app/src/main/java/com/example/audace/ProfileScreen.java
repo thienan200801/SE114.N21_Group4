@@ -101,6 +101,7 @@ public class ProfileScreen extends Fragment {
                     .build();
             MediaType mediaType = MediaType.parse("application/json");
             RequestBody body = RequestBody.create(mediaType, "");
+            // Get the values from the EditText fields
                     Request request = new Request.Builder()
                             .url("https://audace-ecomerce.herokuapp.com/users/me/profile")
                             .method("GET", null)

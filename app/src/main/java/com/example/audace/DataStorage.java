@@ -38,6 +38,11 @@ public class DataStorage {
 
     private String SearchText;
 
+    private String avatarURl;
+
+    private Integer cartCount;
+
+    private String userName;
 
     public ArrayList<Catagory> getCatagoryArrayList() {
         Log.i("catagories", catagoryArrayList.toString());
@@ -86,6 +91,9 @@ public class DataStorage {
         catagoryArrayList = new ArrayList<Catagory>();
         AccessToken = null;
         catagoryId = null;
+        avatarURl = null;
+        cartCount = null;
+        userName = null;
     }
 
     private static DataStorage storage;
@@ -199,5 +207,29 @@ public class DataStorage {
                     setAccessToken(token);
             }
         });
+    }
+
+    public String getAvatarURl() {
+        return avatarURl;
+    }
+
+    public void setAvatarURl(String avatarURl) {
+        this.avatarURl = avatarURl;
+    }
+
+    public Integer getCartCount() {
+        return cartCount;
+    }
+
+    public void setCartCount(Integer cartCount) {
+        this.cartCount = cartCount;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

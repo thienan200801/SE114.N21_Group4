@@ -2,154 +2,182 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
     <RelativeLayout
-        android:id="@+id/layoutfav"
-        android:paddingTop="10dp"
-        android:layout_marginStart="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rectangle41">
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/rectangle41"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerVertical="true"
+            android:orientation="horizontal"
+            android:padding="5dp">
 
+            <ImageView
+                android:id="@+id/cartImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                app:srcCompat="@drawable/user" />
 
-        <RelativeLayout
-            android:layout_alignLeft="@+id/imageView6"
-            android:layout_alignRight="@+id/imageView6"
-            android:layout_alignBottom="@+id/imageView6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true">
-
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:orientation="horizontal">
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/cartImage"
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/cart_name_txtView"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    app:srcCompat="@drawable/user" />
+                    android:layout_gravity="bottom"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <LinearLayout
+                    android:id="@+id/linearLayout3"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:paddingEnd="10dp">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cart_name_txtView">
 
-                    <TextView
-                        android:id="@+id/cart_name_txtView"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_margin="5dp"
-                        android:textColor="#000000"
-                        android:textSize="12sp" />
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <RelativeLayout
-                            android:layout_marginStart="5dp"
-                            android:layout_marginEnd="5dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-
-                            <ImageButton
-                                android:id="@+id/btnSize"
-                                android:layout_width="90dp"
-                                android:layout_height="30dp"
-                                android:onClick="onClick"
-                                android:background="@android:color/transparent"
-                                app:srcCompat="@drawable/edit"
-                                android:contentDescription="Choose size" />
-
-                            <TextView
-                                android:id="@+id/sizeTextView"
-                                android:layout_width="90dp"
-                                android:layout_height="30dp"
-                                android:layout_centerInParent="true"
-                                android:paddingTop="5dp"
-                                android:textAlignment="center"/>
-                        </RelativeLayout>
-                        <RelativeLayout
-                            android:layout_marginStart="5dp"
-                            android:layout_marginEnd="5dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-                            <ImageButton
-                                android:id="@+id/btnColor"
-                                android:layout_width="90dp"
-                                android:layout_height="30dp"
-                                android:layout_marginStart="5dp"
-                                android:layout_marginEnd="5dp"
-                                android:onClick="onClick"
-                                android:background="@android:color/transparent"
-                                app:srcCompat="@drawable/edit"
-                                android:contentDescription="Choose color"/>
-
-                            <TextView
-                                android:id="@+id/colorTextView"
-                                android:layout_width="90dp"
-                                android:layout_height="30dp"
-                                android:layout_centerInParent="true"
-                                android:paddingTop="5dp"
-                                android:textAlignment="center"
-                                android:translationZ="2dp" />
-
-                        </RelativeLayout>
-
-                    </LinearLayout>
-
-
-
-                    <TextView
-                        android:id="@+id/price_txtView"
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:text="$price"
-                        android:textColor="#000000"
-                        android:textSize="10sp" />
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <RelativeLayout
-                            android:layout_marginEnd="30dp"
+                        <ImageButton
+                            android:id="@+id/btnSize"
+                            android:layout_width="90dp"
+                            android:layout_height="30dp"
+                            android:background="@android:color/transparent"
+                            android:contentDescription="Choose size"
+                            android:onClick="onClick"
+                            app:layout_constraintEnd_toEndOf="@+id/sizeTextView"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/edit"
+                            tools:ignore="TouchTargetSizeCheck" />
+
+                        <TextView
+                            android:id="@+id/sizeTextView"
+                            android:layout_width="90dp"
+                            android:layout_height="30dp"
+                            android:layout_alignParentTop="true"
+                            android:paddingTop="7sp"
+                            android:textAlignment="center"
+                            android:textSize="10sp"
+                            app:layout_constraintBottom_toBottomOf="@+id/btnSize"
+                            app:layout_constraintEnd_toEndOf="@+id/btnSize"
+                            app:layout_constraintStart_toStartOf="@+id/btnSize"
+                            app:layout_constraintTop_toTopOf="@+id/btnSize"
+                            app:layout_constraintVertical_bias="0.0" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp">
+
+                        <ImageButton
+                            android:id="@+id/btnColor"
+                            android:layout_width="90dp"
+                            android:layout_height="30dp"
+                            android:background="@android:color/transparent"
+                            android:contentDescription="Choose color"
+                            android:onClick="onClick"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/edit" />
+
+                        <TextView
+                            android:id="@+id/colorTextView"
+                            android:layout_width="90dp"
+                            android:layout_height="30dp"
+                            android:layout_centerInParent="true"
+                            android:paddingTop="7sp"
+                            android:textAlignment="center"
+                            android:textSize="10sp"
+                            android:translationZ="2dp"
+                            app:layout_constraintBottom_toBottomOf="@id/btnColor"
+                            app:layout_constraintEnd_toEndOf="@id/btnColor"
+                            app:layout_constraintStart_toStartOf="@id/btnColor"
+                            app:layout_constraintTop_toTopOf="@id/btnColor" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/price_txtView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="$price"
+                    android:textColor="#000000"
+                    android:textSize="10sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout3"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_gravity="bottom"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/price_txtView">
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageButton
+                            android:id="@+id/btnDel"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent">
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:background="@android:color/transparent"
+                            android:contentDescription="Delete Item"
+                            android:onClick="onCLick"
+                            android:textAlignment="center"
+                            app:srcCompat="@drawable/delete"
+                            tools:ignore="TouchTargetSizeCheck" />
 
-                            <ImageButton
-                                android:id="@+id/btnDel"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerInParent="true"
-                                android:background="@android:color/transparent"
-                                android:contentDescription="Delete Item"
-                                android:onClick="onCLick"
-                                android:textAlignment="center"
-                                app:srcCompat="@drawable/delete"
-                                tools:ignore="TouchTargetSizeCheck" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="Xóa"
+                            android:textSize="9sp" />
+                    </RelativeLayout>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerInParent="true"
-                                android:text="Xóa"
-                                android:textSize="9sp" />
-                        </RelativeLayout>
-
-
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/constraintLayout2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="end"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <ImageButton
                             android:id="@+id/btnNumPlus"
@@ -160,13 +188,21 @@
                             android:contentDescription="Plus number"
                             android:onClick="onCLick"
                             android:textAlignment="center"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
                             app:srcCompat="@drawable/plus"
                             tools:ignore="TouchTargetSizeCheck" />
+
                         <TextView
                             android:id="@+id/numTextView"
-                            android:textAlignment="center"
                             android:layout_width="20dp"
-                            android:layout_height="match_parent"/>
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            app:layout_constraintBottom_toBottomOf="@+id/btnNumPlus"
+                            app:layout_constraintStart_toEndOf="@+id/btnNumPlus"
+                            app:layout_constraintTop_toTopOf="@+id/btnNumPlus" />
+
                         <ImageButton
                             android:id="@+id/btnNumMinus"
                             android:layout_width="wrap_content"
@@ -176,21 +212,21 @@
                             android:contentDescription="Plus number"
                             android:onClick="onClick"
                             android:textAlignment="center"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/numTextView"
+                            app:layout_constraintTop_toTopOf="parent"
                             app:srcCompat="@drawable/minus"
                             tools:ignore="TouchTargetSizeCheck" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-                </LinearLayout>
-            </LinearLayout>
-
-        </RelativeLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
     </RelativeLayout>
-
-
-
 
 
 </RelativeLayout>

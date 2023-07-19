@@ -1,5 +1,6 @@
 package com.example.audace;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,16 +30,6 @@ public class HomepageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent i = getIntent();
-        Uri data = i.getData();
-        String uriToken = null;
-        if(data != null)
-        {
-            uriToken = data.getQueryParameter("access_token");
-            Log.i("message", data.toString());
-        }
-        if(uriToken != null)
-            DataStorage.getInstance().setAccessToken(uriToken);
         if(DataStorage.getInstance().getAccessToken() != null)
         {
             setContentView(R.layout.activity_homepage);
@@ -75,33 +67,9 @@ public class HomepageActivity extends AppCompatActivity {
         }
         else
         {
-            SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("token", Context.MODE_PRIVATE);
-            String token = sharedPreferences.getString("token", "");
-            Log.i("token from device", token);
-            if(!token.equals(""))
-            {
-                DataStorage.getInstance().tokenValidation(token);
-                Intent t = new Intent(HomepageActivity.this, HomepageActivity.class);
-                startActivity(t);
-                this.finishActivity(0);
-            }
-            else
-            {
-
-                boolean firstTime = sharedPreferences.getBoolean("firstTime", true);
-                if(firstTime)
-                {
-                    Intent t = new Intent(HomepageActivity.this, IntroductionActivity1.class);
-                    startActivity(t);
-                    this.finishActivity(0);
-                }
-                else
-                {
-                    Intent t = new Intent(HomepageActivity.this, LoginScreen.class);
-                    startActivity(t);
-                    this.finishActivity(0);
-                }
-            }
+            Intent t = new Intent(HomepageActivity.this, LoginScreen.class);
+            startActivity(t);
+            this.finishActivity(0);
         }
 
     }

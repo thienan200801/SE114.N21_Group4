@@ -13,7 +13,6 @@ import androidx.annotation.Nullable;
 import com.example.audace.R;
 import com.example.audace.model.NamePrice;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class NamePriceOfItemAdapter extends ArrayAdapter<NamePrice> {
@@ -32,10 +31,12 @@ public class NamePriceOfItemAdapter extends ArrayAdapter<NamePrice> {
         LayoutInflater inflater = LayoutInflater.from(context);
         View v = inflater.inflate(R.layout.name_price_item, null, true);
         TextView tname = v.findViewById(R.id.textView11);
-        TextView tprice = v.findViewById(R.id.textView15);
+        TextView tprice = v.findViewById(R.id.userName);
         NamePrice np = mList.get(position);
         tname.setText(np.getNameOfCheckoutItem());
-        tprice.setText(np.getPriceOfCheckoutItem());
+        tprice.setText("$" + np.getPriceOfCheckoutItem());
+        ((TextView)v.findViewById(R.id.quantityTextView)).setText("x" + np.getQuantity());
+        ((TextView)v.findViewById(R.id.totalTextView)).setText("$" + Float.parseFloat(np.getPriceOfCheckoutItem()) * np.getQuantity());
         return v;
     }
     public NamePrice getItem(int position){

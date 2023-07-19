@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -57,11 +58,17 @@ public class HistoryScreen extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         historyAdapter = new HistoryAdapter(this,historyArrayList);
         recyclerView.setAdapter(historyAdapter);
+        if(DataStorage.getInstance().getCartCount() != null && DataStorage.getInstance().getCartCount() != 0)
+        {
+            view.findViewById(R.id.cart_count).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.cart_count_text).setVisibility(View.VISIBLE);
+            ((TextView)view.findViewById(R.id.cart_count_text)).setText(Integer.toString(DataStorage.getInstance().getCartCount()));
+        }
         view.findViewById(R.id.cart).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getActivity().getBaseContext(), CartScreen.class);
-                startActivity(i);
+                Intent t = new Intent(getActivity().getBaseContext(), CartScreen.class);
+                startActivity(t);
             }
         });
         view.findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {

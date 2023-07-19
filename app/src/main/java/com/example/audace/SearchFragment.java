@@ -86,7 +86,6 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_list, container, false);
         fragment = this;
-        ((TextView) view.findViewById(R.id.timkiemtheoTextView)).setText("Kết quả tìm kiếm: " + DataStorage.getInstance().getSearchText());
         products = new ArrayList<Product>();
         // Set the adapter
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
@@ -97,7 +96,26 @@ public class SearchFragment extends Fragment {
         int spacing = 50; // 50px
         boolean includeEdge = false;
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
-        CrawlProduct();
+        view.findViewById(R.id.loadingLayout).setVisibility(View.VISIBLE);
+        String searchString = DataStorage.getInstance().getSearchText();
+        if(searchString.contains("*BST:"))
+            crawlCollection(searchString.substring(5));
+        else if(searchString.equals("*sale-off*"))
+        {
+            crawlSaleOff();
+            ((TextView) view.findViewById(R.id.timkiemtheoTextView)).setText("Kết quả tìm kiếm: Giảm giá");
+
+        } else if(searchString.equals("*best-sale*"))
+        {
+            crawlBestSell();
+            ((TextView) view.findViewById(R.id.timkiemtheoTextView)).setText("Kết quả tìm kiếm: bán chạy");
+        }
+        else
+        {
+            ((TextView) view.findViewById(R.id.timkiemtheoTextView)).setText("Kết quả tìm kiếm: " + DataStorage.getInstance().getSearchText());
+            CrawlProduct();
+        }
+
         //Set spinner
         Spinner spinner = (Spinner)view.findViewById(R.id.dropDown);
         ArrayAdapter arrayAdapter = ArrayAdapter.createFromResource(view.getContext(), R.array.sap_xep_array, android.R.layout.simple_spinner_dropdown_item);
@@ -106,11 +124,13 @@ public class SearchFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                getView().findViewById(R.id.loadingLayout).setVisibility(View.VISIBLE);
                 Log.i("Sort Option", Integer.toString(i));
                 products = Sort(products, i);
                 adapter = new ProductListAdapter(products);
                 recyclerView.setAdapter(adapter );
                 adapter.notifyDataSetChanged();
+                getView().findViewById(R.id.loadingLayout).setVisibility(View.GONE);
             }
 
             @Override
@@ -161,6 +181,7 @@ public class SearchFragment extends Fragment {
                             adapter = new ProductListAdapter(Sort(products, 0));
                             view.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
+                            getView().findViewById(R.id.loadingLayout).setVisibility(View.GONE);
                         }
                     });
                 } catch (JSONException e) {
@@ -271,6 +292,156 @@ public class SearchFragment extends Fragment {
                 }
                 break;
         }
+        if(result.size() == 0)
+            new Handler(Looper.getMainLooper()).post(() -> getView().findViewById(R.id.nothingLayout).setVisibility(View.VISIBLE));
         return result;
+    }
+    public void crawlCollection(String id)
+    {
+        Log.i("message", "start Crawl product");
+        @SuppressLint("DefaultLocale") String string = String.format("https://audace-ecomerce.herokuapp.com/collections/collection/" + id);
+        Handler handler = new Handler(Looper.getMainLooper());
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("text/plain");
+        Request request = new Request.Builder()
+                .url(string)
+                .method("GET", null)
+                .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.i("message", call.toString());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    products.clear();
+                    JSONObject resObject = new JSONObject(response.body().string());
+                    JSONArray jsonArray = resObject.getJSONArray("products");
+                    String search = DataStorage.getInstance().getSearchText();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        Product item = new Product(jsonObject.getString("_id"), jsonObject.getString("name"), jsonObject.getString("currentPrice"), jsonObject.getString("stablePrice"), jsonObject.getBoolean("isFavourite"), jsonObject.getString("imageURL"));
+                        products.add(item);
+                    }
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            RecyclerView view = (RecyclerView) fragment.getView().findViewById(R.id.list);
+                            view.getRecycledViewPool().clear();
+                            adapter = new ProductListAdapter(Sort(products, 0));
+                            view.setAdapter(adapter);
+                            try {
+                                ((TextView) view.getRootView().findViewById(R.id.timkiemtheoTextView)).setText("Bộ sưu tập: "+ resObject.getString("name"));
+                            } catch (JSONException e) {
+                                Log.i("error", e.toString());
+                            }
+                            adapter.notifyDataSetChanged();
+                            getView().findViewById(R.id.loadingLayout).setVisibility(View.GONE);
+                        }
+                    });
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+    }
+    public void crawlSaleOff()
+    {
+        Log.i("message", "start Crawl product");
+        @SuppressLint("DefaultLocale") String string = String.format("https://audace-ecomerce.herokuapp.com/products/best-sale-off");
+        Handler handler = new Handler(Looper.getMainLooper());
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("text/plain");
+        Request request = new Request.Builder()
+                .url(string)
+                .method("GET", null)
+                .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.i("message", call.toString());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    products.clear();
+                    JSONArray jsonArray = new JSONArray(response.body().string());
+                    String search = DataStorage.getInstance().getSearchText();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        Product item = new Product(jsonObject.getString("_id"), jsonObject.getString("name"), jsonObject.getString("currentPrice"), jsonObject.getString("stablePrice"), jsonObject.getBoolean("isFavourite"), jsonObject.getString("imageURL"));
+                        products.add(item);
+                    }
+                    handler.post(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            RecyclerView view = (RecyclerView) fragment.getView().findViewById(R.id.list);
+                            view.getRecycledViewPool().clear();
+                            adapter = new ProductListAdapter(Sort(products, 0));
+                            view.setAdapter(adapter);
+                            adapter.notifyDataSetChanged();
+                            getView().findViewById(R.id.loadingLayout).setVisibility(View.GONE);
+                        }
+                    });
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+    }
+    public void crawlBestSell()
+    {
+        Log.i("message", "start Crawl product");
+        @SuppressLint("DefaultLocale") String string = String.format("https://audace-ecomerce.herokuapp.com/products/best-sellers");
+        Handler handler = new Handler(Looper.getMainLooper());
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("text/plain");
+        Request request = new Request.Builder()
+                .url(string)
+                .method("GET", null)
+                .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.i("message", call.toString());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    products.clear();
+                    JSONArray jsonArray = new JSONArray(response.body().string());
+                    String search = DataStorage.getInstance().getSearchText();
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        Product item = new Product(jsonObject.getString("_id"), jsonObject.getString("name"), jsonObject.getString("currentPrice"), jsonObject.getString("stablePrice"), jsonObject.getBoolean("isFavourite"), jsonObject.getString("imageURL"));
+                        products.add(item);
+                    }
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            RecyclerView view = (RecyclerView) fragment.getView().findViewById(R.id.list);
+                            view.getRecycledViewPool().clear();
+                            adapter = new ProductListAdapter(Sort(products, 0));
+                            view.setAdapter(adapter);
+                            adapter.notifyDataSetChanged();
+                            getView().findViewById(R.id.loadingLayout).setVisibility(View.GONE);
+                        }
+                    });
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
     }
 }

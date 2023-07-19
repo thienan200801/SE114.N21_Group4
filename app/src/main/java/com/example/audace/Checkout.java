@@ -1,15 +1,20 @@
 package com.example.audace;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -31,6 +36,14 @@ import com.example.audace.model.DetailOfItem;
 import com.example.audace.model.NamePrice;
 import com.example.audace.model.PurchaseProduct;
 import com.example.audace.model.SizeObject;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,6 +66,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class Checkout extends AppCompatActivity {
+    private static final int REQUEST_CODE_GPS_PERMISSION = 100;
+
     private TextView nameofproduct, price, size, quantity, color, imgUrl, total;
     private Handler handler = new Handler(Looper.getMainLooper());
     private EditText addressEditText;
@@ -67,21 +82,25 @@ public class Checkout extends AppCompatActivity {
     private ArrayList<NamePrice> namepriceList = new ArrayList<NamePrice>();
     ArrayList<CheckoutItemDetails> checkoutItemDetailsArrayList = new ArrayList<CheckoutItemDetails>();
     CheckoutItemDetailAdapter checkoutItemDetailAdapter;
+    private GoogleMap mMap;
+    private final static int PLACE_PICKER_REQUEST = 999;
+    private final static int LOCATION_REQUEST_CODE = 23;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
-        addressEditText = findViewById(R.id.addressEditText);
         rvCheckoutItemDetails = (RecyclerView) findViewById(R.id.rvCheckoutList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        addressEditText = findViewById(R.id.addressEditText);
         rvCheckoutItemDetails.setLayoutManager(layoutManager);
         rvCheckoutItemDetails.setHasFixedSize(false);
         checkoutItemDetailAdapter = new CheckoutItemDetailAdapter(checkoutItemDetailsArrayList);
         rvCheckoutItemDetails.setAdapter(checkoutItemDetailAdapter);
-        GetCart();
-        listOfCheckoutItemNamePrice=findViewById(R.id.rvSumListItem);
-        namepriceAdapter=new NamePriceOfItemAdapter(this, namepriceList);
+        listOfCheckoutItemNamePrice = findViewById(R.id.rvSumListItem);
+        namepriceAdapter = new NamePriceOfItemAdapter(this, namepriceList);
         listOfCheckoutItemNamePrice.setAdapter(namepriceAdapter);
+        GetCart();
         //Call API to get Item list
 
         ///////////////////////////////////////
@@ -93,57 +112,49 @@ public class Checkout extends AppCompatActivity {
         changeAddressBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                postAddress();
-            }
-
-            private void postAddress() {
-                Log.i("message","start crawl user address");
-                OkHttpClient changeAddressClient = new OkHttpClient().newBuilder()
-                        .build();
-                MediaType changeAddressMediaType = MediaType.parse("application/json");
-                RequestBody body = RequestBody.create(changeAddressMediaType, "{\r\n    \"address\": \"" + addressEditText.getText().toString() +"\"\r\n}");
-                Request changeAddressRequest = new Request.Builder()
-                        .url("https://audace-ecomerce.herokuapp.com/users/me/address")
-                        .method("PATCH", body)
-                        .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
-                        .addHeader("Content-Type", "application/json")
-                        .build();
-                changeAddressClient.newCall(changeAddressRequest).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        Log.i("failure", e.toString());
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        Log.i("message", "Address Changed");
-                    }
-                });
+                Intent i = new Intent(getBaseContext(), MapActivity.class);
+                startActivityForResult(i, 1);
             }
         });
         findViewById(R.id.thanhToanButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(address == null)
-                    Toast.makeText(Checkout.this, "Hãy nhập address và nhấn thay đổi", Toast.LENGTH_SHORT).show();
+                if (address == null)
+                    Toast.makeText(Checkout.this, "Hãy chọn địa chỉ gửi hàng", Toast.LENGTH_SHORT).show();
                 else
                     thanhToanHandler();
             }
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if( requestCode == 1 && resultCode == 1){
+            getAddress();
+        }
+    }
+
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+        getAddress();
+    }
+
     private void initNamePriceData() {
         namepriceList.clear();
-        if(checkoutItemDetailsArrayList != null){
-            for(int i = 0; i < checkoutItemDetailsArrayList.size(); i++)
-                namepriceList.add(new NamePrice(checkoutItemDetailsArrayList.get(i).getName(), checkoutItemDetailsArrayList.get(i).getPrice()));
+        if (checkoutItemDetailsArrayList != null) {
+            for (int i = 0; i < checkoutItemDetailsArrayList.size(); i++)
+                namepriceList.add(new NamePrice(checkoutItemDetailsArrayList.get(i).getName(),
+                        checkoutItemDetailsArrayList.get(i).getPrice(),
+                        Integer.parseInt(checkoutItemDetailsArrayList.get(i).getQuantity())));
         }
         handler.post(() -> {
             namepriceAdapter.notifyDataSetChanged();
         });
     }
-    private void GetCart()
-    {
+
+    private void GetCart() {
         checkoutItemDetailsArrayList.clear();
         OkHttpClient clientItemCart = new OkHttpClient().newBuilder()
                 .build();
@@ -162,11 +173,11 @@ public class Checkout extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 try {
-                    Log.i("message","Call API get Item Cart successful");
+                    Log.i("message", "Call API get Item Cart successful");
                     JSONArray cartResponse = new JSONObject(response.body().string()).getJSONArray("cart");
-                    cart = cartResponse.toString();
                     Log.i("response", cartResponse.toString());
-                    for(int i=0; i<cartResponse.length(); i++){
+                    checkoutItemDetailsArrayList.clear();
+                    for (int i = 0; i < cartResponse.length(); i++) {
                         String colorId = cartResponse.getJSONObject(i).getString("color");
                         String sizeId = cartResponse.getJSONObject(i).getString("size");
                         final ColorObject[] color = new ColorObject[1];
@@ -188,13 +199,12 @@ public class Checkout extends AppCompatActivity {
 
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
-                                try{
+                                try {
                                     JSONObject jsonResponse = new JSONObject(response.body().string());
 
                                     JSONArray colors = jsonResponse.getJSONArray("colors");
-                                    for (int i = 0; i <colors.length();i++)
-                                        if(Objects.equals(colors.getJSONObject(i).getString("_id"), colorId))
-                                        {
+                                    for (int i = 0; i < colors.length(); i++)
+                                        if (Objects.equals(colors.getJSONObject(i).getString("_id"), colorId)) {
                                             JSONObject productObject = colors.getJSONObject(i);
                                             String productColorName = productObject.getString("name");
                                             String productColor = productObject.getString("hex");
@@ -202,9 +212,8 @@ public class Checkout extends AppCompatActivity {
                                             break;
                                         }
                                     JSONArray sizes = jsonResponse.getJSONArray("sizes");
-                                    for (int i = 0; i <sizes.length();i++)
-                                        if(sizes.getJSONObject(i).getString("_id").equals(sizeId))
-                                        {
+                                    for (int i = 0; i < sizes.length(); i++)
+                                        if (sizes.getJSONObject(i).getString("_id").equals(sizeId)) {
                                             JSONObject productObject = sizes.getJSONObject(i);
                                             String productWidth = productObject.getString("widthInCentimeter");
                                             String productHeight = productObject.getString("heightInCentimeter");
@@ -217,19 +226,18 @@ public class Checkout extends AppCompatActivity {
                                             jsonResponse.getString("currentPrice"),
                                             cartResponse.getJSONObject(finalI).getString("quantity"),
                                             jsonResponse.getString("imageURL")));
-                                    initNamePriceData();
                                     //Total
-                                    int sum  = 0;
-                                    for(int i = 0; i < checkoutItemDetailsArrayList.size(); i++)
-                                        sum += Integer.parseInt(checkoutItemDetailsArrayList.get(i).getPrice());
+                                    int sum = 0;
+                                    for (int i = 0; i < checkoutItemDetailsArrayList.size(); i++)
+                                        sum += Float.parseFloat(checkoutItemDetailsArrayList.get(i).getPrice()) * Integer.parseInt(checkoutItemDetailsArrayList.get(i).getQuantity());
                                     int finalSum = sum;
                                     handler.post(() -> {
-                                        checkoutItemDetailAdapter.notifyItemInserted(checkoutItemDetailsArrayList.size() - 1);
+                                        initNamePriceData();
+                                        checkoutItemDetailAdapter.notifyDataSetChanged();
                                         total = findViewById(R.id.textView12);
                                         total.setText("Tổng tiền: $" + finalSum);
                                     });
-                                }
-                                catch(Exception e){
+                                } catch (Exception e) {
                                     Log.i("error", e.toString());
                                 }
                             }
@@ -242,8 +250,9 @@ public class Checkout extends AppCompatActivity {
             }
         });
     }
-    private void getAddress(){
-        Log.i("message","start crawl user address");
+
+    private void getAddress() {
+        Log.i("message", "start crawl user address");
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("text/plain");
@@ -263,20 +272,19 @@ public class Checkout extends AppCompatActivity {
                 String address1;
                 address1 = null;
                 try {
-                    Log.i("message","Call API User address successful");
+                    Log.i("message", "Call API User address successful");
                     JSONObject jsonObject = new JSONObject(response.body().string());
                     address1 = jsonObject.getString("address");
                 } catch (JSONException e) {
                     Log.i("error", e.toString());
                 }
-                if(address1 != null) {
+                if (address1 != null) {
                     String finalAddress = address1;
                     address = address1;
                     handler.post(() -> {
                         addressEditText.setText(finalAddress);
                     });
-                }
-                else{
+                } else {
                     handler.post(() -> {
                         addressEditText.setHint("Chưa có address");
                     });
@@ -285,7 +293,7 @@ public class Checkout extends AppCompatActivity {
         });
     }
 
-    public void thanhToanHandler(){
+    public void thanhToanHandler() {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("application/json");
@@ -322,4 +330,11 @@ public class Checkout extends AppCompatActivity {
             Log.i("error", e.toString());
         }
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
 }

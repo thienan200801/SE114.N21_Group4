@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,6 +78,7 @@ public class fragment_productDetail extends Fragment {
     private ImageButton searchButton;
     SizeAdapter sizeAdapter;
     ColorAdapter colorAdapter;
+
     private String colorId = null;
     private String sizeId = null;
     public fragment_productDetail() {
@@ -205,7 +207,7 @@ public class fragment_productDetail extends Fragment {
                                     OkHttpClient client = new OkHttpClient().newBuilder()
                                             .build();
                                     MediaType mediaType = MediaType.parse("application/json");
-                                    String string = String.format("{\r\n    \"id\": \"%s\"\r\n}", DataStorage.getInstance().getProductId());
+                                    String string = String.format("{\r\n    \"product\": \"%s\"\r\n}", DataStorage.getInstance().getProductId());
 
                                     RequestBody body = RequestBody.create(mediaType, string);
                                     Request request = new Request.Builder()
@@ -314,7 +316,7 @@ public class fragment_productDetail extends Fragment {
                 RequestBody body = RequestBody.create(mediaType, String.format("{\r\n    \"productCheckoutInfos\": [\r\n%s\r\n    ]\r\n}", purchasedProduct));
                 Request request = new Request.Builder()
                         .url("https://audace-ecomerce.herokuapp.com/users/me/cart")
-                        .method("PUT", body)
+                        .method("POST", body)
                         .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
                         .addHeader("Content-Type", "application/json")
                         .build();
@@ -331,9 +333,10 @@ public class fragment_productDetail extends Fragment {
                                 @Override
                                 public void run() {
                                     Toast.makeText(getContext(), "Đã thêm vào giỏ hàng thành công", Toast.LENGTH_SHORT).show();
-                                    getFragmentManager().popBackStack();
+                                     getCartCount();
                                 }
                             });
+
                         }
                     });
                 } catch (Exception e) {
@@ -381,5 +384,35 @@ public class fragment_productDetail extends Fragment {
         });
         return view;
     }
+    private void getCartCount() {
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("application/json");
+        Request request = new Request.Builder()
+                .url("https://audace-ecomerce.herokuapp.com/users/me/profile")
+                .method("GET", null)
+                .addHeader("Authorization", "Bearer "+ DataStorage.getInstance().getAccessToken())
+                .addHeader("Content-Type", "application/json")
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.i("message", "Fail to fetch data");
+            }
 
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response.body().string());
+                    Log.i("user",jsonObject.getJSONArray("cart").toString());
+                    DataStorage.getInstance().setCartCount(jsonObject.getJSONArray("cart").length());
+
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
+        });
+    }
 }

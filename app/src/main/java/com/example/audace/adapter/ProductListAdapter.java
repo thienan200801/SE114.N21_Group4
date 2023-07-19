@@ -6,12 +6,15 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.fragment.app.Fragment;
@@ -144,6 +147,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         holder.getFavouriteButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                view.setEnabled(false);
                 if(holder.getFavouriteButton().isChecked())
                 {
                     holder.getFavouriteButton().setButtonDrawable(R.drawable.baseline_favorite_24);
@@ -167,6 +171,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             Log.i("message", "Success to add");
+                            new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getActivity(view), "Success to add item to favourites", Toast.LENGTH_SHORT).show());
+                            view.setEnabled(true);
                         }
                     });
                 }
@@ -176,8 +182,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                     OkHttpClient client = new OkHttpClient().newBuilder()
                             .build();
                     MediaType mediaType = MediaType.parse("application/json");
-                    String string = String.format("{\r\n    \"id\": \"%s\"\r\n}", products.get(holder.getAdapterPosition()).getProductID());
-
+                    String string = String.format("{\r\n    \"product\": \"%s\"\r\n}", products.get(holder.getAdapterPosition()).getProductID());
+                    Log.i("product", string);
                     RequestBody body = RequestBody.create(mediaType, string);
                     Request request = new Request.Builder()
                             .url("https://audace-ecomerce.herokuapp.com/users/me/favourites")
@@ -194,6 +200,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             Log.i("message", "Susccess to delete");
+                            new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getActivity(view), "Success to delete item from favourites", Toast.LENGTH_SHORT).show());
+                            view.setEnabled(true);
                         }
                     });
                 }

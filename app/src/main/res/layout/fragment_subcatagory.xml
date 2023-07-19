@@ -38,5 +38,29 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/subCatagoryRecyclerView" />
+        app:layout_constraintTop_toBottomOf="@+id/subCatagoryRecyclerView">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <FrameLayout
+        android:id="@+id/nothingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:foregroundGravity="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/itemGridView"
+        app:layout_constraintEnd_toEndOf="@+id/itemGridView"
+        app:layout_constraintStart_toStartOf="@+id/itemGridView"
+        app:layout_constraintTop_toBottomOf="@+id/subCatagoryRecyclerView">
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="Không tìm thấy sản phẩm phù hợp"
+            android:textAlignment="center" />
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

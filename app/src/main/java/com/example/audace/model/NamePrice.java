@@ -3,9 +3,12 @@ package com.example.audace.model;
 public class NamePrice {
     private String nameOfCheckoutItem, priceOfCheckoutItem;
 
-    public NamePrice(String nameOfCheckoutItem, String priceOfCheckoutItem){
+    private Integer quantity;
+
+    public NamePrice(String nameOfCheckoutItem, String priceOfCheckoutItem, Integer quantity){
         this.nameOfCheckoutItem = nameOfCheckoutItem;
         this.priceOfCheckoutItem = priceOfCheckoutItem;
+        this.quantity = quantity;
     }
 
     public String getNameOfCheckoutItem() {
@@ -22,5 +25,13 @@ public class NamePrice {
 
     public void setPriceOfCheckoutItem(String priceOfCheckoutItem) {
         this.priceOfCheckoutItem = priceOfCheckoutItem;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 }

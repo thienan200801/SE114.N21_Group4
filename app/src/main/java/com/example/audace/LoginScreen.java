@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -61,6 +62,8 @@ public class LoginScreen extends AppCompatActivity {
         btnLogin = (ImageButton) findViewById(R.id.btnLogin);
         btnSignUp = (ImageButton) findViewById(R.id.btnSignUp);
         getBtnLogin = (ImageButton)  findViewById(R.id.backButton);
+        ScrollView scrollView = ((ScrollView)findViewById(R.id.loginScrollView));
+        scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
 
         getBtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,16 +79,18 @@ public class LoginScreen extends AppCompatActivity {
                 checkConfirmPass();
             }
         });
-        findViewById(R.id.googleLogin).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.googleButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                findViewById(R.id.loadingLayout).setVisibility(View.VISIBLE);
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://audace-ecomerce.herokuapp.com/auth/google"));
                 startActivity(browserIntent);
             }
         });
-        findViewById(R.id.facebookLogin).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.facebookButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                findViewById(R.id.loadingLayout).setVisibility(View.VISIBLE);
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://audace-ecomerce.herokuapp.com/auth/facebook"));
                 startActivity(browserIntent);
             }

@@ -72,6 +72,7 @@ public class InfoScreen extends AppCompatActivity implements AdapterView.OnItemS
 
     private void renderData() {
         try {
+
             OkHttpClient client = new OkHttpClient().newBuilder()
                     .build();
             MediaType mediaType = MediaType.parse("application/json");
