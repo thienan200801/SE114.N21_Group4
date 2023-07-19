@@ -1,9 +1,14 @@
 package com.example.audace;
 
+import android.content.Intent;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,6 +34,7 @@ public class CartScreen extends AppCompatActivity {
 
     private ArrayList<Cart> cartList = new ArrayList<>();
     private CartAdapter cartAdapter;
+    ImageButton btnPurchase;
     private RecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +48,20 @@ public class CartScreen extends AppCompatActivity {
         recyclerView.setAdapter(cartAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         setupData();
+
+        btnPurchase = findViewById(R.id.btnPurchase);
+        btnPurchase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (cartList.isEmpty()){
+                    Toast.makeText(CartScreen.this, "Giỏ hàng chưa có sản phẩm", Toast.LENGTH_SHORT).show();
+
+                }
+                else {
+
+                }
+            }
+        });
 
 
 

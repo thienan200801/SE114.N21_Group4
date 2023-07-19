@@ -3,6 +3,7 @@ package com.example.audace;
 import static android.os.Looper.getMainLooper;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -94,6 +95,10 @@ public class ProductDetailScreen extends BottomSheetDialogFragment implements Co
 
                     if (productId != null) {
                         updateCartDetails(productId, selectedColorId, selectedSizeId);
+                        Intent intent = new Intent(requireContext(), CartScreen.class);
+
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        requireContext().startActivity(intent);
                     }
                 }
 
