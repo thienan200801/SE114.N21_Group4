@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentContainerView;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -23,6 +25,7 @@ import com.example.audace.Favorite;
 import com.example.audace.FavoriteScreen;
 import com.example.audace.ProductDetailScreen;
 import com.example.audace.R;
+import com.example.audace.fragment_productDetail;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -64,9 +67,9 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
     public void onBindViewHolder(FavoriteAdapter.ViewHolder holder, int position){
         Favorite item = favoriteArrayList.get(position);
         holder.nameTextView.setText(item.getName());
-        holder.priceTextView.setText(String.valueOf(item.getPrice()));
+        holder.priceTextView.setText("Price: $" + item.getPrice());
         holder.colorTextView.setText(item.getColorName());
-        holder.sizeTextView.setText(item.getSizeWidth() + " x "+item.getSizeHeight());
+        holder.sizeTextView.setText(item.getSizeWidth() + "cm x "+item.getSizeHeight() + "cm");
         holder.quantityTextView.setText(String.valueOf(item.getQuantity()));
         holder.deleteFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +80,12 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
             @Override
             public void onClick(View view) {
                 addCart(item);
+            }
+        });
+        holder.favoriteImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigateToProductDetail(holder);
             }
         });
         Picasso.get()
@@ -117,16 +126,13 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         }
 
     }
-    private void navigateToProductDetail(String productId,String selectedColor, String selectedSize) {
-        ProductDetailScreen productDetailScreen = new ProductDetailScreen();
-
-        Bundle bundle = new Bundle();
-        bundle.putString("productId", productId);
-        bundle.putString("selectedColor",selectedColor);
-        bundle.putString("selectedSize",selectedSize);
-        productDetailScreen.setArguments(bundle);
-
-        productDetailScreen.show(activity.getActivity().getSupportFragmentManager(), "ProductDetailBottomSheet");
+    private void navigateToProductDetail(ViewHolder holder) {
+        DataStorage.getInstance().setProductId(favoriteArrayList.get(holder.getAdapterPosition()).getId());
+        FragmentContainerView navHostFragment = (FragmentContainerView) holder.nameTextView.getRootView().findViewById(R.id.bottomNavigationContainer);
+        FragmentTransaction transaction = navHostFragment.getFragment().getFragmentManager().beginTransaction();
+        transaction.replace(R.id.bottomNavigationContainer, new fragment_productDetail());
+        transaction.addToBackStack(null);
+        transaction.commit();
 
     }
 

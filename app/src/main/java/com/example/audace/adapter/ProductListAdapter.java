@@ -147,6 +147,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         holder.getFavouriteButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                view.setEnabled(false);
                 if(holder.getFavouriteButton().isChecked())
                 {
                     holder.getFavouriteButton().setButtonDrawable(R.drawable.baseline_favorite_24);
@@ -171,6 +172,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                         public void onResponse(Call call, Response response) throws IOException {
                             Log.i("message", "Success to add");
                             new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getActivity(view), "Success to add item to favourites", Toast.LENGTH_SHORT).show());
+                            view.setEnabled(true);
                         }
                     });
                 }
@@ -199,6 +201,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                         public void onResponse(Call call, Response response) throws IOException {
                             Log.i("message", "Susccess to delete");
                             new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getActivity(view), "Success to delete item from favourites", Toast.LENGTH_SHORT).show());
+                            view.setEnabled(true);
                         }
                     });
                 }

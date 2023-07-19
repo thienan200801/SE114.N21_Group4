@@ -25,12 +25,12 @@
                 android:padding="10dp"
                 app:srcCompat="@drawable/user" />
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="5dp"
-                android:gravity="bottom"
                 android:orientation="vertical">
 
                 <TextView
@@ -39,12 +39,18 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:textColor="#000000"
-                    android:textSize="12sp" />
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <LinearLayout
+                    android:id="@+id/linearLayout3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cart_name_txtView">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="wrap_content"
@@ -124,12 +130,18 @@
                     android:layout_margin="5dp"
                     android:text="$price"
                     android:textColor="#000000"
-                    android:textSize="10sp" />
+                    android:textSize="10sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout3"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_gravity="bottom">
+                    android:layout_gravity="bottom"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/price_txtView">
 
                     <RelativeLayout
                         android:layout_width="wrap_content"
@@ -211,7 +223,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
     </RelativeLayout>
