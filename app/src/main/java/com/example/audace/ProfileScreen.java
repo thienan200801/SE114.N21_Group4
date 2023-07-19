@@ -38,7 +38,7 @@ import okhttp3.Response;
 public class ProfileScreen extends Fragment {
 
 
-    TextView name, dob, emailText, phone;
+    TextView nameText, genderText, emailText, phoneText;
     ImageView pic;
 
     ImageButton order,cart,info;
@@ -52,10 +52,10 @@ public class ProfileScreen extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.activity_profile, container, false);
-        name = (TextView) view.findViewById(R.id.profile_name);
-        dob = (TextView) view.findViewById(R.id.profile_dob);
+        nameText = (TextView) view.findViewById(R.id.profile_name);
+        genderText = (TextView) view.findViewById(R.id.profile_gender);
         emailText = (TextView) view.findViewById(R.id.profile_email);
-        phone = (TextView) view.findViewById(R.id.profile_phone);
+        phoneText = (TextView) view.findViewById(R.id.profile_phone);
         pic = (ImageView) view.findViewById(R.id.profile_pic);
 
         order = (ImageButton) view.findViewById(R.id.btnOrder);
@@ -88,7 +88,7 @@ public class ProfileScreen extends Fragment {
                 getActivity().onBackPressed();
             }
         });
-        setupData();
+        /*setupData();*/
         renderData();
 
         return view;
@@ -101,10 +101,9 @@ public class ProfileScreen extends Fragment {
                     .build();
             MediaType mediaType = MediaType.parse("application/json");
             RequestBody body = RequestBody.create(mediaType, "");
-            // Get the values from the EditText fields
                     Request request = new Request.Builder()
-                            .url("https://audace-ecomerce.herokuapp.com/users/me")
-                            .method("POST", null)
+                            .url("https://audace-ecomerce.herokuapp.com/users/me/profile")
+                            .method("GET", null)
                             .addHeader("Authorization", "Bearer "+ DataStorage.getInstance().getAccessToken())
                             .build();
 
@@ -119,18 +118,34 @@ public class ProfileScreen extends Fragment {
                         public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                             String body=response.body().string();
                             Log.e("data from server", body);
+
                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
+                                    try {
+                                        if (response.isSuccessful()) {
+                                            JSONObject jsonObject = new JSONObject(body);
 
-                                    if (body.equals("")) {
-                                        Toast.makeText(getContext(), "Sign Up successfully", Toast.LENGTH_SHORT).show();
+                                            String email = jsonObject.getString("email");
+                                            String phone = jsonObject.getString("phone");
+                                            String fullName = jsonObject.getString("fullname");
+                                            String gender = jsonObject.getString("gender");
 
-                                    }
-                                    else {
-                                        Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show();
+                                            emailText.setText(email);
+                                            phoneText.setText(phone);
+                                            nameText.setText(fullName);
+                                            genderText.setText(gender);
 
-                                    }
+
+
+
+                                        } else {
+                                            Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    }catch (JSONException e)
+                                    { e.printStackTrace();
+                                        Toast.makeText(getContext(), "Failed to parse profile data", Toast.LENGTH_SHORT).show(); }
                                 }
                             });
 
@@ -146,12 +161,12 @@ public class ProfileScreen extends Fragment {
         }
     }
 
-    private void setupData() {
+    /*private void setupData() {
 
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
-      /*  MediaType mediaType = MediaType.parse("text/plain");*/
-        /*RequestBody body = RequestBody.create(mediaType, "");*/
+      *//*  MediaType mediaType = MediaType.parse("text/plain");*//*
+        *//*RequestBody body = RequestBody.create(mediaType, "");*//*
 
         Request request = new Request.Builder()
                 .url("https://audace-ecomerce.herokuapp.com/users/me/profile")
@@ -197,7 +212,7 @@ public class ProfileScreen extends Fragment {
 
             }
         });
-    }
+    }*/
     public void loadFragment(Fragment fragment) {
         // load fragment
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
