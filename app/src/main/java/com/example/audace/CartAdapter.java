@@ -284,7 +284,6 @@ public class ViewHolder extends RecyclerView.ViewHolder{
                         JSONObject requestBody = new JSONObject();
                         requestBody.put("productCheckoutInfos", productCheckoutInfosArray);
 
-                        // Send the updated request
                         MediaType mediaType = MediaType.parse("application/json");
                         RequestBody body = RequestBody.create(mediaType, requestBody.toString());
                         Request updateRequest = new Request.Builder()
