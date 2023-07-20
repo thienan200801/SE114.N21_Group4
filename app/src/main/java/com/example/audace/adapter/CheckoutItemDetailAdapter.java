@@ -17,6 +17,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 import com.example.audace.R;
 import com.example.audace.model.CheckoutItemDetails;
 import com.example.audace.model.SizeObject;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -86,7 +87,7 @@ public class CheckoutItemDetailAdapter extends RecyclerView.Adapter<CheckoutItem
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull CheckoutItemDetailAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CheckoutItemDetailAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.title.setText(checkoutItemDetailsArray.get(position).getName());
         holder.quantity.setText("Số lượng: " + checkoutItemDetailsArray.get(position).getQuantity());
         holder.color.setText("Màu sắc: " + checkoutItemDetailsArray.get(position).getColor().getColorName());
@@ -101,9 +102,24 @@ public class CheckoutItemDetailAdapter extends RecyclerView.Adapter<CheckoutItem
             circularProgressDrawable.start();
             Picasso.get()
                     .load(checkoutItemDetailsArray.get(position).getImageURL())
-                    .placeholder(circularProgressDrawable)
                     .fit()
-                    .into(holder.getImageView());
+                    .networkPolicy(NetworkPolicy.OFFLINE)
+                    .placeholder(circularProgressDrawable)
+                    .into(holder.getImageView(), new com.squareup.picasso.Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            Picasso.get()
+                                    .load(checkoutItemDetailsArray.get(position).getImageURL())
+                                    .placeholder(circularProgressDrawable)
+                                    .fit()
+                                    .into(holder.getImageView());
+                        }
+                    });
         }
     }
 

@@ -52,16 +52,16 @@ public class CartScreen extends AppCompatActivity {
         btnPurchase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (cartList.isEmpty()){
-                    Toast.makeText(CartScreen.this, "Giỏ hàng chưa có sản phẩm", Toast.LENGTH_SHORT).show();
-
-                }
-                else {
-
-                }
+                Intent i = new Intent(getBaseContext(), Checkout.class);
+                startActivity(i);
             }
         });
-
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
 
     }

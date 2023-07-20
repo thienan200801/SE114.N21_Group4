@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
@@ -33,6 +34,7 @@ import com.example.audace.R;
 import com.example.audace.fragment_productDetail;
 import com.example.audace.model.Product;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -115,9 +117,25 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         Picasso.get()
                 .load(products.get(position).getImgUrl())
                 .placeholder(circularProgressDrawable)
-                .error(R.drawable.baseline_wifi_tethering_error_24)
+                .networkPolicy(NetworkPolicy.OFFLINE)
                 .fit()
-                .into(holder.getImgView());
+                .into(holder.getImgView(), new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Picasso.get()
+                                .load(products.get(position).getImgUrl())
+                                .placeholder(circularProgressDrawable)
+                                .error(R.drawable.baseline_wifi_tethering_error_24)
+                                .fit()
+                                .into(holder.getImgView());
+                    }
+                });
+
         if(!Objects.equals(products.get(position).getStablePrice(), products.get(position).getPrice()))
         {
             Float stablePrice = Float.parseFloat(products.get(position).getStablePrice());
@@ -147,7 +165,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         holder.getFavouriteButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                view.setEnabled(false);
+                new Handler(Looper.getMainLooper()).post(() -> view.setEnabled(false));
                 if(holder.getFavouriteButton().isChecked())
                 {
                     holder.getFavouriteButton().setButtonDrawable(R.drawable.baseline_favorite_24);
@@ -172,7 +190,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                         public void onResponse(Call call, Response response) throws IOException {
                             Log.i("message", "Success to add");
                             new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getActivity(view), "Success to add item to favourites", Toast.LENGTH_SHORT).show());
-                            view.setEnabled(true);
+                            new Handler(Looper.getMainLooper()).post(() -> view.setEnabled(true));
                         }
                     });
                 }
@@ -201,7 +219,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                         public void onResponse(Call call, Response response) throws IOException {
                             Log.i("message", "Susccess to delete");
                             new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getActivity(view), "Success to delete item from favourites", Toast.LENGTH_SHORT).show());
-                            view.setEnabled(true);
+                            new Handler(Looper.getMainLooper()).post(() -> view.setEnabled(true));
                         }
                     });
                 }

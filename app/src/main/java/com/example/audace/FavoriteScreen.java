@@ -92,6 +92,7 @@ public class FavoriteScreen extends Fragment  {
 
 
     public void setupData() {
+
         new AsyncTask<Void, Void, JSONArray>() {
             @Override
             protected JSONArray doInBackground(Void... voids) {
@@ -166,6 +167,14 @@ public class FavoriteScreen extends Fragment  {
                                     favoriteProduct.setColor(selectedColor);
                                     favoriteArrayList.add(favoriteProduct);
                                     favoriteAdapter.notifyDataSetChanged();
+                                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            getActivity().findViewById(R.id.loadingLayout).setVisibility(View.GONE);
+                                            if(favoriteArrayList.size() == 0)
+                                                getActivity().findViewById(R.id.nothingLayout).setVisibility(View.VISIBLE);
+                                        }
+                                    });
                                 }
 
                                 @Override

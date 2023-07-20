@@ -61,7 +61,7 @@ public class OrderScreen extends AppCompatActivity {
         Request request = new Request.Builder()
                 .url("https://audace-ecomerce.herokuapp.com/users/me/orders")
                 .method("GET", null)
-                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
+                .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -157,7 +157,7 @@ public class OrderScreen extends AppCompatActivity {
                 Request request = new Request.Builder()
                         .url("https://audace-ecomerce.herokuapp.com/users/me/orders")
                         .method("GET", null)
-                        .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
+                        .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
                         .build();
 
                 try {
@@ -249,7 +249,7 @@ public class OrderScreen extends AppCompatActivity {
         Request request = new Request.Builder()
                 .url("https://audace-ecomerce.herokuapp.com/products/product/" + productId)
                 .method("GET", null)
-                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDQxMTU4ZmVhZjQ5MmY0OGI0NzE3MzEiLCJpYXQiOjE2ODM3MDE4MDN9.dA-agPqUSJ-g2mdmw7lTBzzfszH7TUYpNAh-Lh9xQ24")
+                .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override

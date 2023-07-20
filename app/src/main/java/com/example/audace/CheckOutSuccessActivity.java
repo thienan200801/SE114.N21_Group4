@@ -1,5 +1,6 @@
 package com.example.audace;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -14,7 +15,9 @@ public class CheckOutSuccessActivity extends AppCompatActivity {
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finishActivity(0);
+                Intent i = new Intent(getBaseContext(), HomepageActivity.class);
+                startActivity(i);
+                finish();
             }
         });
     }
