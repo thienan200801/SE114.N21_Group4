@@ -224,7 +224,8 @@ public class ViewHolder extends RecyclerView.ViewHolder{
                         }
                         else {
                             Toast.makeText(activity, body, Toast.LENGTH_SHORT).show();
-
+                            if(DataStorage.getInstance().getCartCount() > 0)
+                                    DataStorage.getInstance().setCartCount(DataStorage.getInstance().getCartCount() - 1);
                         }
                     }
                 });

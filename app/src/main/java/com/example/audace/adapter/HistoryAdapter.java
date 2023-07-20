@@ -61,7 +61,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         Picasso.get()
                 .load(item.getImage())
                 .networkPolicy(NetworkPolicy.OFFLINE)
-                .resize(250,250)
+                .fit()
                 .into(holder.historyImage, new com.squareup.picasso.Callback() {
                     @Override
                     public void onSuccess() {
@@ -72,7 +72,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                     public void onError(Exception e) {
                         Picasso.get()
                                 .load(item.getImage())
-                                .resize(250,250)
+                                .fit()
                                 .into(holder.historyImage);
                     }
                 });

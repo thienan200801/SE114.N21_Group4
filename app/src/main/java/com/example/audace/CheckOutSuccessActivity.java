@@ -17,6 +17,7 @@ public class CheckOutSuccessActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(getBaseContext(), HomepageActivity.class);
                 startActivity(i);
+                DataStorage.getInstance().setCartCount(0);
                 finish();
             }
         });

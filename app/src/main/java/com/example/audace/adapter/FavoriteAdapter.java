@@ -211,6 +211,8 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
                                     if (body.equals("")) {
 
                                         Toast.makeText(activity.getContext(), "Added to cart", Toast.LENGTH_SHORT).show();
+                                        if(DataStorage.getInstance().getCartCount() != null)
+                                            DataStorage.getInstance().setCartCount(DataStorage.getInstance().getCartCount() + 1);
 
                                     }
                                     else {

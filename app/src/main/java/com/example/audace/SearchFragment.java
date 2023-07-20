@@ -228,6 +228,10 @@ public class SearchFragment extends Fragment {
     }
     private ArrayList<Product> Sort(ArrayList<Product> productArrayList, int type)
     {
+        if(productArrayList.size() == 0)
+            new Handler(Looper.getMainLooper()).post(() -> getView().findViewById(R.id.nothingLayout).setVisibility(View.VISIBLE));
+        else
+            new Handler(Looper.getMainLooper()).post(() -> getView().findViewById(R.id.nothingLayout).setVisibility(View.GONE));
         ArrayList<Product> result = new ArrayList<Product>();
         switch (type)
         {
@@ -292,8 +296,6 @@ public class SearchFragment extends Fragment {
                 }
                 break;
         }
-        if(result.size() == 0)
-            new Handler(Looper.getMainLooper()).post(() -> getView().findViewById(R.id.nothingLayout).setVisibility(View.VISIBLE));
         return result;
     }
     public void crawlCollection(String id)

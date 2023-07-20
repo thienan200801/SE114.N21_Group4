@@ -115,6 +115,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap = googleMap;
         ActivityCompat.requestPermissions( this, new String[] {  android.Manifest.permission.ACCESS_COARSE_LOCATION  },
                 LOCATION_REQUEST_CODE );
+        getCurrentLocation();
     }
 
 
