@@ -26,6 +26,7 @@ import com.example.audace.FavoriteScreen;
 import com.example.audace.ProductDetailScreen;
 import com.example.audace.R;
 import com.example.audace.fragment_productDetail;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -91,7 +92,21 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         Picasso.get()
                 .load(item.getImage())
                 .resize(250,250)
-                .into(holder.favoriteImage);
+                .networkPolicy(NetworkPolicy.OFFLINE)
+                .into(holder.favoriteImage, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Picasso.get()
+                                .load(item.getImage())
+                                .resize(250,250)
+                                .into(holder.favoriteImage);
+                    }
+                });
 
     }
 

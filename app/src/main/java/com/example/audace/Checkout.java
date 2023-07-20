@@ -64,6 +64,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okio.BufferedSink;
 
 public class Checkout extends AppCompatActivity {
     private static final int REQUEST_CODE_GPS_PERMISSION = 100;
@@ -176,6 +177,7 @@ public class Checkout extends AppCompatActivity {
                     Log.i("message", "Call API get Item Cart successful");
                     JSONArray cartResponse = new JSONObject(response.body().string()).getJSONArray("cart");
                     Log.i("response", cartResponse.toString());
+                    cart = cartResponse.toString();
                     checkoutItemDetailsArrayList.clear();
                     for (int i = 0; i < cartResponse.length(); i++) {
                         String colorId = cartResponse.getJSONObject(i).getString("color");
@@ -294,16 +296,16 @@ public class Checkout extends AppCompatActivity {
     }
 
     public void thanhToanHandler() {
+        findViewById(R.id.loadingLayout).setVisibility(View.VISIBLE);
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = new FormBody.Builder().add("productCheckoutInfos", cart).build();
-        Log.i("body", body.toString());
+        RequestBody body = RequestBody.create(mediaType,  String.format("{\"productCheckoutInfos\": %s}", cart));
+        Log.i("request",  String.format("{\"productCheckoutInfos\": %s}", cart));
         Request request = new Request.Builder()
                 .url("https://audace-ecomerce.herokuapp.com/orders")
                 .method("POST", body)
                 .addHeader("Authorization", "Bearer " + DataStorage.getInstance().getAccessToken())
-                .addHeader("Content-Type", "application/json")
                 .build();
         try {
             client.newCall(request).enqueue(new Callback() {
@@ -319,6 +321,13 @@ public class Checkout extends AppCompatActivity {
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
+                            try {
+                                 DataStorage.getInstance().setCartCount(new JSONObject(response.body().string()).getJSONArray("productCheckoutInfos").length());
+                            } catch (IOException e) {
+                                Log.i("error", e.toString());
+                            } catch (JSONException e) {
+                                Log.i("error", e.toString());
+                            }
                             Intent i = new Intent(getBaseContext(), CheckOutSuccessActivity.class);
                             startActivity(i);
                             getFragmentManager().popBackStack();

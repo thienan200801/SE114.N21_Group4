@@ -21,6 +21,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -61,6 +63,9 @@ public class ProfileScreen extends Fragment {
         order = (ImageButton) view.findViewById(R.id.btnOrder);
         cart = (ImageButton) view.findViewById(R.id.btnCart) ;
         info = (ImageButton) view.findViewById(R.id.btnEdit);
+        Picasso.get()
+                .load(DataStorage.getInstance().getAvatarURl())
+                .into(pic);
 
         order.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,9 +93,14 @@ public class ProfileScreen extends Fragment {
                 getActivity().onBackPressed();
             }
         });
+        view.findViewById(R.id.btnVoucher).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadFragment(new FavoriteScreen());
+            }
+        });
         /*setupData();*/
         renderData();
-
         return view;
     }
 
@@ -126,28 +136,35 @@ public class ProfileScreen extends Fragment {
                                     try {
                                         if (response.isSuccessful()) {
                                             JSONObject jsonObject = new JSONObject(body);
-
-                                            String email = jsonObject.getString("email");
-                                            String phone = jsonObject.getString("phone");
-                                            String fullName = jsonObject.getString("fullname");
-                                            String gender = jsonObject.getString("gender");
-
-                                            emailText.setText(email);
-                                            phoneText.setText(phone);
-                                            nameText.setText(fullName);
-                                            genderText.setText(gender);
-
-
-
-
+                                            try{
+                                                String email = jsonObject.getString("email");
+                                                emailText.setText(email);
+                                            }
+                                            catch (JSONException e)
+                                            {}
+                                            try{
+                                                String fullName = jsonObject.getString("fullname");
+                                                nameText.setText(fullName);
+                                            }
+                                            catch (JSONException e) {}
+                                            try{
+                                                String gender = jsonObject.getString("gender");
+                                                genderText.setText(gender);
+                                            }
+                                            catch (JSONException e) {}
+                                            try{
+                                                String number = jsonObject.getString("phone");
+                                                phoneText.setText(number);
+                                            }
+                                            catch (JSONException e) {}
                                         } else {
                                             Toast.makeText(getContext(), body, Toast.LENGTH_SHORT).show();
-
                                         }
-                                    }catch (JSONException e)
+                                    }
+                                    catch (JSONException e)
                                     { e.printStackTrace();
                                         Toast.makeText(getContext(), "Failed to parse profile data", Toast.LENGTH_SHORT).show(); }
-                                }
+                                    }
                             });
 
 

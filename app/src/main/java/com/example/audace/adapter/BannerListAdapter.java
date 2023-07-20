@@ -18,6 +18,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 import com.example.audace.DataStorage;
 import com.example.audace.R;
 import com.example.audace.model.Banner;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -63,9 +64,24 @@ public class BannerListAdapter extends RecyclerView.Adapter<BannerListAdapter.Vi
         circularProgressDrawable.start();
         Picasso.get()
                 .load(banners.get(position).getImgURL())
-                .error(R.drawable.baseline_wifi_tethering_error_24)
+                .networkPolicy(NetworkPolicy.OFFLINE)
                 .placeholder(circularProgressDrawable)
-                .into(viewHolder.getImageView());
+                .fit()
+                .into(viewHolder.getImageView(), new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Picasso.get()
+                                .load(banners.get(position).getImgURL())
+                                .error(R.drawable.baseline_wifi_tethering_error_24)
+                                .placeholder(circularProgressDrawable)
+                                .into(viewHolder.getImageView());
+                    }
+                });
         viewHolder.getImageView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

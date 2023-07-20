@@ -67,7 +67,12 @@ public class InfoScreen extends AppCompatActivity implements AdapterView.OnItemS
             }
         });
         renderData();
-
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
 
     private void renderData() {
@@ -106,22 +111,39 @@ public class InfoScreen extends AppCompatActivity implements AdapterView.OnItemS
                             try {
                                 if (response.isSuccessful()) {
                                     JSONObject jsonObject = new JSONObject(body);
+                                    try{
+                                        String email = jsonObject.getString("email");
+                                        emailText.setText(email);
+                                    }
+                                    catch (JSONException e)
+                                    {}
+                                    try{
+                                        String fullName = jsonObject.getString("fullname");
+                                        nameText.setText(fullName);
+                                    }
+                                    catch (JSONException e) {}
+                                    try{
+                                        String gender = jsonObject.getString("gender");
+                                        int genderPosition = getGenderPosition(gender);
+                                        genderSpinner.setSelection(genderPosition);
 
-                                    String email = jsonObject.getString("email");
-                                    String phone = jsonObject.getString("phone");
-                                    String fullName = jsonObject.getString("fullname");
-                                    String gender = jsonObject.getString("gender");
-                                    String id = jsonObject.getString("_id");
-                                    String password = jsonObject.getString("password");
-
-                                    emailText.setText(email);
-                                    phoneText.setText(phone);
-                                    nameText.setText(fullName);
-                                    userIdText.setText(id);
-                                    passwordText.setText(password);
-
-                                    int genderPosition = getGenderPosition(gender);
-                                    genderSpinner.setSelection(genderPosition);
+                                    }
+                                    catch (JSONException e) {}
+                                    try{
+                                        String number = jsonObject.getString("phone");
+                                        phoneText.setText(number);
+                                    }
+                                    catch (JSONException e) {}
+                                    try{
+                                        String id = jsonObject.getString("_id");
+                                        userIdText.setText(id);
+                                    }
+                                    catch (JSONException e) {}
+                                    try{
+                                        String password = jsonObject.getString("password");
+                                        passwordText.setText(password);
+                                    }
+                                    catch (JSONException e) {}
 
                                 } else {
                                     Toast.makeText(InfoScreen.this, body, Toast.LENGTH_SHORT).show();

@@ -17,6 +17,7 @@ import com.example.audace.Favorite;
 import com.example.audace.HistoryScreen;
 import com.example.audace.R;
 import com.example.audace.fragment_productDetail;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -46,9 +47,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     public void onBindViewHolder(HistoryAdapter.ViewHolder holder, int position){
         Favorite item = historyArrayList.get(position);
         holder.nameTextView.setText(item.getName());
-        holder.priceTextView.setText(String.valueOf(item.getPrice()));
+        holder.priceTextView.setText("Price: $" + String.valueOf(item.getPrice()));
         holder.colorTextView.setText(item.getColorName());
-        holder.sizeTextView.setText(item.getSizeWidth() + " x "+item.getSizeHeight());
+        holder.sizeTextView.setText(item.getSizeWidth() + "cm x "+item.getSizeHeight() + "cm");
         holder.quantityTextView.setText(String.valueOf(item.getQuantity()));
         holder.viewDetail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,8 +60,23 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
         Picasso.get()
                 .load(item.getImage())
+                .networkPolicy(NetworkPolicy.OFFLINE)
                 .resize(250,250)
-                .into(holder.historyImage);
+                .into(holder.historyImage, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Picasso.get()
+                                .load(item.getImage())
+                                .resize(250,250)
+                                .into(holder.historyImage);
+                    }
+                });
+
 
     }
     private void navigateToDetailActivity(String productId) {
